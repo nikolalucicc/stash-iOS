@@ -1,0 +1,63 @@
+/* Localizable.strings — Serbian
+   stash
+*/
+
+// MARK: - Common
+
+"common.app_title"             = "Stash";
+"common.continue_btn"          = "Nastavi";
+"common.back_btn"              = "Nazad";
+"common.skip_btn"              = "Preskoči ovaj korak";
+"common.rsd"                   = "RSD";
+"common.add_btn"               = "Dodaj";
+"common.cancel_btn"            = "Otkaži";
+
+"common.progress_step"         = "Korak %d od 4";
+"common.progress_step_suffix"  = "Korak %d od 4 · %@";
+
+// MARK: - Onboarding · Step 1
+
+"onboarding.step1.title"            = "Kolika ti je plata?";
+"onboarding.step1.subtitle"         = "Unesi okvirni mesečni prihod i dan kada ti legne.";
+"onboarding.step1.salary_label"     = "Mesečna plata";
+"onboarding.step1.payday_label"     = "Period isplate";
+"onboarding.step1.privacy_note"     = "Ovo koristimo samo za podsetnik — ne šaljemo ništa na server.";
+"onboarding.step1.payday_beginning" = "Početak meseca";
+"onboarding.step1.payday_middle"    = "Sredina meseca";
+"onboarding.step1.payday_end"       = "Kraj meseca";
+
+// MARK: - Onboarding · Step 2
+
+"onboarding.step2.title"             = "Koliko želiš da štediš?";
+"onboarding.step2.subtitle"          = "Izaberi kako da računamo tvoju mesečnu štednju.";
+"onboarding.step2.method_label"      = "Način štednje";
+"onboarding.step2.percentage_method" = "% od plate";
+"onboarding.step2.fixed_method"      = "Fiksni iznos";
+"onboarding.step2.percentage_label"  = "Procenat štednje";
+"onboarding.step2.fixed_label"       = "Fiksni iznos štednje";
+"onboarding.step2.preview_label"     = "Mesečno ćeš odvojiti";
+
+// MARK: - Onboarding · Step 3
+
+"onboarding.step3.title"            = "Fiksni troškovi";
+"onboarding.step3.subtitle"         = "Dodaj rekurentne troškove — kirija, rate, pretplate...";
+"onboarding.step3.progress_suffix"  = "Opciono";
+"onboarding.step3.add_expense_btn"  = "Dodaj trošak";
+"onboarding.step3.total_label"      = "Ukupno fiksnih";
+"onboarding.step3.sheet_title"      = "Dodaj trošak";
+"onboarding.step3.name_label"       = "Naziv troška";
+"onboarding.step3.name_placeholder" = "npr. Struja, Pretplata...";
+"onboarding.step3.amount_label"     = "Iznos";
+"onboarding.step3.default_note"     = "Mesečna uplata";
+
+// MARK: - Onboarding · Step 4
+
+"onboarding.step4.title"      = "Koja valuta?";
+"onboarding.step4.subtitle"   = "Možeš je promeniti u podešavanjima u bilo kom trenutku.";
+"onboarding.step4.finish_btn" = "Završi podešavanje";
+
+// MARK: - Currency
+
+"currency.rsd_name" = "Srpski dinar";
+"currency.eur_name" = "Euro";
+"currency.usd_name" = "Američki dolar";
