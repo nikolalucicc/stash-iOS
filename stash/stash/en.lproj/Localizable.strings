@@ -1,0 +1,65 @@
+/* Localizable.strings — English (default)
+   stash
+*/
+
+// MARK: - Common
+
+"common.app_title"             = "Stash";
+"common.continue_btn"          = "Continue";
+"common.back_btn"              = "Back";
+"common.skip_btn"              = "Skip this step";
+"common.rsd"                   = "RSD";
+"common.add_btn"               = "Add";
+"common.cancel_btn"            = "Cancel";
+
+/* %d = current step number (1–4) */
+"common.progress_step"         = "Step %d of 4";
+/* %d = current step number, %@ = optional suffix (e.g. "Optional") */
+"common.progress_step_suffix"  = "Step %d of 4 · %@";
+
+// MARK: - Onboarding · Step 1
+
+"onboarding.step1.title"            = "What's your salary?";
+"onboarding.step1.subtitle"         = "Enter your approximate monthly income and payday.";
+"onboarding.step1.salary_label"     = "Monthly salary";
+"onboarding.step1.payday_label"     = "Pay period";
+"onboarding.step1.privacy_note"     = "We use this only for reminders — nothing is sent to a server.";
+"onboarding.step1.payday_beginning" = "Beginning of month";
+"onboarding.step1.payday_middle"    = "Mid month";
+"onboarding.step1.payday_end"       = "End of month";
+
+// MARK: - Onboarding · Step 2
+
+"onboarding.step2.title"             = "How much do you want to save?";
+"onboarding.step2.subtitle"          = "Choose how we calculate your monthly savings.";
+"onboarding.step2.method_label"      = "Saving method";
+"onboarding.step2.percentage_method" = "% of salary";
+"onboarding.step2.fixed_method"      = "Fixed amount";
+"onboarding.step2.percentage_label"  = "Savings percentage";
+"onboarding.step2.fixed_label"       = "Fixed savings amount";
+"onboarding.step2.preview_label"     = "You'll set aside monthly";
+
+// MARK: - Onboarding · Step 3
+
+"onboarding.step3.title"            = "Fixed expenses";
+"onboarding.step3.subtitle"         = "Add recurring expenses — rent, installments, subscriptions...";
+"onboarding.step3.progress_suffix"  = "Optional";
+"onboarding.step3.add_expense_btn"  = "Add expense";
+"onboarding.step3.total_label"      = "Total fixed";
+"onboarding.step3.sheet_title"      = "Add expense";
+"onboarding.step3.name_label"       = "Expense name";
+"onboarding.step3.name_placeholder" = "e.g. Rent, Netflix...";
+"onboarding.step3.amount_label"     = "Amount";
+"onboarding.step3.default_note"     = "Monthly payment";
+
+// MARK: - Onboarding · Step 4
+
+"onboarding.step4.title"      = "Which currency?";
+"onboarding.step4.subtitle"   = "You can change it in settings at any time.";
+"onboarding.step4.finish_btn" = "Finish setup";
+
+// MARK: - Currency
+
+"currency.rsd_name" = "Serbian dinar";
+"currency.eur_name" = "Euro";
+"currency.usd_name" = "US dollar";
