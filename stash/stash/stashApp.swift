@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct stashApp: App {
+struct StashApp: App {
 
     var body: some Scene {
         WindowGroup {
