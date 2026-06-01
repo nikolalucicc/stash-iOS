@@ -59,11 +59,11 @@ struct OnboardingFourthStepView: View {
 
     private func currencyCard(_ currency: Currency) -> some View {
         let isSelected = vm.selectedCurrency == currency
-        return Button(action: {
+        return Button {
             withAnimation(.easeInOut(duration: 0.15)) {
                 vm.selectedCurrency = currency
             }
-        }) {
+        } label: {
             HStack(spacing: Spacing.md) {
                 ZStack {
                     RoundedRectangle(cornerRadius: Radius.lg)
@@ -123,7 +123,7 @@ struct OnboardingFourthStepView: View {
 
     private var footerSection: some View {
         VStack(spacing: Spacing.md) {
-            Button(action: {}) {
+            Button {} label: {
                 Text("onboarding.step4.finish_btn")
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
@@ -146,7 +146,7 @@ struct OnboardingFourthStepView: View {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                Button(action: { dismiss() }) {
+                Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.left")
                             .font(.system(size: 13))

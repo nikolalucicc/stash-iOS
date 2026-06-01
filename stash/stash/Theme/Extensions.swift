@@ -12,11 +12,11 @@ import Foundation
 extension NumberFormatter {
     /// Serbian-locale decimal formatter: groups thousands with ".", no decimals.
     static let serbian: NumberFormatter = {
-        let f = NumberFormatter()
-        f.numberStyle = .decimal
-        f.groupingSeparator = "."
-        f.maximumFractionDigits = 0
-        return f
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = "."
+        formatter.maximumFractionDigits = 0
+        return formatter
     }()
 }
 

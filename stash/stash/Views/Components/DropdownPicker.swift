@@ -23,11 +23,11 @@ struct DropdownPicker: View {
                 .padding(.leading, 4)
 
             VStack(spacing: 0) {
-                Button(action: {
+                Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         isExpanded.toggle()
                     }
-                }) {
+                } label: {
                     HStack {
                         Text(selection)
                             .font(.inputValStyle)
@@ -51,12 +51,12 @@ struct DropdownPicker: View {
 
                     VStack(spacing: 0) {
                         ForEach(options, id: \.self) { option in
-                            Button(action: {
+                            Button {
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     selection = option
                                     isExpanded = false
                                 }
-                            }) {
+                            } label: {
                                 HStack {
                                     Text(option)
                                         .font(.inputValStyle)

@@ -57,7 +57,7 @@ struct OnboardingFirstStepView: View {
     }
 
     private var salaryField: some View {
-        let b = Bindable(vm)
+        let bindable = Bindable(vm)
         return VStack(alignment: .leading, spacing: Spacing.xs) {
             Text("onboarding.step1.salary_label")
                 .font(.labelCapsStyle)
@@ -66,7 +66,7 @@ struct OnboardingFirstStepView: View {
                 .padding(.leading, 4)
 
             HStack {
-                TextField("", text: b.salaryText)
+                TextField("", text: bindable.salaryText)
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
@@ -86,11 +86,11 @@ struct OnboardingFirstStepView: View {
     }
 
     private var paydayField: some View {
-        let b = Bindable(vm)
+        let bindable = Bindable(vm)
         return DropdownPicker(
             label: String(localized: "onboarding.step1.payday_label"),
             options: vm.paydayOptions,
-            selection: b.selectedPeriod
+            selection: bindable.selectedPeriod
         )
     }
 

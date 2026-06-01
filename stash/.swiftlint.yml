@@ -1,0 +1,11 @@
+identifier_name:
+  min_length: 3
+  max_length: 40
+  excluded:
+    - id
+    - vm
+    - xs
+    - sm
+    - md
+    - lg
+    - xl

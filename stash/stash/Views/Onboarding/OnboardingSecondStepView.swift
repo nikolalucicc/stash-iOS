@@ -72,11 +72,11 @@ struct OnboardingSecondStepView: View {
             HStack(spacing: Spacing.gutter) {
                 ForEach(SavingMethod.allCases, id: \.self) { method in
                     let isSelected = vm.savingMethod == method
-                    Button(action: {
+                    Button {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             vm.savingMethod = method
                         }
-                    }) {
+                    } label: {
                         Text(verbatim: method.label)
                             .font(.navTitleStyle)
                             .foregroundColor(isSelected ? .onPrimaryContainer : .onSurfaceVariant)
@@ -112,7 +112,7 @@ struct OnboardingSecondStepView: View {
     // MARK: - Savings Input
 
     private var savingsInput: some View {
-        let b = Bindable(vm)
+        let bindable = Bindable(vm)
         return VStack(alignment: .leading, spacing: Spacing.xs) {
             Text(verbatim: vm.savingMethod.inputLabel)
                 .font(.labelCapsStyle)
@@ -122,12 +122,12 @@ struct OnboardingSecondStepView: View {
 
             HStack {
                 if vm.savingMethod == .percentage {
-                    TextField("", text: b.percentageText)
+                    TextField("", text: bindable.percentageText)
                         .font(.inputValStyle)
                         .foregroundColor(.white)
                         .keyboardType(.numberPad)
                 } else {
-                    TextField("", text: b.fixedAmountText)
+                    TextField("", text: bindable.fixedAmountText)
                         .font(.inputValStyle)
                         .foregroundColor(.white)
                         .keyboardType(.numberPad)
@@ -206,7 +206,7 @@ struct OnboardingSecondStepView: View {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                Button(action: { dismiss() }) {
+                Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.left")
                             .font(.system(size: 13))

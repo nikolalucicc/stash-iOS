@@ -10,7 +10,7 @@ import SwiftUI
 
 struct OnboardingAppBar: View {
 
-    var onBack: (() -> Void)? = nil
+    var onBack: (() -> Void)?
 
     var body: some View {
         ZStack {
@@ -22,7 +22,7 @@ struct OnboardingAppBar: View {
 
             if let onBack {
                 HStack {
-                    Button(action: onBack) {
+                    Button { onBack() } label: {
                         Image(systemName: "arrow.left")
                             .font(.system(size: 18, weight: .medium))
                             .foregroundColor(.appPrimary)

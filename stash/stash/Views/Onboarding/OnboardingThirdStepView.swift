@@ -99,7 +99,7 @@ struct OnboardingThirdStepView: View {
                     .font(.labelSmStyle)
                     .foregroundColor(.onSurface)
             }
-            Button(action: { vm.delete(expense) }) {
+            Button { vm.delete(expense) } label: {
                 Image(systemName: "trash")
                     .font(.system(size: 18))
                     .foregroundColor(.appError)
@@ -116,7 +116,7 @@ struct OnboardingThirdStepView: View {
     }
 
     private var addButton: some View {
-        Button(action: { vm.showAddSheet = true }) {
+        Button { vm.showAddSheet = true } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
                     .font(.system(size: 18))
@@ -190,7 +190,7 @@ struct OnboardingThirdStepView: View {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                Button(action: { dismiss() }) {
+                Button { dismiss() } label: {
                     Text("common.skip_btn")
                         .font(.secondaryStyle)
                         .foregroundColor(.onSurfaceVariant)
@@ -230,7 +230,7 @@ struct AddExpenseSheetView: View {
             Spacer()
 
             VStack(spacing: Spacing.sm) {
-                Button(action: { vm.addExpense() }) {
+                Button { vm.addExpense() } label: {
                     Text("common.add_btn")
                         .font(.navTitleStyle)
                         .foregroundColor(.white)
@@ -242,7 +242,7 @@ struct AddExpenseSheetView: View {
                 }
                 .buttonStyle(.plain)
 
-                Button(action: { vm.cancelAdd() }) {
+                Button { vm.cancelAdd() } label: {
                     Text("common.cancel_btn")
                         .font(.bodyStyle)
                         .foregroundColor(.onSurfaceVariant)
