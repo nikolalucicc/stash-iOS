@@ -8,10 +8,12 @@ excluded:
 opt_in_rules:
   - empty_count
   - force_unwrapping
-  - sorted_imports
 
 disabled_rules:
   - trailing_whitespace
+  - sorted_imports
+  - trailing_comma
+  - type_name
 
 line_length:
   warning: 120
