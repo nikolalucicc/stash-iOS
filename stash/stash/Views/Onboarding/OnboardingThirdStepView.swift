@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OnboardingThirdStepView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingThirdStepVM()
 
     var body: some View {
@@ -45,6 +47,28 @@ struct OnboardingThirdStepView: View {
                 .presentationBackground(Color.surfaceContainerLow)
                 .presentationDragIndicator(.visible)
         }
+        .onAppear { loadSavedExpenses() }
+    }
+
+    // MARK: - Persistence
+
+    private func loadSavedExpenses() {
+        guard vm.expenses.isEmpty, let profile = UserProfile.existing(in: modelContext) else { return }
+        vm.expenses = profile.expenses
+            .sorted { $0.createdAt < $1.createdAt }
+            .map { FixedExpense(name: $0.name, note: $0.note, amount: $0.amount, icon: $0.icon) }
+    }
+
+    private func saveExpenses() {
+        let profile = UserProfile.current(in: modelContext)
+        let previouslySaved = profile.expenses
+        for expense in previouslySaved {
+            modelContext.delete(expense)
+        }
+        profile.expenses = vm.expenses.map {
+            FixedExpenseEntity(name: $0.name, note: $0.note, amount: $0.amount, icon: $0.icon)
+        }
+        try? modelContext.save()
     }
 
     // MARK: - Header
@@ -185,12 +209,16 @@ struct OnboardingThirdStepView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { saveExpenses() })
 
             HStack(spacing: Spacing.md) {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                Button { dismiss() } label: {
+                Button {
+                    saveExpenses()
+                    dismiss()
+                } label: {
                     Text("common.skip_btn")
                         .font(.secondaryStyle)
                         .foregroundColor(.onSurfaceVariant)

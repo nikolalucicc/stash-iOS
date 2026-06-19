@@ -63,3 +63,18 @@
 "currency.rsd_name" = "Serbian dinar";
 "currency.eur_name" = "Euro";
 "currency.usd_name" = "US dollar";
+
+// MARK: - Dashboard
+
+"dashboard.empty_state"             = "Finish setup to see your dashboard here.";
+"dashboard.this_month_saving_label" = "This month's saving";
+"dashboard.share_of_salary"         = "Share of your monthly salary";
+"dashboard.salary_card_label"       = "This month's salary";
+"dashboard.entered_badge"           = "entered";
+"dashboard.savings_stat"            = "Savings";
+"dashboard.fixed_stat"              = "Fixed";
+"dashboard.free_stat"               = "Free";
+"dashboard.expenses_label"          = "Fixed expenses";
+"dashboard.days_until_payday_label" = "Until next payday";
+/* %d = number of days until the next payday */
+"dashboard.days_value"              = "%d days";

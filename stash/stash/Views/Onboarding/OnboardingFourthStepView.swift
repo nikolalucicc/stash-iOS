@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OnboardingFourthStepView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingFourthStepVM()
+    @State private var didFinishOnboarding = false
 
     var body: some View {
         StashTheme {
@@ -32,6 +35,26 @@ struct OnboardingFourthStepView: View {
             }
         }
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $didFinishOnboarding) {
+            DashboardView()
+                .navigationBarBackButtonHidden(true)
+        }
+        .onAppear { loadSavedProfile() }
+    }
+
+    // MARK: - Persistence
+
+    private func loadSavedProfile() {
+        guard let profile = UserProfile.existing(in: modelContext) else { return }
+        vm.selectedCurrency = profile.currency
+    }
+
+    private func finishOnboarding() {
+        let profile = UserProfile.current(in: modelContext)
+        profile.currency = vm.selectedCurrency
+        profile.onboardingCompleted = true
+        try? modelContext.save()
+        didFinishOnboarding = true
     }
 
     // MARK: - Header
@@ -123,7 +146,7 @@ struct OnboardingFourthStepView: View {
 
     private var footerSection: some View {
         VStack(spacing: Spacing.md) {
-            Button {} label: {
+            Button { finishOnboarding() } label: {
                 Text("onboarding.step4.finish_btn")
                     .font(.navTitleStyle)
                     .foregroundColor(.white)

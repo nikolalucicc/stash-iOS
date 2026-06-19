@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct StashApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                OnboardingFirstStepView()
-            }
+            RootView()
         }
+        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self])
     }
 }

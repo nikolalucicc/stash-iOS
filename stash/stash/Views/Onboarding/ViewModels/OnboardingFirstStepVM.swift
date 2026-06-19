@@ -10,7 +10,7 @@ import Foundation
 @Observable
 @MainActor
 class OnboardingFirstStepVM {
-    var salaryText: String = "85,000"
+    var salaryText: String = "85.000"
     var selectedPeriod: String = String(localized: "onboarding.step1.payday_beginning")
     let paydayOptions: [String] = [
         String(localized: "onboarding.step1.payday_beginning"),

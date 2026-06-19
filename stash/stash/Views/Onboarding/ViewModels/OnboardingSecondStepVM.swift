@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SavingMethod: CaseIterable {
+enum SavingMethod: String, CaseIterable {
     case percentage
     case fixed
 
