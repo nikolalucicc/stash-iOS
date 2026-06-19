@@ -1,0 +1,407 @@
+//
+//  DashboardView.swift
+//  stash
+//
+//  Created by Nikola on 7. 6. 2026..
+//
+
+import SwiftUI
+import SwiftData
+import Foundation
+
+struct DashboardView: View {
+
+    @Query private var profiles: [UserProfile]
+
+    private var profile: UserProfile? { profiles.first }
+
+    var body: some View {
+        StashTheme {
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.gutter) {
+                    headerBar
+
+                    if let profile {
+                        savingHeroCard(for: profile)
+                        currentMonthCard(for: profile)
+                        statsGrid(for: profile)
+                        if !profile.expenses.isEmpty {
+                            expensesSection(for: profile)
+                        }
+                    } else {
+                        emptyState
+                    }
+                }
+                .padding(.horizontal, Spacing.containerPadding)
+                .padding(.top, Spacing.sm)
+                .padding(.bottom, Spacing.xl)
+            }
+        }
+        .navigationBarHidden(true)
+    }
+
+    // MARK: - Header Bar
+
+    private var headerBar: some View {
+        HStack {
+            Text(verbatim: monthYearLabel)
+                .font(.labelSmStyle)
+                .foregroundColor(.white.opacity(0.4))
+                .textCase(.uppercase)
+                .tracking(1)
+            Spacer()
+            ZStack {
+                Circle()
+                    .fill(Color.white.opacity(0.05))
+                    .overlay(Circle().stroke(Color.white.opacity(0.1), lineWidth: 0.5))
+                    .frame(width: 36, height: 36)
+                Image(systemName: "gearshape")
+                    .font(.system(size: 16))
+                    .foregroundColor(.white.opacity(0.6))
+            }
+        }
+        .padding(.bottom, Spacing.xs)
+    }
+
+    private var monthYearLabel: String {
+        Date.now.formatted(.dateTime.month(.wide).year())
+    }
+
+    private var emptyState: some View {
+        Text("dashboard.empty_state")
+            .font(.bodyStyle)
+            .foregroundColor(.onSurfaceVariant)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Spacing.md)
+            .background(Color.white.opacity(0.03))
+            .cornerRadius(Radius.xl)
+    }
+
+    // MARK: - Hero Saving Card
+
+    private func savingHeroCard(for profile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                Text("dashboard.this_month_saving_label")
+                    .font(.labelCapsStyle)
+                    .tracking(0.6)
+                    .foregroundColor(.white.opacity(0.4))
+                HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
+                    Text(verbatim: profile.monthlySaving.serbianFormatted)
+                        .font(.displayLgStyle)
+                        .foregroundColor(.white)
+                    Text(verbatim: profile.currency.code)
+                        .font(.sectionHeaderStyle)
+                        .foregroundColor(.white.opacity(0.4))
+                }
+            }
+            VStack(spacing: Spacing.xs) {
+                HStack {
+                    Text("dashboard.share_of_salary")
+                        .font(.noteStyle)
+                        .foregroundColor(.white.opacity(0.6))
+                    Spacer()
+                    Text(verbatim: "\(Int(savingShare(for: profile).rounded()))%")
+                        .font(.noteStyle)
+                        .foregroundColor(.white)
+                }
+                ProgressTrack(progress: savingShare(for: profile) / 100, tint: .accent)
+            }
+        }
+        .padding(Spacing.lg)
+        .background(Color.white.opacity(0.04))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+        )
+    }
+
+    private func savingShare(for profile: UserProfile) -> Double {
+        guard profile.monthlySalary > 0 else { return 0 }
+        return min(profile.monthlySaving / profile.monthlySalary * 100, 100)
+    }
+
+    // MARK: - Current Month Card
+
+    private func currentMonthCard(for profile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            HStack {
+                Text("dashboard.salary_card_label")
+                    .font(.labelCapsStyle)
+                    .tracking(0.6)
+                    .foregroundColor(.white.opacity(0.6))
+                Spacer()
+                Text("dashboard.entered_badge")
+                    .font(.labelSmStyle)
+                    .foregroundColor(.appPrimary)
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, 3)
+                    .background(Color.accent.opacity(0.2))
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(Color.accent.opacity(0.3), lineWidth: 0.5))
+            }
+
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text(verbatim: profile.monthlySalary.serbianFormatted)
+                    .font(.screenTitleStyle)
+                    .foregroundColor(.onSurface)
+                Text(verbatim: profile.currency.code)
+                    .font(.bodyStyle)
+                    .foregroundColor(.onSurfaceVariant)
+            }
+
+            SegmentedBreakdownBar(breakdown: breakdown(for: profile))
+
+            HStack {
+                statColumn(
+                    label: String(localized: "dashboard.savings_stat"),
+                    amount: profile.monthlySaving,
+                    tint: Color(hex: "#AFA9EC")
+                )
+                Spacer()
+                statColumn(
+                    label: String(localized: "dashboard.fixed_stat"),
+                    amount: fixedTotal(for: profile),
+                    tint: .onSurfaceVariant
+                )
+                Spacer()
+                statColumn(
+                    label: String(localized: "dashboard.free_stat"),
+                    amount: freeAmount(for: profile),
+                    tint: .onSurface
+                )
+            }
+        }
+        .padding(Spacing.md + 2)
+        .background(Color.accent.opacity(0.1))
+        .cornerRadius(Radius.xl + 4)
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.xl + 4)
+                .stroke(Color.accent.opacity(0.3), lineWidth: 0.5)
+        )
+    }
+
+    private func statColumn(label: String, amount: Double, tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(verbatim: label)
+                .font(.labelSmStyle)
+                .foregroundColor(tint.opacity(0.8))
+            Text(verbatim: amount.serbianFormatted)
+                .font(.bodyStyle)
+                .fontWeight(.medium)
+                .foregroundColor(tint)
+        }
+    }
+
+    // MARK: - Stats Grid
+
+    private func statsGrid(for profile: UserProfile) -> some View {
+        HStack(spacing: Spacing.gutter) {
+            statTile(
+                icon: "list.bullet.rectangle",
+                iconColor: Color(hex: "#5DCAA5"),
+                value: "\(profile.expenses.count)",
+                label: String(localized: "dashboard.expenses_label")
+            )
+            statTile(
+                icon: "calendar",
+                iconColor: .white.opacity(0.4),
+                value: daysUntilPaydayLabel(for: profile),
+                label: String(localized: "dashboard.days_until_payday_label")
+            )
+        }
+    }
+
+    private func statTile(icon: String, iconColor: Color, value: String, label: String) -> some View {
+        VStack(spacing: Spacing.sm) {
+            ZStack {
+                RoundedRectangle(cornerRadius: Radius.lg)
+                    .fill(Color.white.opacity(0.05))
+                    .frame(width: 32, height: 32)
+                Image(systemName: icon)
+                    .font(.system(size: 16))
+                    .foregroundColor(iconColor)
+            }
+            Text(verbatim: value)
+                .font(.displayValStyle)
+                .foregroundColor(.onSurface)
+            Text(verbatim: label)
+                .font(.labelSmStyle)
+                .foregroundColor(.white.opacity(0.4))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(Spacing.md)
+        .background(Color.white.opacity(0.04))
+        .cornerRadius(Radius.xl)
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+        )
+    }
+
+    // MARK: - Fixed Expenses
+
+    private func expensesSection(for profile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            Text("dashboard.expenses_label")
+                .font(.labelCapsStyle)
+                .tracking(0.6)
+                .foregroundColor(.onSurfaceVariant)
+                .padding(.leading, 4)
+
+            VStack(spacing: Spacing.gutter) {
+                ForEach(profile.expenses.sorted { $0.createdAt < $1.createdAt }) { expense in
+                    expenseRow(expense)
+                }
+            }
+        }
+    }
+
+    private func expenseRow(_ expense: FixedExpenseEntity) -> some View {
+        HStack(spacing: Spacing.md) {
+            ZStack {
+                RoundedRectangle(cornerRadius: Radius.lg)
+                    .fill(Color.white.opacity(0.05))
+                    .frame(width: 36, height: 36)
+                Image(systemName: expense.icon)
+                    .font(.system(size: 16))
+                    .foregroundColor(.appPrimary)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: expense.name)
+                    .font(.navTitleStyle)
+                    .foregroundColor(.onSurface)
+                Text(verbatim: expense.note)
+                    .font(.noteStyle)
+                    .foregroundColor(.onSurfaceVariant)
+            }
+            Spacer()
+            HStack(alignment: .lastTextBaseline, spacing: 3) {
+                Text(verbatim: expense.amount.serbianFormatted)
+                    .font(.displayValStyle)
+                    .foregroundColor(.onSurface)
+                Text("common.rsd")
+                    .font(.labelSmStyle)
+                    .foregroundColor(.onSurface)
+            }
+        }
+        .padding(Spacing.md)
+        .background(Color.white.opacity(0.03))
+        .cornerRadius(Radius.xl)
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+        )
+    }
+
+    // MARK: - Derived values
+
+    private func fixedTotal(for profile: UserProfile) -> Double {
+        profile.expenses.reduce(0) { $0 + $1.amount }
+    }
+
+    private func freeAmount(for profile: UserProfile) -> Double {
+        max(0, profile.monthlySalary - profile.monthlySaving - fixedTotal(for: profile))
+    }
+
+    private func breakdown(for profile: UserProfile) -> SalaryBreakdown {
+        let salary = max(profile.monthlySalary, 0.01)
+        let saving = min(profile.monthlySaving / salary, 1)
+        let fixed = min(fixedTotal(for: profile) / salary, 1 - saving)
+        let free = max(0, 1 - saving - fixed)
+        return SalaryBreakdown(savingRatio: saving, fixedRatio: fixed, freeRatio: free)
+    }
+
+    private func daysUntilPaydayLabel(for profile: UserProfile) -> String {
+        String(format: String(localized: "dashboard.days_value"), daysUntilNextPayday(for: profile))
+    }
+
+    private func daysUntilNextPayday(for profile: UserProfile) -> Int {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let timing = paydayTiming(for: profile)
+
+        let candidates = [0, 1].compactMap {
+            payday(monthsFromNow: $0, timing: timing, calendar: calendar, today: today)
+        }
+        guard let upcoming = candidates.first(where: { $0 >= today }) ?? candidates.first else {
+            return 0
+        }
+        return max(0, calendar.dateComponents([.day], from: today, to: upcoming).day ?? 0)
+    }
+
+    private func payday(monthsFromNow: Int, timing: PaydayTiming, calendar: Calendar, today: Date) -> Date? {
+        guard let monthDate = calendar.date(byAdding: .month, value: monthsFromNow, to: today) else { return nil }
+        var components = calendar.dateComponents([.year, .month], from: monthDate)
+        switch timing {
+        case .beginning: components.day = 1
+        case .middle:    components.day = 15
+        case .end:       components.day = calendar.range(of: .day, in: .month, for: monthDate)?.count ?? 28
+        }
+        return calendar.date(from: components)
+    }
+
+    private func paydayTiming(for profile: UserProfile) -> PaydayTiming {
+        if profile.paydayPeriod == String(localized: "onboarding.step1.payday_middle") { return .middle }
+        if profile.paydayPeriod == String(localized: "onboarding.step1.payday_end") { return .end }
+        return .beginning
+    }
+}
+
+// MARK: - Supporting types
+
+private enum PaydayTiming {
+    case beginning, middle, end
+}
+
+private struct SalaryBreakdown {
+    let savingRatio: Double
+    let fixedRatio: Double
+    let freeRatio: Double
+}
+
+private struct ProgressTrack: View {
+    let progress: Double
+    let tint: Color
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color.white.opacity(0.1))
+                Capsule()
+                    .fill(tint)
+                    .frame(width: proxy.size.width * min(max(progress, 0), 1))
+            }
+        }
+        .frame(height: 4)
+    }
+}
+
+private struct SegmentedBreakdownBar: View {
+    let breakdown: SalaryBreakdown
+
+    var body: some View {
+        GeometryReader { proxy in
+            HStack(spacing: 2) {
+                Capsule()
+                    .fill(Color(hex: "#534AB7"))
+                    .frame(width: proxy.size.width * breakdown.savingRatio)
+                Capsule()
+                    .fill(Color(hex: "#3C3489"))
+                    .frame(width: proxy.size.width * breakdown.fixedRatio)
+                Capsule()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(width: proxy.size.width * breakdown.freeRatio)
+            }
+        }
+        .frame(height: 8)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        DashboardView()
+    }
+    .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self], inMemory: true)
+}

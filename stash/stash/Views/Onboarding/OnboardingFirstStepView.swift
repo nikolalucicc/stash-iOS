@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OnboardingFirstStepView: View {
 
+    @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingFirstStepVM()
 
     var body: some View {
@@ -31,6 +33,24 @@ struct OnboardingFirstStepView: View {
             }
         }
         .navigationBarHidden(true)
+        .onAppear { loadSavedProfile() }
+    }
+
+    // MARK: - Persistence
+
+    private func loadSavedProfile() {
+        guard let profile = UserProfile.existing(in: modelContext) else { return }
+        vm.salaryText = profile.monthlySalary.serbianFormatted
+        if vm.paydayOptions.contains(profile.paydayPeriod) {
+            vm.selectedPeriod = profile.paydayPeriod
+        }
+    }
+
+    private func saveProfile() {
+        let profile = UserProfile.current(in: modelContext)
+        profile.monthlySalary = vm.salaryText.parsedSerbianNumber
+        profile.paydayPeriod = vm.selectedPeriod
+        try? modelContext.save()
     }
 
     // MARK: - Header
@@ -128,6 +148,7 @@ struct OnboardingFirstStepView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { saveProfile() })
         }
         .padding(.horizontal, Spacing.containerPadding)
         .padding(.bottom, Spacing.xl)

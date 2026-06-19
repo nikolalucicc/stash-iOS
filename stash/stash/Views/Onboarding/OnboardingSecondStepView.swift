@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OnboardingSecondStepView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingSecondStepVM()
 
     var body: some View {
@@ -32,6 +34,29 @@ struct OnboardingSecondStepView: View {
             }
         }
         .navigationBarHidden(true)
+        .onAppear { loadSavedProfile() }
+    }
+
+    // MARK: - Persistence
+
+    private func loadSavedProfile() {
+        guard let profile = UserProfile.existing(in: modelContext) else { return }
+        vm.monthlySalary = profile.monthlySalary
+        vm.savingMethod = profile.savingMethod
+        if profile.savingPercentage > 0 {
+            vm.percentageText = String(format: "%.0f", profile.savingPercentage)
+        }
+        if profile.savingFixedAmount > 0 {
+            vm.fixedAmountText = profile.savingFixedAmount.serbianFormatted
+        }
+    }
+
+    private func saveProfile() {
+        let profile = UserProfile.current(in: modelContext)
+        profile.savingMethod = vm.savingMethod
+        profile.savingPercentage = Double(vm.percentageText) ?? profile.savingPercentage
+        profile.savingFixedAmount = vm.fixedAmountText.parsedSerbianNumber
+        try? modelContext.save()
     }
 
     // MARK: - Header
@@ -201,6 +226,7 @@ struct OnboardingSecondStepView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { saveProfile() })
 
             HStack(spacing: Spacing.md) {
                 Rectangle()

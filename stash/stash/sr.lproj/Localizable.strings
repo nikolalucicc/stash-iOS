@@ -61,3 +61,18 @@
 "currency.rsd_name" = "Srpski dinar";
 "currency.eur_name" = "Euro";
 "currency.usd_name" = "Američki dolar";
+
+// MARK: - Dashboard
+
+"dashboard.empty_state"             = "Završi podešavanje da bi video svoju početnu stranu ovde.";
+"dashboard.this_month_saving_label" = "Ušteda ovog meseca";
+"dashboard.share_of_salary"         = "Udeo u mesečnoj plati";
+"dashboard.salary_card_label"       = "Plata ovog meseca";
+"dashboard.entered_badge"           = "uneto";
+"dashboard.savings_stat"            = "Štednja";
+"dashboard.fixed_stat"              = "Fiksni";
+"dashboard.free_stat"               = "Slobodno";
+"dashboard.expenses_label"          = "Fiksni troškovi";
+"dashboard.days_until_payday_label" = "Do sledeće plate";
+/* %d = broj dana do sledeće plate */
+"dashboard.days_value"              = "%d dana";
