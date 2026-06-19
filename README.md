@@ -10,22 +10,46 @@ Stash je mobilna aplikacija za Android i iOS namenjena jednostavnom upravljanju 
 
 Projekat je razvijen kao lična vežba sa ciljem upoznavanja sa celim životnim ciklusom mobilne aplikacije: od arhitekture i razvoja, kroz testove i CI/CD pipeline, do release procesa na Google Play Store i Apple App Store.
 
+> **Napomena:** Ovo je **iOS** repozitorijum (SwiftUI). Deo dokumenta opisuje ciljnu viziju za obe platforme; aktuelno stanje iOS implementacije je u sekciji [Trenutni status](#trenutni-status-ios).
+
 ---
 
-## Funkcionalnosti
+## Trenutni status (iOS)
 
-- 📥 **Unos plate** — uneseš iznos, aplikacija odmah računa raspodelu
-- 🎯 **Cilj štednje** — fiksni iznos ili procenat plate
-- 🧾 **Fiksni troškovi** — kirija, rate, pretplate — automatski se uračunavaju
-- 📊 **Dashboard** — pregled tekućeg meseca i ukupne uštedine
-- 📅 **Istorija** — mesečni i godišnji pregled svih entrija
-- 🔥 **Streak tracker** — broj uzastopnih meseci sa unetom platom
-- 🔔 **Notifikacije** — podsetnik na dan isplate
-- 🔒 **App lock** — biometrija ili PIN
-- 💾 **Export** — CSV i PDF izveštaji, lokalni backup
-- 🌙 **Dark mode** — Light / Dark / System
+Implementirano do sada:
 
-Svi podaci su lokalni — aplikacija ne šalje ništa na server.
+- ✅ **Onboarding (4 koraka)**
+  1. Unos plate + period isplate (početak / sredina / kraj meseca)
+  2. Način štednje — procenat plate ili fiksni iznos, sa live pregledom mesečne štednje
+  3. Fiksni troškovi — dodavanje/brisanje preko sheet-a, sa automatskim biranjem ikonice po nazivu
+  4. Izbor valute (RSD / EUR / USD)
+- ✅ **Lokalno čuvanje (SwiftData)** — `UserProfile` + `FixedExpenseEntity` modeli; podaci uneti u onboarding-u se čuvaju na uređaju i učitavaju nazad pri ponovnom otvaranju
+- ✅ **Dashboard** — pregled sačuvanog profila: plata, raspodela (štednja / fiksni / slobodno), mesečna ušteda, dani do sledeće plate, lista fiksnih troškova
+- ✅ **Rutiranje na startu** — `RootView` vodi na dashboard ili onboarding u zavisnosti od `onboardingCompleted` flag-a
+- ✅ **Dizajn sistem** — `AppTheme` (boje, Inter tipografija, `Spacing` i `Radius` tokeni) + `StashTheme` pozadinski wrapper
+- ✅ **Reusable komponente** — `DropdownPicker`, `OnboardingAppBar`, `ProgressIndicator`
+- ✅ **MVVM** — `@Observable @MainActor` ViewModel po koraku
+- ✅ **Lokalizacija** — engleski (default) + srpski (`Localizable.strings`, `LocalizedStringKey`)
+- ✅ **SwiftLint** — konfiguracija + pre-push hook + GitHub Actions CI
+
+Sledeće na redu: istorija mesečnih entrija, notifikacije, podešavanja.
+
+---
+
+## Funkcionalnosti (ciljna vizija)
+
+- 📥 **Unos plate** — uneseš iznos, aplikacija odmah računa raspodelu ✅
+- 🎯 **Cilj štednje** — fiksni iznos ili procenat plate ✅
+- 🧾 **Fiksni troškovi** — kirija, rate, pretplate — automatski se uračunavaju ✅
+- 📊 **Dashboard** — pregled tekućeg meseca i raspodele plate ✅
+- 📅 **Istorija** — mesečni i godišnji pregled svih entrija 🚧
+- 🔥 **Streak tracker** — broj uzastopnih meseci sa unetom platom 🚧
+- 🔔 **Notifikacije** — podsetnik na dan isplate 🚧
+- 🔒 **App lock** — biometrija ili PIN 🚧
+- 💾 **Export** — CSV i PDF izveštaji, lokalni backup 🚧
+- 🌙 **Dark mode** — trenutno fiksno dark 🚧
+
+Svi podaci su lokalni — aplikacija ne šalje ništa na server. _(✅ = urađeno, 🚧 = planirano)_
 
 ---
 
@@ -54,7 +78,36 @@ Svi podaci su lokalni — aplikacija ne šalje ništa na server.
 
 ## Arhitektura
 
-Oba projekta koriste **Clean Architecture** sa tri odvojena layera:
+### Aktuelna struktura (iOS)
+
+Trenutno je u upotrebi **MVVM** sa `@Observable` ViewModelima, **SwiftData** slojem za perzistenciju i deljenim dizajn slojem:
+
+```
+stash/stash/
+├── stashApp.swift              # Entry point — postavlja modelContainer
+├── Models/                     # SwiftData @Model klase
+│   ├── UserProfile.swift       #   Profil (plata, štednja, valuta, flag-ovi)
+│   └── FixedExpenseEntity.swift#   Fiksni trošak (relacija ka profilu)
+├── Theme/
+│   ├── AppTheme.swift          # Boje, tipografija, Spacing, Radius
+│   └── Extensions.swift        # NumberFormatter / Double / String helperi
+├── Views/
+│   ├── RootView.swift          # Rutiranje: dashboard vs. onboarding
+│   ├── DashboardView.swift     # Pregled sačuvanog profila
+│   ├── Components/             # DropdownPicker, OnboardingAppBar,
+│   │                          #   ProgressIndicator, StashTheme
+│   └── Onboarding/
+│       ├── Onboarding{First…Fourth}StepView.swift
+│       └── ViewModels/         # @Observable @MainActor VM po koraku
+├── en.lproj/Localizable.strings   # Engleski (default)
+└── sr.lproj/Localizable.strings   # Srpski
+```
+
+**Perzistencija:** `modelContainer(for:)` se postavlja u `StashApp`, a `UserProfile` se čuva po principu „jedan profil po uređaju" (`UserProfile.current(in:)` / `.existing(in:)`). Onboarding koraci upisuju podatke u profil, a `RootView` na startu čita `onboardingCompleted` da odluči koji ekran prikazati.
+
+### Ciljna arhitektura
+
+Kako projekat raste, prelazi se na **Clean Architecture** sa tri odvojena layera:
 
 ```
 ├── data/
@@ -89,10 +142,11 @@ Oba projekta koriste **Clean Architecture** sa tri odvojena layera:
 - **Merge u main** → release build (potpisani AAB) + auto-upload na Play Store Internal Testing track
 
 ### iOS
-- **PR** → SwiftLint + unit testovi + build
-- **Merge u main** → archive + automatski upload na TestFlight (Fastlane)
+Aktuelni pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) na `push` i `pull_request`:
+- **`lint`** → `swiftlint --strict`
+- **`build-and-test`** → `xcodebuild test` (scheme `stash`, iPhone 16 simulator), uz upload test rezultata pri padu
 
-Sertifikati i provisioning profili se upravljaju putem **Fastlane match**.
+Planirano: archive + automatski upload na TestFlight preko **Fastlane**, sa sertifikatima i provisioning profilima kroz **Fastlane match**.
 
 ---
 
@@ -117,19 +171,22 @@ cd stash-android
 
 ```bash
 # Kloniranje repozitorijuma
-git clone https://github.com/username/stash-ios.git
-cd stash-ios
-
-# Instalacija dependencies
-bundle install
+git clone https://github.com/nikolalucicc/stash-iOS.git
+cd stash-iOS
 
 # Otvaranje u Xcode
-open Stash.xcodeproj
+open stash/stash.xcodeproj
+
+# Lint (lokalno, isto što i CI radi)
+brew install swiftlint   # ako već nije instaliran
+cd stash && swiftlint --strict
 ```
+
+> SwiftLint se pokreće i kroz **pre-push git hook** — push se odbija ako ima violations. Pokreni `swiftlint --strict` pre push-a da uhvatiš greške ranije.
 
 Zahtevi:
 - Android: Android Studio Hedgehog ili noviji, JDK 17+
-- iOS: Xcode 15+, macOS Sonoma ili noviji
+- iOS: Xcode 15+, macOS Sonoma ili noviji, SwiftLint
 
 ---
 
@@ -145,7 +202,10 @@ Ciljna pokrivenost: **70%+ na domain i data layeru**.
 ./gradlew koverHtmlReport
 
 # iOS — testovi
-xcodebuild test -scheme Stash -destination 'platform=iOS Simulator,name=iPhone 15'
+xcodebuild test \
+  -project stash/stash.xcodeproj \
+  -scheme stash \
+  -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
 ---
@@ -161,16 +221,18 @@ xcodebuild test -scheme Stash -destination 'platform=iOS Simulator,name=iPhone 1
 
 ## Roadmap
 
-**V1 — MVP**
-- [x] Arhitektura i data layer
-- [ ] Onboarding
-- [ ] Dashboard
-- [ ] Unos plate i kalkulacija
+**V1 — MVP (iOS)**
+- [x] Dizajn sistem i reusable komponente
+- [x] Onboarding (4 koraka)
+- [x] Lokalizacija (en + sr)
+- [x] CI/CD pipeline (SwiftLint + build & test)
+- [x] Lokalno čuvanje podataka (SwiftData)
+- [x] Dashboard
+- [ ] Unos plate i kalkulacija (van onboarding-a)
 - [ ] Istorija
 - [ ] Podešavanja
 - [ ] Notifikacije
 - [ ] App lock
-- [ ] CI/CD pipeline
 - [ ] Play Store + App Store release
 
 **V2**
