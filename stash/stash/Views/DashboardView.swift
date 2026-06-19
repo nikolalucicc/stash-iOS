@@ -126,22 +126,7 @@ struct DashboardView: View {
 
     private func currentMonthCard(for profile: UserProfile) -> some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
-            HStack {
-                Text("dashboard.salary_card_label")
-                    .font(.labelCapsStyle)
-                    .tracking(0.6)
-                    .foregroundColor(.white.opacity(0.6))
-                Spacer()
-                Text("dashboard.entered_badge")
-                    .font(.labelSmStyle)
-                    .foregroundColor(.appPrimary)
-                    .padding(.horizontal, Spacing.sm)
-                    .padding(.vertical, 3)
-                    .background(Color.accent.opacity(0.2))
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(Color.accent.opacity(0.3), lineWidth: 0.5))
-            }
-
+            currentMonthHeader
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text(verbatim: profile.monthlySalary.serbianFormatted)
                     .font(.screenTitleStyle)
@@ -150,28 +135,8 @@ struct DashboardView: View {
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
-
             SegmentedBreakdownBar(breakdown: breakdown(for: profile))
-
-            HStack {
-                statColumn(
-                    label: String(localized: "dashboard.savings_stat"),
-                    amount: profile.monthlySaving,
-                    tint: Color(hex: "#AFA9EC")
-                )
-                Spacer()
-                statColumn(
-                    label: String(localized: "dashboard.fixed_stat"),
-                    amount: fixedTotal(for: profile),
-                    tint: .onSurfaceVariant
-                )
-                Spacer()
-                statColumn(
-                    label: String(localized: "dashboard.free_stat"),
-                    amount: freeAmount(for: profile),
-                    tint: .onSurface
-                )
-            }
+            currentMonthStats(for: profile)
         }
         .padding(Spacing.md + 2)
         .background(Color.accent.opacity(0.1))
@@ -180,6 +145,46 @@ struct DashboardView: View {
             RoundedRectangle(cornerRadius: Radius.xl + 4)
                 .stroke(Color.accent.opacity(0.3), lineWidth: 0.5)
         )
+    }
+
+    private var currentMonthHeader: some View {
+        HStack {
+            Text("dashboard.salary_card_label")
+                .font(.labelCapsStyle)
+                .tracking(0.6)
+                .foregroundColor(.white.opacity(0.6))
+            Spacer()
+            Text("dashboard.entered_badge")
+                .font(.labelSmStyle)
+                .foregroundColor(.appPrimary)
+                .padding(.horizontal, Spacing.sm)
+                .padding(.vertical, 3)
+                .background(Color.accent.opacity(0.2))
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.accent.opacity(0.3), lineWidth: 0.5))
+        }
+    }
+
+    private func currentMonthStats(for profile: UserProfile) -> some View {
+        HStack {
+            statColumn(
+                label: String(localized: "dashboard.savings_stat"),
+                amount: profile.monthlySaving,
+                tint: Color(hex: "#AFA9EC")
+            )
+            Spacer()
+            statColumn(
+                label: String(localized: "dashboard.fixed_stat"),
+                amount: fixedTotal(for: profile),
+                tint: .onSurfaceVariant
+            )
+            Spacer()
+            statColumn(
+                label: String(localized: "dashboard.free_stat"),
+                amount: freeAmount(for: profile),
+                tint: .onSurface
+            )
+        }
     }
 
     private func statColumn(label: String, amount: Double, tint: Color) -> some View {
@@ -295,17 +300,21 @@ struct DashboardView: View {
         )
     }
 
-    // MARK: - Derived values
+}
 
-    private func fixedTotal(for profile: UserProfile) -> Double {
+// MARK: - Derived values
+
+private extension DashboardView {
+
+    func fixedTotal(for profile: UserProfile) -> Double {
         profile.expenses.reduce(0) { $0 + $1.amount }
     }
 
-    private func freeAmount(for profile: UserProfile) -> Double {
+    func freeAmount(for profile: UserProfile) -> Double {
         max(0, profile.monthlySalary - profile.monthlySaving - fixedTotal(for: profile))
     }
 
-    private func breakdown(for profile: UserProfile) -> SalaryBreakdown {
+    func breakdown(for profile: UserProfile) -> SalaryBreakdown {
         let salary = max(profile.monthlySalary, 0.01)
         let saving = min(profile.monthlySaving / salary, 1)
         let fixed = min(fixedTotal(for: profile) / salary, 1 - saving)
@@ -313,11 +322,11 @@ struct DashboardView: View {
         return SalaryBreakdown(savingRatio: saving, fixedRatio: fixed, freeRatio: free)
     }
 
-    private func daysUntilPaydayLabel(for profile: UserProfile) -> String {
+    func daysUntilPaydayLabel(for profile: UserProfile) -> String {
         String(format: String(localized: "dashboard.days_value"), daysUntilNextPayday(for: profile))
     }
 
-    private func daysUntilNextPayday(for profile: UserProfile) -> Int {
+    func daysUntilNextPayday(for profile: UserProfile) -> Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
         let timing = paydayTiming(for: profile)
@@ -331,7 +340,7 @@ struct DashboardView: View {
         return max(0, calendar.dateComponents([.day], from: today, to: upcoming).day ?? 0)
     }
 
-    private func payday(monthsFromNow: Int, timing: PaydayTiming, calendar: Calendar, today: Date) -> Date? {
+    func payday(monthsFromNow: Int, timing: PaydayTiming, calendar: Calendar, today: Date) -> Date? {
         guard let monthDate = calendar.date(byAdding: .month, value: monthsFromNow, to: today) else { return nil }
         var components = calendar.dateComponents([.year, .month], from: monthDate)
         switch timing {
@@ -342,7 +351,7 @@ struct DashboardView: View {
         return calendar.date(from: components)
     }
 
-    private func paydayTiming(for profile: UserProfile) -> PaydayTiming {
+    func paydayTiming(for profile: UserProfile) -> PaydayTiming {
         if profile.paydayPeriod == String(localized: "onboarding.step1.payday_middle") { return .middle }
         if profile.paydayPeriod == String(localized: "onboarding.step1.payday_end") { return .end }
         return .beginning
