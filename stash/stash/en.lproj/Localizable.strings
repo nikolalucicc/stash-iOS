@@ -13,6 +13,8 @@
 "common.cancel_btn"            = "Cancel";
 
 /* %d = current step number (1–4) */
+"common.saving_exceeds_salary" = "Saving can't be higher than your salary.";
+
 "common.progress_step"         = "Step %d of 4";
 /* %d = current step number, %@ = optional suffix (e.g. "Optional") */
 "common.progress_step_suffix"  = "Step %d of 4 · %@";
@@ -78,3 +80,14 @@
 "dashboard.days_until_payday_label" = "Until next payday";
 /* %d = number of days until the next payday */
 "dashboard.days_value"              = "%d days";
+
+// MARK: - Settings (Change salary)
+
+"settings.title"             = "Salary settings";
+"settings.subtitle"          = "Update your monthly income details.";
+"settings.info"              = "These changes will apply from next month.";
+"settings.save_btn"          = "Save changes";
+"settings.projection_label"  = "Budget projection";
+"settings.projection_title"  = "Your new saving";
+/* Appended after the currency code, e.g. "RSD/mo" */
+"settings.per_month_suffix"  = "/mo";

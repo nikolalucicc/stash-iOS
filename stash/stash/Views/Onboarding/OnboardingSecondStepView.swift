@@ -167,8 +167,21 @@ struct OnboardingSecondStepView: View {
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.appPrimary.opacity(0.5), lineWidth: 1)
+                    .stroke(
+                        vm.savingExceedsSalary ? Color.appError : Color.appPrimary.opacity(0.5),
+                        lineWidth: 1
+                    )
             )
+            if vm.savingExceedsSalary {
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 11))
+                    Text("common.saving_exceeds_salary")
+                        .font(.noteStyle)
+                }
+                .foregroundColor(.appError)
+                .padding(.leading, 4)
+            }
         }
     }
 
@@ -226,6 +239,8 @@ struct OnboardingSecondStepView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(!vm.canContinue)
+            .opacity(vm.canContinue ? 1 : 0.4)
             .simultaneousGesture(TapGesture().onEnded { saveProfile() })
 
             HStack(spacing: Spacing.md) {

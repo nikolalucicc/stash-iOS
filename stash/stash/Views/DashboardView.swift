@@ -12,6 +12,7 @@ import Foundation
 struct DashboardView: View {
 
     @Query private var profiles: [UserProfile]
+    @State private var showSettings = false
 
     private var profile: UserProfile? { profiles.first }
 
@@ -38,6 +39,9 @@ struct DashboardView: View {
             }
         }
         .navigationBarHidden(true)
+        .fullScreenCover(isPresented: $showSettings) {
+            ChangeSalaryView()
+        }
     }
 
     // MARK: - Header Bar
@@ -50,15 +54,18 @@ struct DashboardView: View {
                 .textCase(.uppercase)
                 .tracking(1)
             Spacer()
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.05))
-                    .overlay(Circle().stroke(Color.white.opacity(0.1), lineWidth: 0.5))
-                    .frame(width: 36, height: 36)
-                Image(systemName: "gearshape")
-                    .font(.system(size: 16))
-                    .foregroundColor(.white.opacity(0.6))
+            Button { showSettings = true } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.white.opacity(0.05))
+                        .overlay(Circle().stroke(Color.white.opacity(0.1), lineWidth: 0.5))
+                        .frame(width: 36, height: 36)
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 16))
+                        .foregroundColor(.white.opacity(0.6))
+                }
             }
+            .buttonStyle(.plain)
         }
         .padding(.bottom, Spacing.xs)
     }
@@ -198,10 +205,13 @@ struct DashboardView: View {
                 .foregroundColor(tint)
         }
     }
+}
 
-    // MARK: - Stats Grid
+// MARK: - Stats & expenses
 
-    private func statsGrid(for profile: UserProfile) -> some View {
+private extension DashboardView {
+
+    func statsGrid(for profile: UserProfile) -> some View {
         HStack(spacing: Spacing.gutter) {
             statTile(
                 icon: "list.bullet.rectangle",
@@ -355,56 +365,6 @@ private extension DashboardView {
         if profile.paydayPeriod == String(localized: "onboarding.step1.payday_middle") { return .middle }
         if profile.paydayPeriod == String(localized: "onboarding.step1.payday_end") { return .end }
         return .beginning
-    }
-}
-
-// MARK: - Supporting types
-
-private enum PaydayTiming {
-    case beginning, middle, end
-}
-
-private struct SalaryBreakdown {
-    let savingRatio: Double
-    let fixedRatio: Double
-    let freeRatio: Double
-}
-
-private struct ProgressTrack: View {
-    let progress: Double
-    let tint: Color
-
-    var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Capsule().fill(Color.white.opacity(0.1))
-                Capsule()
-                    .fill(tint)
-                    .frame(width: proxy.size.width * min(max(progress, 0), 1))
-            }
-        }
-        .frame(height: 4)
-    }
-}
-
-private struct SegmentedBreakdownBar: View {
-    let breakdown: SalaryBreakdown
-
-    var body: some View {
-        GeometryReader { proxy in
-            HStack(spacing: 2) {
-                Capsule()
-                    .fill(Color(hex: "#534AB7"))
-                    .frame(width: proxy.size.width * breakdown.savingRatio)
-                Capsule()
-                    .fill(Color(hex: "#3C3489"))
-                    .frame(width: proxy.size.width * breakdown.fixedRatio)
-                Capsule()
-                    .fill(Color.white.opacity(0.1))
-                    .frame(width: proxy.size.width * breakdown.freeRatio)
-            }
-        }
-        .frame(height: 8)
     }
 }
 

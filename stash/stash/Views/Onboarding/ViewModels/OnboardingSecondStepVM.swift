@@ -59,4 +59,14 @@ class OnboardingSecondStepVM {
     var monthlySavingFormatted: String {
         monthlySaving.serbianFormatted
     }
+
+    /// `true` when the entered saving would exceed the salary — invalid input.
+    var savingExceedsSalary: Bool {
+        monthlySalary > 0 && monthlySaving > monthlySalary
+    }
+
+    /// Whether the user can proceed to the next step.
+    var canContinue: Bool {
+        monthlySalary > 0 && monthlySaving <= monthlySalary
+    }
 }

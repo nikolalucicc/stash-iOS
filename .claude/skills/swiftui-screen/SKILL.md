@@ -35,10 +35,10 @@ final class ExampleVM {
 
 ## View structure & SwiftLint limits
 
-SwiftLint (`.swiftlint.yml`, run `swiftlint --strict`) is enforced by a **pre-push hook and CI** — a violation blocks the push. Design for it up front:
+SwiftLint (`.swiftlint.yml`) is enforced by a **pre-push hook and CI** — a violation blocks the push. **CI runs `swiftlint --strict`** (warnings become errors); the local pre-push hook is **not** strict, so it can pass while CI fails. Always run `swiftlint --strict` yourself from the `stash/` directory. Design for it up front:
 
-- **`function_body_length` ≤ 50 lines** and **`type_body_length` ≤ 300 lines** (excluding comments/whitespace). Keep `body` tiny; split UI into small `private var section: some View` computed properties and `private func row(_:) -> some View` helpers.
-- When a `struct` View nears the 300-line type limit, move pure helpers (derived values, formatting, calculations) into a `private extension XxxView { }` — extensions don't count toward `type_body_length`.
+- Strict thresholds (errors under `--strict`): **`function_body_length` ≤ 50**, **`type_body_length` ≤ 250**, **`file_length` ≤ 400** (excluding comments/whitespace). Keep `body` tiny; split UI into small `private var section: some View` computed properties and `private func row(_:) -> some View` helpers.
+- When a `struct` View nears the 250-line type limit, move pure helpers (derived values, formatting) **and whole view sections** into a `private extension XxxView { }` — extensions don't count toward `type_body_length`. When the **file** nears 400 lines, move supporting types / small subviews into their own file (e.g. `XxxComponents.swift`).
 - **`identifier_name` min length 3.** Use descriptive names (`bindable`, `formatter`, not `b`, `f`). Allowed short names are only those in `.swiftlint.yml` `excluded` (`id`, `vm`, `xs`, `sm`, `md`, `lg`, `xl`).
 - **Buttons use multiple-trailing-closure syntax:** `Button { action } label: { content }` — never `Button(action:){ }`. Add `.buttonStyle(.plain)` for custom-styled buttons.
 - Don't initialize optionals with `= nil` (`implicit_optional_initialization`): write `var onBack: (() -> Void)?`.
@@ -86,7 +86,7 @@ Expose validity as VM computed properties (`isValid` / `canSave` / `canContinue`
 ## Checklist before finishing
 
 - [ ] `body` small; sections split into computed props / small funcs (≤ 50 lines each)
-- [ ] Type body ≤ 300 lines (helpers moved to a `private extension` if needed)
+- [ ] Type body ≤ 250 lines (helpers/sections moved to a `private extension`); file ≤ 400 lines
 - [ ] Only design tokens (Spacing/Radius/colors/fonts) — no magic numbers
 - [ ] All strings localized in **both** `en` and `sr`
 - [ ] VM is `@Observable @MainActor final class`; side effects `async`; derived state computed

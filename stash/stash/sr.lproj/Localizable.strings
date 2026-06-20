@@ -12,6 +12,8 @@
 "common.add_btn"               = "Dodaj";
 "common.cancel_btn"            = "Otkaži";
 
+"common.saving_exceeds_salary" = "Ušteda ne može biti veća od plate.";
+
 "common.progress_step"         = "Korak %d od 4";
 "common.progress_step_suffix"  = "Korak %d od 4 · %@";
 
@@ -76,3 +78,14 @@
 "dashboard.days_until_payday_label" = "Do sledeće plate";
 /* %d = broj dana do sledeće plate */
 "dashboard.days_value"              = "%d dana";
+
+// MARK: - Settings (Izmena plate)
+
+"settings.title"             = "Podešavanje plate";
+"settings.subtitle"          = "Ažurirajte podatke o vašim mesečnim prihodima.";
+"settings.info"              = "Ove promene će se primeniti od sledećeg meseca.";
+"settings.save_btn"          = "Sačuvaj promene";
+"settings.projection_label"  = "Projekcija budžeta";
+"settings.projection_title"  = "Vaša nova štednja";
+/* Dodaje se posle koda valute, npr. "RSD/mes" */
+"settings.per_month_suffix"  = "/mes";
