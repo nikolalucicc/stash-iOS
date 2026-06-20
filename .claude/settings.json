@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *stashTests/*Tests.swift) cls=$(basename \"$f\" .swift); out=$(xcodebuild test -project stash/stash.xcodeproj -scheme stash -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:\"stashTests/$cls\" 2>&1) || { printf '%s failed:\\n' \"$cls\"; printf '%s\\n' \"$out\" | grep -iE 'error:|fail|Executed [0-9]' | tail -25; exit 2; } ;; esac",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *stashTests/*Tests.swift) cls=$(basename \"$f\" .swift); udid=$(xcrun simctl list devices available | grep iPhone | grep -oE '[0-9A-F-]{36}' | head -1); out=$(xcodebuild test -project stash/stash.xcodeproj -scheme stash -destination \"id=$udid\" -only-testing:\"stashTests/$cls\" 2>&1) || { printf '%s failed:\\n' \"$cls\"; printf '%s\\n' \"$out\" | grep -iE 'error:|fail|Executed [0-9]' | tail -25; exit 2; } ;; esac",
             "asyncRewake": true,
             "timeout": 300,
             "statusMessage": "Running edited test in background"
