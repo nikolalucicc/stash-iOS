@@ -5,14 +5,14 @@ description: Resolve SwiftLint violations in the Stash iOS app. Use when a push/
 
 # Fixing SwiftLint violations (Stash iOS)
 
-SwiftLint runs via a **pre-push git hook** and **GitHub Actions CI** (`swiftlint --strict` on `stash/`). A single violation rejects the push (`SwiftLint failed. Fix errors before pushing.`). Run it locally first:
+SwiftLint runs via a **pre-push git hook** (plain, non-strict) and **GitHub Actions CI** (`swiftlint --strict`). ⚠️ The hook can pass (0 violations) while **CI still fails**, because `--strict` promotes warnings (like `type_body_length`/`file_length` exceeding their *warning* thresholds) into errors. Always reproduce CI locally:
 
 ```bash
-cd stash && swiftlint --strict      # same as CI
+cd stash && swiftlint --strict      # same as CI — run from stash/, not the repo root
 swiftlint --fix                     # auto-fix the mechanical ones
 ```
 
-Config lives in `stash/.swiftlint.yml`. Prefer fixing the code over loosening rules; only edit the config for genuinely conventional short names.
+Run from the `stash/` directory so `stash/.swiftlint.yml` is picked up; running from a nested dir makes SwiftLint fall back to defaults and report false `identifier_name` hits on excluded names (`vm`, `md`, `lg`, `xl`...). Prefer fixing the code over loosening rules; only edit the config for genuinely conventional short names.
 
 ## Rules this project trips on — and the fix
 
@@ -22,13 +22,17 @@ SwiftUI view builders grow fast. Split the body into smaller pieces:
 - Extract repeated/parameterized rows into `private func row(_ item: T) -> some View { ... }`.
 - Move a card's header/stats/footer into separate computed properties.
 
-### `type_body_length` (≤ 300 lines)
-A big `struct View` with many subviews. Move **non-view helpers** (derived values, formatting, calculations) into an extension — extensions are not counted:
+### `type_body_length` (≤ 250 lines under `--strict`)
+A big `struct View` with many subviews. Move helpers **and whole view sections** into an extension — extensions are not counted toward the type body:
 ```swift
 private extension DashboardView {
     func fixedTotal(for profile: UserProfile) -> Double { ... }
+    func statsGrid(for profile: UserProfile) -> some View { ... }
 }
 ```
+
+### `file_length` (≤ 400 lines under `--strict`)
+Extensions in the same file don't help here. Move supporting value types and small subviews into their own file (e.g. `DashboardComponents.swift`). Note: types used across files can't stay `private` — drop to internal.
 
 ### `multiple_closures_with_trailing_closure`
 Never `Button(action: {}) { }`. Use the multiple-trailing-closure form:
