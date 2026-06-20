@@ -15,6 +15,7 @@ Follow these conventions for any new screen, component, or view model. They refl
 - **Derived state = computed properties** on the VM (e.g. `monthlySaving`, `projectedSavingFormatted`). Don't store what you can compute.
 - **Side effects = methods.** In this project VM side-effecting methods are `async` (e.g. `func load(from: ModelContext) async`, `func save(to: ModelContext) async`) — keep new ones `async` too, even if the body is currently synchronous, so call sites stay future-proof.
 - Inject dependencies (like `ModelContext`) as method parameters; don't capture global singletons.
+- **Changing VM logic? Update its tests in the same change and re-run them** — see the `xctest-screen` skill. A logic edit that leaves tests untouched is incomplete.
 
 ```swift
 @Observable
