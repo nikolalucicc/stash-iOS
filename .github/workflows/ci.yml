@@ -21,31 +21,25 @@ jobs:
 
   build-and-test:
     name: Build & Test
-    runs-on: macos-latest
+    # macos-14 ships a stable Xcode (iOS 17/18) whose simulators are
+    # pre-created and eligible. The macos-15 image bundles Xcode 26, which
+    # is incompatible with its own macOS 15.x, leaving no usable iOS sim.
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
-
-      - name: Select compatible Xcode
-        run: |
-          echo "Installed Xcodes:"; ls -d /Applications/Xcode*.app || true
-          # Xcode 26 ships on these images but is incompatible with the
-          # runner's macOS 15.x (no usable iOS simulators). Prefer the
-          # newest Xcode 16.x, falling back to the default.
-          XC=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
-          [ -z "$XC" ] && XC=/Applications/Xcode.app
-          echo "Selecting $XC"
-          sudo xcode-select -s "$XC/Contents/Developer"
-          xcodebuild -version
 
       - name: Build & Test
         run: |
           set -o pipefail
-          echo "Eligible simulators:"
+          xcodebuild -version
+          echo "Available simulators:"
           xcrun simctl list devices available | grep -E 'iPhone' || true
+          UDID=$(xcrun simctl list devices available | grep iPhone | grep -oE '[0-9A-F-]{36}' | head -1)
+          echo "Using simulator: $UDID"
           xcodebuild test \
             -project stash/stash.xcodeproj \
             -scheme stash \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination "id=$UDID" \
             -only-testing:stashTests \
             -resultBundlePath TestResults
 
