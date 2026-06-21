@@ -94,6 +94,16 @@ final class GoalsVMTests: XCTestCase {
         XCTAssertTrue(goals.isEmpty)
     }
 
+    // MARK: - Ordering
+
+    func testGoalsSortByPriorityHighFirst() {
+        let low = SavingsGoal(name: "Low", targetAmount: 1, priority: .low)
+        let high = SavingsGoal(name: "High", targetAmount: 1, priority: .high)
+        let medium = SavingsGoal(name: "Medium", targetAmount: 1, priority: .medium)
+        let sorted = [low, high, medium].sortedByPriority
+        XCTAssertEqual(sorted.map(\.name), ["High", "Medium", "Low"])
+    }
+
     // MARK: - GoalsBudgetVM
 
     func testBudgetAllocationsWithinBudget() {

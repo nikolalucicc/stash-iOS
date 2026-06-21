@@ -98,11 +98,12 @@ struct GoalsBudgetView: View {
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             } else {
-                let amounts = vm.allocations(for: goals)
-                ForEach(Array(zip(goals, amounts)), id: \.0.id) { goal, amount in
+                let sorted = goals.sortedByPriority
+                let amounts = vm.allocations(for: sorted)
+                ForEach(Array(zip(sorted, amounts)), id: \.0.id) { goal, amount in
                     allocationRow(goal: goal, amount: amount)
                 }
-                let leftover = vm.unallocated(for: goals)
+                let leftover = vm.unallocated(for: sorted)
                 if leftover > 0 {
                     unallocatedRow(leftover)
                 }

@@ -79,3 +79,22 @@ extension SavingsGoal {
 
     var remaining: Double { max(0, targetAmount - savedAmount) }
 }
+
+// MARK: - Ordering
+
+extension SavingsGoal {
+    /// Sort comparator: highest priority first, then oldest first (stable).
+    static func byPriority(_ lhs: SavingsGoal, _ rhs: SavingsGoal) -> Bool {
+        if lhs.priority.weight != rhs.priority.weight {
+            return lhs.priority.weight > rhs.priority.weight
+        }
+        return lhs.createdAt < rhs.createdAt
+    }
+}
+
+extension Array where Element == SavingsGoal {
+    /// Goals ordered by priority (high → low), then oldest first.
+    var sortedByPriority: [SavingsGoal] {
+        sorted(by: SavingsGoal.byPriority)
+    }
+}

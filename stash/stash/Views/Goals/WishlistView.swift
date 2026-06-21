@@ -108,7 +108,7 @@ struct WishlistView: View {
 
     private var goalsList: some View {
         VStack(spacing: Spacing.gutter) {
-            ForEach(goals) { goal in
+            ForEach(goals.sortedByPriority) { goal in
                 NavigationLink(value: goal) {
                     GoalCard(goal: goal)
                 }
