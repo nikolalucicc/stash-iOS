@@ -63,14 +63,19 @@ final class ChangeSalaryVMTests: XCTestCase {
 }
 ```
 
-**SwiftData — use an in-memory container** so tests are isolated and fast:
+**SwiftData — use an in-memory container** so tests are isolated and fast. ⚠️ **Keep the `ModelContainer` alive for the whole test** — a `ModelContext` does NOT retain its container's store, so if the container deallocates, the next `fetch` traps (`EXC_BREAKPOINT`, "crashed before starting test execution"). Hold it in a property, don't return only `mainContext` from a helper that lets the container go out of scope:
 ```swift
 @MainActor
-func makeContext() throws -> ModelContext {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try ModelContainer(
-        for: UserProfile.self, FixedExpenseEntity.self, configurations: config)
-    return container.mainContext
+final class XxxTests: XCTestCase {
+    private var container: ModelContainer!          // retains the store
+    private var context: ModelContext { container.mainContext }
+
+    override func setUpWithError() throws {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        container = try ModelContainer(
+            for: UserProfile.self, FixedExpenseEntity.self, configurations: config)
+    }
+    override func tearDownWithError() throws { container = nil }
 }
 ```
 Then assert lookup/persistence behavior: `UserProfile.current(in:)` creates exactly one record, `existing(in:)` returns `nil` before creation, cascade delete removes child `FixedExpenseEntity` rows, a `save → fetch` round-trips values.

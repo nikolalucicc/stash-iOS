@@ -86,6 +86,8 @@ Use an in-memory container so previews/tests don't touch the on-device store:
 }
 ```
 
+In unit tests, **retain the `ModelContainer` for the test's lifetime** (a property, set in `setUp`). A `ModelContext` does not keep its container's store alive, so a helper that returns only `container.mainContext` and lets the container deallocate makes the next `fetch` trap. See the `xctest-screen` skill.
+
 ## Checklist
 - [ ] `@Model final class` in `Models/`
 - [ ] Enums persisted as raw `String` + typed accessor

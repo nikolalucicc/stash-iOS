@@ -13,12 +13,18 @@ import SwiftData
 @MainActor
 final class ChangeSalaryVMTests: XCTestCase {
 
+    /// Held for the test's lifetime — a `ModelContext` does not keep its
+    /// container's store alive, so letting the container deallocate makes
+    /// subsequent fetches trap.
+    private var container: ModelContainer?
+
     private func makeContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(
             for: UserProfile.self, FixedExpenseEntity.self,
             configurations: config
         )
+        self.container = container
         return container.mainContext
     }
 
