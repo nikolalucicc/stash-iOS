@@ -35,6 +35,9 @@ struct WishlistView: View {
             .overlay(addButton, alignment: .bottomTrailing)
         }
         .navigationBarHidden(true)
+        .navigationDestination(for: SavingsGoal.self) { goal in
+            GoalDetailView(goal: goal)
+        }
         .sheet(isPresented: $showAddGoal) {
             AddGoalView(nextSortOrder: goals.count)
                 .presentationBackground(Color.surfaceContainerLow)
@@ -88,7 +91,10 @@ struct WishlistView: View {
     private var goalsList: some View {
         VStack(spacing: Spacing.gutter) {
             ForEach(goals) { goal in
-                GoalCard(goal: goal)
+                NavigationLink(value: goal) {
+                    GoalCard(goal: goal)
+                }
+                .buttonStyle(.plain)
             }
         }
     }

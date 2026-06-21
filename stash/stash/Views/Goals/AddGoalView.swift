@@ -18,6 +18,10 @@ struct AddGoalView: View {
         _vm = State(initialValue: AddGoalVM(sortOrder: nextSortOrder))
     }
 
+    init(editing goal: SavingsGoal) {
+        _vm = State(initialValue: AddGoalVM(editing: goal))
+    }
+
     var body: some View {
         StashTheme {
             VStack(spacing: 0) {
@@ -26,6 +30,7 @@ struct AddGoalView: View {
                     VStack(alignment: .leading, spacing: Spacing.lg) {
                         nameField
                         amountField
+                        savedField
                         prioritySelector
                         deadlineField
                         contributionSlider
@@ -42,7 +47,7 @@ struct AddGoalView: View {
 
     private var topBar: some View {
         ZStack {
-            Text("goals.add_title")
+            Text(vm.isEditing ? "goals.edit_title" : "goals.add_title")
                 .font(.screenTitleStyle)
                 .foregroundColor(.appPrimary)
                 .frame(maxWidth: .infinity)
@@ -92,6 +97,30 @@ struct AddGoalView: View {
             fieldLabel("goals.amount_label")
             HStack {
                 TextField("0", text: bindable.amountText)
+                    .font(.inputValStyle)
+                    .foregroundColor(.onSurface)
+                    .keyboardType(.numberPad)
+                Text("common.rsd")
+                    .font(.labelCapsStyle)
+                    .foregroundColor(.appPrimary)
+            }
+            .frame(height: 56)
+            .padding(.horizontal, Spacing.md)
+            .background(Color.white.opacity(0.04))
+            .cornerRadius(Radius.xl)
+            .overlay(
+                RoundedRectangle(cornerRadius: Radius.xl)
+                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+            )
+        }
+    }
+
+    private var savedField: some View {
+        let bindable = Bindable(vm)
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
+            fieldLabel("goals.saved_label")
+            HStack {
+                TextField("0", text: bindable.savedText)
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
@@ -182,7 +211,7 @@ struct AddGoalView: View {
                 dismiss()
             }
         } label: {
-            Text("goals.add_cta")
+            Text(vm.isEditing ? "goals.save_cta" : "goals.add_cta")
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

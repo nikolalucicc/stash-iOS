@@ -128,3 +128,23 @@
 "goals.deadline_label"      = "Rok (opciono)";
 "goals.contribution_label"  = "Mesečni doprinos";
 "goals.add_cta"             = "Dodaj na listu";
+
+// MARK: - Goals · detalj i izmena
+
+"goals.edit_title"           = "Izmeni cilj";
+"goals.save_cta"             = "Sačuvaj izmene";
+"goals.saved_label"          = "Već ušteđeno (opciono)";
+/* %@ = preostali iznos */
+"goals.remaining"            = "još %@ RSD";
+"goals.planned_monthly"      = "Planirano mesečno";
+/* %d = broj meseci do cilja */
+"goals.eta"                  = "≈ %d meseci do cilja";
+"goals.eta_done"             = "Cilj dostignut 🎉";
+"goals.eta_set_monthly"      = "Postavi mesečni iznos";
+/* %@ = planirani mesečni iznos */
+"goals.deposit_month_cta"    = "Odvojio sam ovog meseca (+%@)";
+"goals.deposit_custom_cta"   = "Dodaj proizvoljan iznos";
+"goals.delete_cta"           = "Obriši cilj";
+"goals.delete_confirm_title" = "Obrisati ovaj cilj?";
+"goals.deposit_title"        = "Dodaj u štednju";
+"goals.deposit_cta"          = "Dodaj";
