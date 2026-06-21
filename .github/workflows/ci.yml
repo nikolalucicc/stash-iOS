@@ -30,12 +30,23 @@ jobs:
 
       - name: Build & Test
         run: |
+          set -o pipefail
+          echo "Available simulators:"
+          xcrun simctl list devices available | grep -E 'iPhone|iPad' || true
+          UDID=$(xcrun simctl list devices available | grep iPhone | grep -oE '[0-9A-F-]{36}' | head -1)
+          if [ -z "$UDID" ]; then
+            echo "No iPhone simulator available; creating one"
+            RUNTIME=$(xcrun simctl list runtimes available | grep -oE 'com.apple.CoreSimulator.SimRuntime.iOS[^ ]*' | head -1)
+            DEVTYPE=$(xcrun simctl list devicetypes | grep -oE 'com.apple.CoreSimulator.SimDeviceType.iPhone[^ )]*' | head -1)
+            UDID=$(xcrun simctl create ci-iphone "$DEVTYPE" "$RUNTIME")
+          fi
+          echo "Using simulator: $UDID"
           xcodebuild test \
             -project stash/stash.xcodeproj \
             -scheme stash \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
-            -resultBundlePath TestResults \
-            | xcpretty
+            -destination "id=$UDID" \
+            -only-testing:stashTests \
+            -resultBundlePath TestResults
 
       - name: Upload test results
         if: failure()
