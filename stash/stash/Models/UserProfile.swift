@@ -23,7 +23,7 @@ final class UserProfile {
     var currencyRaw: String
     var onboardingCompleted: Bool
     /// Max total the user is willing to put toward wishlist goals each month.
-    var goalsMonthlyBudget: Double
+    var goalsMonthlyBudget: Double = 15_000
     var createdAt: Date
 
     @Relationship(deleteRule: .cascade, inverse: \FixedExpenseEntity.profile)

@@ -9,27 +9,36 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
+
+    private enum Tab: Hashable { case vault, goals, monthly, account }
+
+    @State private var selection: Tab = .monthly
+
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             NavigationStack {
                 PlaceholderTab(titleKey: "tab.vault", systemImage: "creditcard.fill")
             }
             .tabItem { Label("tab.vault", systemImage: "creditcard.fill") }
+            .tag(Tab.vault)
 
             NavigationStack {
                 WishlistView()
             }
             .tabItem { Label("tab.goals", systemImage: "star.fill") }
+            .tag(Tab.goals)
 
             NavigationStack {
                 DashboardView()
             }
             .tabItem { Label("tab.monthly", systemImage: "calendar") }
+            .tag(Tab.monthly)
 
             NavigationStack {
                 PlaceholderTab(titleKey: "tab.account", systemImage: "person.fill")
             }
             .tabItem { Label("tab.account", systemImage: "person.fill") }
+            .tag(Tab.account)
         }
         .tint(.accent)
     }

@@ -2,8 +2,8 @@
 //  RootView.swift
 //  stash
 //
-//  Decides whether to show onboarding or the dashboard, based on whether
-//  the user already finished setup (persisted in `UserProfile`).
+//  Decides whether to show onboarding or the main app, reacting to whether
+//  the user has finished setup (persisted in `UserProfile`).
 //
 
 import SwiftUI
@@ -11,27 +11,20 @@ import SwiftData
 
 struct RootView: View {
 
-    @Environment(\.modelContext) private var modelContext
-    @State private var hasCompletedOnboarding: Bool?
+    @Query private var profiles: [UserProfile]
+
+    private var onboardingCompleted: Bool {
+        profiles.first?.onboardingCompleted ?? false
+    }
 
     var body: some View {
         Group {
-            if let hasCompletedOnboarding {
-                if hasCompletedOnboarding {
-                    MainTabView()
-                } else {
-                    NavigationStack { OnboardingFirstStepView() }
-                }
+            if onboardingCompleted {
+                MainTabView()
             } else {
-                Color.appBackground.ignoresSafeArea()
+                NavigationStack { OnboardingFirstStepView() }
             }
         }
-        .onAppear { resolveStartDestination() }
-    }
-
-    private func resolveStartDestination() {
-        guard hasCompletedOnboarding == nil else { return }
-        hasCompletedOnboarding = UserProfile.existing(in: modelContext)?.onboardingCompleted ?? false
     }
 }
 
