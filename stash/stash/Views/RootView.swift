@@ -15,17 +15,15 @@ struct RootView: View {
     @State private var hasCompletedOnboarding: Bool?
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if let hasCompletedOnboarding {
-                    if hasCompletedOnboarding {
-                        DashboardView()
-                    } else {
-                        OnboardingFirstStepView()
-                    }
+        Group {
+            if let hasCompletedOnboarding {
+                if hasCompletedOnboarding {
+                    MainTabView()
                 } else {
-                    Color.appBackground.ignoresSafeArea()
+                    NavigationStack { OnboardingFirstStepView() }
                 }
+            } else {
+                Color.appBackground.ignoresSafeArea()
             }
         }
         .onAppear { resolveStartDestination() }
@@ -39,5 +37,5 @@ struct RootView: View {
 
 #Preview {
     RootView()
-        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self], inMemory: true)
+        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self], inMemory: true)
 }

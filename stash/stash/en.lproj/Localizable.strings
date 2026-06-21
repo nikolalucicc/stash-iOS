@@ -91,3 +91,42 @@
 "settings.projection_title"  = "Your new saving";
 /* Appended after the currency code, e.g. "RSD/mo" */
 "settings.per_month_suffix"  = "/mo";
+
+// MARK: - Common (shared)
+
+"common.coming_soon" = "Coming soon";
+
+// MARK: - Tab bar
+
+"tab.vault"   = "Vault";
+"tab.goals"   = "Goals";
+"tab.monthly" = "Monthly";
+"tab.account" = "Account";
+
+// MARK: - Goals (Wishlist)
+
+"goals.title"               = "Wishlist";
+"goals.subtitle"            = "Save toward what you want, by priority.";
+"goals.budget_label"        = "Total monthly budget for goals";
+/* %d = number of goals currently being saved for */
+"goals.active_count"        = "%d goals in progress";
+"goals.empty_title"         = "No goals yet";
+"goals.empty_subtitle"      = "Add your first wish and start saving toward it.";
+"goals.empty_cta"           = "Add a goal";
+
+"goals.no_deadline"         = "No deadline";
+/* %@ = formatted month and year */
+"goals.until_date"          = "until %@";
+
+"goals.priority.low"    = "Low";
+"goals.priority.medium" = "Medium";
+"goals.priority.high"   = "High";
+
+"goals.add_title"           = "New goal";
+"goals.name_label"          = "Wish name";
+"goals.name_placeholder"    = "e.g. PlayStation 5";
+"goals.amount_label"        = "Total amount";
+"goals.priority_label"      = "Priority";
+"goals.deadline_label"      = "Deadline (optional)";
+"goals.contribution_label"  = "Monthly contribution";
+"goals.add_cta"             = "Add to list";

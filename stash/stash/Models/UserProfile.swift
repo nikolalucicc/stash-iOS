@@ -22,6 +22,8 @@ final class UserProfile {
     var savingFixedAmount: Double
     var currencyRaw: String
     var onboardingCompleted: Bool
+    /// Max total the user is willing to put toward wishlist goals each month.
+    var goalsMonthlyBudget: Double
     var createdAt: Date
 
     @Relationship(deleteRule: .cascade, inverse: \FixedExpenseEntity.profile)
@@ -34,7 +36,8 @@ final class UserProfile {
         savingPercentage: Double = 25,
         savingFixedAmount: Double = 20_000,
         currencyRaw: String = Currency.rsd.rawValue,
-        onboardingCompleted: Bool = false
+        onboardingCompleted: Bool = false,
+        goalsMonthlyBudget: Double = 15_000
     ) {
         self.monthlySalary = monthlySalary
         self.paydayPeriod = paydayPeriod
@@ -43,6 +46,7 @@ final class UserProfile {
         self.savingFixedAmount = savingFixedAmount
         self.currencyRaw = currencyRaw
         self.onboardingCompleted = onboardingCompleted
+        self.goalsMonthlyBudget = goalsMonthlyBudget
         self.createdAt = .now
     }
 }
