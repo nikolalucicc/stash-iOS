@@ -13,6 +13,7 @@ struct WishlistView: View {
     @Query(sort: \SavingsGoal.sortOrder) private var goals: [SavingsGoal]
     @Query private var profiles: [UserProfile]
     @State private var showAddGoal = false
+    @State private var showBudget = false
 
     private var monthlyBudget: Double { profiles.first?.goalsMonthlyBudget ?? 0 }
 
@@ -42,6 +43,12 @@ struct WishlistView: View {
             AddGoalView(nextSortOrder: goals.count)
                 .presentationBackground(Color.surfaceContainerLow)
         }
+        .sheet(isPresented: $showBudget) {
+            GoalsBudgetView()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .presentationBackground(Color.surfaceContainerLow)
+        }
     }
 
     private var header: some View {
@@ -56,36 +63,47 @@ struct WishlistView: View {
     }
 
     private var budgetCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text("goals.budget_label")
-                .font(.labelCapsStyle)
-                .tracking(0.6)
-                .foregroundColor(.onSurfaceVariant)
-            HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
-                Text(verbatim: monthlyBudget.serbianFormatted)
-                    .font(.displayLgStyle)
-                    .foregroundColor(.onSurface)
-                Text("common.rsd")
-                    .font(.displayValStyle)
-                    .foregroundColor(.appPrimary)
-            }
-            HStack(spacing: Spacing.xs) {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 12))
-                    .foregroundColor(.appPrimary)
-                Text(verbatim: String(format: String(localized: "goals.active_count"), goals.count))
-                    .font(.noteStyle)
+        Button { showBudget = true } label: {
+            VStack(alignment: .leading, spacing: Spacing.sm) {
+                Text("goals.budget_label")
+                    .font(.labelCapsStyle)
+                    .tracking(0.6)
                     .foregroundColor(.onSurfaceVariant)
+                HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
+                    Text(verbatim: monthlyBudget.serbianFormatted)
+                        .font(.displayLgStyle)
+                        .foregroundColor(.onSurface)
+                    Text("common.rsd")
+                        .font(.displayValStyle)
+                        .foregroundColor(.appPrimary)
+                }
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 12))
+                        .foregroundColor(.appPrimary)
+                    Text(verbatim: String(format: String(localized: "goals.active_count"), goals.count))
+                        .font(.noteStyle)
+                        .foregroundColor(.onSurfaceVariant)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Spacing.lg)
+            .background(Color.appPrimary.opacity(0.08))
+            .cornerRadius(20)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            )
+            .overlay(
+                Image(systemName: "slider.horizontal.3")
+                    .font(.system(size: 16))
+                    .foregroundColor(.appPrimary)
+                    .padding(Spacing.lg),
+                alignment: .topTrailing
+            )
+            .contentShape(Rectangle())
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Spacing.lg)
-        .background(Color.appPrimary.opacity(0.08))
-        .cornerRadius(20)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
-        )
+        .buttonStyle(.plain)
     }
 
     private var goalsList: some View {

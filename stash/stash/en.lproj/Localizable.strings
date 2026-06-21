@@ -150,3 +150,14 @@
 "goals.delete_confirm_title" = "Delete this goal?";
 "goals.deposit_title"        = "Add to savings";
 "goals.deposit_cta"          = "Add";
+
+// MARK: - Goals · budget sheet
+
+"goals.budget_title"        = "Goals budget";
+"goals.budget_intro"        = "Set the most you'll set aside each month for all your goals.";
+"goals.budget_input_label"  = "Max monthly budget";
+"goals.budget_info"         = "This amount is split across your goals by priority.";
+"goals.allocation_header"   = "Distribution preview";
+"goals.budget_empty"        = "Add goals to see how the budget splits.";
+"goals.unallocated"         = "Unallocated";
+"goals.budget_save_cta"     = "Save settings";

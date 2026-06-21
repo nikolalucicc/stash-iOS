@@ -148,3 +148,14 @@
 "goals.delete_confirm_title" = "Obrisati ovaj cilj?";
 "goals.deposit_title"        = "Dodaj u štednju";
 "goals.deposit_cta"          = "Dodaj";
+
+// MARK: - Goals · budget sheet
+
+"goals.budget_title"        = "Budžet za ciljeve";
+"goals.budget_intro"        = "Podesite maksimalni iznos koji želite da odvojite svakog meseca za sve ciljeve.";
+"goals.budget_input_label"  = "Maksimalni mesečni budžet";
+"goals.budget_info"         = "Ovaj iznos se raspoređuje na ciljeve prema prioritetima.";
+"goals.allocation_header"   = "Pregled raspodele";
+"goals.budget_empty"        = "Dodaj ciljeve da vidiš kako se budžet deli.";
+"goals.unallocated"         = "Neraspoređeno";
+"goals.budget_save_cta"     = "Sačuvaj podešavanja";

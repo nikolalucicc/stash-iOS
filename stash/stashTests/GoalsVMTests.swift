@@ -93,4 +93,23 @@ final class GoalsVMTests: XCTestCase {
         let goals = (try? context.fetch(FetchDescriptor<SavingsGoal>())) ?? []
         XCTAssertTrue(goals.isEmpty)
     }
+
+    // MARK: - GoalsBudgetVM
+
+    func testBudgetAllocationsWithinBudget() {
+        let vm = GoalsBudgetVM()
+        vm.budgetText = "20.000"
+        let first = SavingsGoal(name: "A", targetAmount: 100_000, priority: .high, desiredMonthly: 5_000)
+        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low, desiredMonthly: 4_000)
+        XCTAssertEqual(vm.allocations(for: [first, second]), [5_000, 4_000])
+    }
+
+    func testBudgetSaveLoadRoundTrip() async {
+        let vm = GoalsBudgetVM()
+        vm.budgetText = "30.000"
+        await vm.save(to: context)
+        let reloaded = GoalsBudgetVM()
+        await reloaded.load(from: context)
+        XCTAssertEqual(reloaded.budget, 30_000)
+    }
 }
