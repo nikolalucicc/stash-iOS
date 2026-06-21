@@ -91,3 +91,73 @@
 "settings.projection_title"  = "Your new saving";
 /* Appended after the currency code, e.g. "RSD/mo" */
 "settings.per_month_suffix"  = "/mo";
+
+// MARK: - Common (shared)
+
+"common.coming_soon" = "Coming soon";
+
+// MARK: - Tab bar
+
+"tab.vault"   = "Vault";
+"tab.goals"   = "Goals";
+"tab.monthly" = "Monthly";
+"tab.account" = "Account";
+
+// MARK: - Goals (Wishlist)
+
+"goals.title"               = "Wishlist";
+"goals.subtitle"            = "Save toward what you want, by priority.";
+"goals.budget_label"        = "Total monthly budget for goals";
+/* %d = number of goals currently being saved for */
+"goals.active_count"        = "%d goals in progress";
+"goals.empty_title"         = "No goals yet";
+"goals.empty_subtitle"      = "Add your first wish and start saving toward it.";
+"goals.empty_cta"           = "Add a goal";
+
+"goals.no_deadline"         = "No deadline";
+/* %@ = formatted month and year */
+"goals.until_date"          = "until %@";
+
+"goals.priority.low"    = "Low";
+"goals.priority.medium" = "Medium";
+"goals.priority.high"   = "High";
+
+"goals.add_title"           = "New goal";
+"goals.name_label"          = "Wish name";
+"goals.name_placeholder"    = "e.g. PlayStation 5";
+"goals.amount_label"        = "Total amount";
+"goals.priority_label"      = "Priority";
+"goals.deadline_label"      = "Deadline (optional)";
+"goals.contribution_label"  = "Monthly contribution";
+"goals.add_cta"             = "Add to list";
+
+// MARK: - Goals · detail & edit
+
+"goals.edit_title"           = "Edit goal";
+"goals.save_cta"             = "Save changes";
+"goals.saved_label"          = "Already saved (optional)";
+/* %@ = remaining amount */
+"goals.remaining"            = "%@ RSD left";
+"goals.planned_monthly"      = "Planned monthly";
+/* %d = months left to reach the goal */
+"goals.eta"                  = "≈ %d months to goal";
+"goals.eta_done"             = "Goal reached 🎉";
+"goals.eta_set_monthly"      = "Set a monthly amount";
+/* %@ = the planned monthly amount */
+"goals.deposit_month_cta"    = "I saved this month (+%@)";
+"goals.deposit_custom_cta"   = "Add a custom amount";
+"goals.delete_cta"           = "Delete goal";
+"goals.delete_confirm_title" = "Delete this goal?";
+"goals.deposit_title"        = "Add to savings";
+"goals.deposit_cta"          = "Add";
+
+// MARK: - Goals · budget sheet
+
+"goals.budget_title"        = "Goals budget";
+"goals.budget_intro"        = "Set the most you'll set aside each month for all your goals.";
+"goals.budget_input_label"  = "Max monthly budget";
+"goals.budget_info"         = "This amount is split across your goals by priority.";
+"goals.allocation_header"   = "Distribution preview";
+"goals.budget_empty"        = "Add goals to see how the budget splits.";
+"goals.unallocated"         = "Unallocated";
+"goals.budget_save_cta"     = "Save settings";

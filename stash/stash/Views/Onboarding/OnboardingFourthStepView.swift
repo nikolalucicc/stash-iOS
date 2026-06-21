@@ -13,7 +13,6 @@ struct OnboardingFourthStepView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingFourthStepVM()
-    @State private var didFinishOnboarding = false
 
     var body: some View {
         StashTheme {
@@ -35,10 +34,6 @@ struct OnboardingFourthStepView: View {
             }
         }
         .navigationBarHidden(true)
-        .navigationDestination(isPresented: $didFinishOnboarding) {
-            DashboardView()
-                .navigationBarBackButtonHidden(true)
-        }
         .onAppear { loadSavedProfile() }
     }
 
@@ -54,7 +49,6 @@ struct OnboardingFourthStepView: View {
         profile.currency = vm.selectedCurrency
         profile.onboardingCompleted = true
         try? modelContext.save()
-        didFinishOnboarding = true
     }
 
     // MARK: - Header

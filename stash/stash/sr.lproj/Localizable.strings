@@ -89,3 +89,73 @@
 "settings.projection_title"  = "Vaša nova štednja";
 /* Dodaje se posle koda valute, npr. "RSD/mes" */
 "settings.per_month_suffix"  = "/mes";
+
+// MARK: - Common (shared)
+
+"common.coming_soon" = "Uskoro";
+
+// MARK: - Tab bar
+
+"tab.vault"   = "Trezor";
+"tab.goals"   = "Ciljevi";
+"tab.monthly" = "Mesečno";
+"tab.account" = "Nalog";
+
+// MARK: - Goals (Lista želja)
+
+"goals.title"               = "Lista želja";
+"goals.subtitle"            = "Štedi za ono što želiš, po prioritetu.";
+"goals.budget_label"        = "Ukupan mesečni budžet za ciljeve";
+/* %d = broj ciljeva za koje se trenutno štedi */
+"goals.active_count"        = "%d ciljeva u toku";
+"goals.empty_title"         = "Još nema ciljeva";
+"goals.empty_subtitle"      = "Dodaj prvu želju i počni da štediš za nju.";
+"goals.empty_cta"           = "Dodaj cilj";
+
+"goals.no_deadline"         = "Bez roka";
+/* %@ = formatiran mesec i godina */
+"goals.until_date"          = "do %@";
+
+"goals.priority.low"    = "Nizak";
+"goals.priority.medium" = "Srednji";
+"goals.priority.high"   = "Visok";
+
+"goals.add_title"           = "Novi cilj";
+"goals.name_label"          = "Naziv želje";
+"goals.name_placeholder"    = "npr. PlayStation 5";
+"goals.amount_label"        = "Ukupan iznos";
+"goals.priority_label"      = "Prioritet";
+"goals.deadline_label"      = "Rok (opciono)";
+"goals.contribution_label"  = "Mesečni doprinos";
+"goals.add_cta"             = "Dodaj na listu";
+
+// MARK: - Goals · detalj i izmena
+
+"goals.edit_title"           = "Izmeni cilj";
+"goals.save_cta"             = "Sačuvaj izmene";
+"goals.saved_label"          = "Već ušteđeno (opciono)";
+/* %@ = preostali iznos */
+"goals.remaining"            = "još %@ RSD";
+"goals.planned_monthly"      = "Planirano mesečno";
+/* %d = broj meseci do cilja */
+"goals.eta"                  = "≈ %d meseci do cilja";
+"goals.eta_done"             = "Cilj dostignut 🎉";
+"goals.eta_set_monthly"      = "Postavi mesečni iznos";
+/* %@ = planirani mesečni iznos */
+"goals.deposit_month_cta"    = "Odvojio sam ovog meseca (+%@)";
+"goals.deposit_custom_cta"   = "Dodaj proizvoljan iznos";
+"goals.delete_cta"           = "Obriši cilj";
+"goals.delete_confirm_title" = "Obrisati ovaj cilj?";
+"goals.deposit_title"        = "Dodaj u štednju";
+"goals.deposit_cta"          = "Dodaj";
+
+// MARK: - Goals · budget sheet
+
+"goals.budget_title"        = "Budžet za ciljeve";
+"goals.budget_intro"        = "Podesite maksimalni iznos koji želite da odvojite svakog meseca za sve ciljeve.";
+"goals.budget_input_label"  = "Maksimalni mesečni budžet";
+"goals.budget_info"         = "Ovaj iznos se raspoređuje na ciljeve prema prioritetima.";
+"goals.allocation_header"   = "Pregled raspodele";
+"goals.budget_empty"        = "Dodaj ciljeve da vidiš kako se budžet deli.";
+"goals.unallocated"         = "Neraspoređeno";
+"goals.budget_save_cta"     = "Sačuvaj podešavanja";
