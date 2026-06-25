@@ -10,18 +10,12 @@ import SwiftData
 
 struct MainTabView: View {
 
-    private enum Tab: Hashable { case vault, goals, monthly, account }
+    private enum Tab: Hashable { case goals, monthly, account }
 
     @State private var selection: Tab = .monthly
 
     var body: some View {
         TabView(selection: $selection) {
-            NavigationStack {
-                PlaceholderTab(titleKey: "tab.vault", systemImage: "creditcard.fill")
-            }
-            .tabItem { Label("tab.vault", systemImage: "creditcard.fill") }
-            .tag(Tab.vault)
-
             NavigationStack {
                 WishlistView()
             }

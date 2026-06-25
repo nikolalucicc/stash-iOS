@@ -107,9 +107,6 @@
 
 "goals.title"               = "Wishlist";
 "goals.subtitle"            = "Save toward what you want, by priority.";
-"goals.budget_label"        = "Total monthly budget for goals";
-/* %d = number of goals currently being saved for */
-"goals.active_count"        = "%d goals in progress";
 "goals.empty_title"         = "No goals yet";
 "goals.empty_subtitle"      = "Add your first wish and start saving toward it.";
 "goals.empty_cta"           = "Add a goal";
@@ -161,3 +158,11 @@
 "goals.budget_empty"        = "Add goals to see how the budget splits.";
 "goals.unallocated"         = "Unallocated";
 "goals.budget_save_cta"     = "Save settings";
+
+
+// MARK: - Goals · summary
+
+"goals.summary_saved_label"  = "Total saved";
+"goals.summary_budget_label" = "Monthly budget";
+/* %d = number of completed goals */
+"goals.completed"            = "%d completed";

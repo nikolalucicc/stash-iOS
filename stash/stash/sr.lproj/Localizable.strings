@@ -105,9 +105,6 @@
 
 "goals.title"               = "Lista želja";
 "goals.subtitle"            = "Štedi za ono što želiš, po prioritetu.";
-"goals.budget_label"        = "Ukupan mesečni budžet za ciljeve";
-/* %d = broj ciljeva za koje se trenutno štedi */
-"goals.active_count"        = "%d ciljeva u toku";
 "goals.empty_title"         = "Još nema ciljeva";
 "goals.empty_subtitle"      = "Dodaj prvu želju i počni da štediš za nju.";
 "goals.empty_cta"           = "Dodaj cilj";
@@ -159,3 +156,11 @@
 "goals.budget_empty"        = "Dodaj ciljeve da vidiš kako se budžet deli.";
 "goals.unallocated"         = "Neraspoređeno";
 "goals.budget_save_cta"     = "Sačuvaj podešavanja";
+
+
+// MARK: - Goals · pregled
+
+"goals.summary_saved_label"  = "Ukupno ušteđeno";
+"goals.summary_budget_label" = "Mesečni budžet";
+/* %d = broj završenih ciljeva */
+"goals.completed"            = "%d završeno";
