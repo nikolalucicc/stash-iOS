@@ -10,6 +10,7 @@ import SwiftData
 
 struct VaultView: View {
 
+    @Environment(AppRouter.self) private var router
     @Query private var goals: [SavingsGoal]
     @Query private var profiles: [UserProfile]
 
@@ -95,11 +96,14 @@ struct VaultView: View {
 
     private var statsRow: some View {
         HStack(spacing: Spacing.gutter) {
-            statTile(
-                icon: "star.fill",
-                value: "\(summary.goalCount)",
-                label: String(localized: "vault.active_goals")
-            )
+            Button { router.selectedTab = .goals } label: {
+                statTile(
+                    icon: "star.fill",
+                    value: "\(summary.goalCount)",
+                    label: String(localized: "vault.active_goals")
+                )
+            }
+            .buttonStyle(.plain)
             statTile(
                 icon: "calendar",
                 value: summary.monthlyAllocated.serbianFormatted,
@@ -217,5 +221,6 @@ struct VaultView: View {
     NavigationStack {
         VaultView()
     }
+    .environment(AppRouter())
     .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self], inMemory: true)
 }

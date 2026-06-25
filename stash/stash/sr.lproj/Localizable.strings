@@ -166,7 +166,7 @@
 "vault.subtitle"           = "Tvoja ušteda kroz sve ciljeve.";
 "vault.total_saved_label"  = "Ukupno ušteđeno";
 "vault.active_goals"       = "Aktivni ciljevi";
-"vault.saved_monthly"      = "Mesečno se odvaja";
+"vault.saved_monthly"      = "Mesečno za ciljeve";
 /* %d = broj završenih ciljeva */
 "vault.completed"          = "%d završeno";
 "vault.breakdown_header"   = "Po cilju";

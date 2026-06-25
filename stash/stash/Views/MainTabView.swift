@@ -10,35 +10,34 @@ import SwiftData
 
 struct MainTabView: View {
 
-    private enum Tab: Hashable { case vault, goals, monthly, account }
-
-    @State private var selection: Tab = .monthly
+    @Environment(AppRouter.self) private var router
 
     var body: some View {
-        TabView(selection: $selection) {
+        @Bindable var router = router
+        return TabView(selection: $router.selectedTab) {
             NavigationStack {
                 VaultView()
             }
             .tabItem { Label("tab.vault", systemImage: "creditcard.fill") }
-            .tag(Tab.vault)
+            .tag(AppTab.vault)
 
             NavigationStack {
                 WishlistView()
             }
             .tabItem { Label("tab.goals", systemImage: "star.fill") }
-            .tag(Tab.goals)
+            .tag(AppTab.goals)
 
             NavigationStack {
                 DashboardView()
             }
             .tabItem { Label("tab.monthly", systemImage: "calendar") }
-            .tag(Tab.monthly)
+            .tag(AppTab.monthly)
 
             NavigationStack {
                 PlaceholderTab(titleKey: "tab.account", systemImage: "person.fill")
             }
             .tabItem { Label("tab.account", systemImage: "person.fill") }
-            .tag(Tab.account)
+            .tag(AppTab.account)
         }
         .tint(.accent)
     }
@@ -70,5 +69,6 @@ struct PlaceholderTab: View {
 
 #Preview {
     MainTabView()
+        .environment(AppRouter())
         .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self], inMemory: true)
 }
