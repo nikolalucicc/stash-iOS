@@ -1,4 +1,4 @@
-/* Localizable.strings — Serbian
+/* Localizable.strings â Serbian
    stash
 */
 
@@ -7,106 +7,105 @@
 "common.app_title"             = "Stash";
 "common.continue_btn"          = "Nastavi";
 "common.back_btn"              = "Nazad";
-"common.skip_btn"              = "Preskoči ovaj korak";
+"common.skip_btn"              = "PreskoÄi ovaj korak";
 "common.rsd"                   = "RSD";
 "common.add_btn"               = "Dodaj";
-"common.cancel_btn"            = "Otkaži";
+"common.cancel_btn"            = "OtkaÅ¾i";
 
-"common.saving_exceeds_salary" = "Ušteda ne može biti veća od plate.";
+"common.saving_exceeds_salary" = "UÅ¡teda ne moÅ¾e biti veÄa od plate.";
 
 "common.progress_step"         = "Korak %d od 4";
-"common.progress_step_suffix"  = "Korak %d od 4 · %@";
+"common.progress_step_suffix"  = "Korak %d od 4 Â· %@";
 
-// MARK: - Onboarding · Step 1
+// MARK: - Onboarding Â· Step 1
 
 "onboarding.step1.title"            = "Kolika ti je plata?";
-"onboarding.step1.subtitle"         = "Unesi okvirni mesečni prihod i dan kada ti legne.";
-"onboarding.step1.salary_label"     = "Mesečna plata";
+"onboarding.step1.subtitle"         = "Unesi okvirni meseÄni prihod i dan kada ti legne.";
+"onboarding.step1.salary_label"     = "MeseÄna plata";
 "onboarding.step1.payday_label"     = "Period isplate";
-"onboarding.step1.privacy_note"     = "Ovo koristimo samo za podsetnik — ne šaljemo ništa na server.";
-"onboarding.step1.payday_beginning" = "Početak meseca";
+"onboarding.step1.privacy_note"     = "Ovo koristimo samo za podsetnik â ne Å¡aljemo niÅ¡ta na server.";
+"onboarding.step1.payday_beginning" = "PoÄetak meseca";
 "onboarding.step1.payday_middle"    = "Sredina meseca";
 "onboarding.step1.payday_end"       = "Kraj meseca";
 
-// MARK: - Onboarding · Step 2
+// MARK: - Onboarding Â· Step 2
 
-"onboarding.step2.title"             = "Koliko želiš da štediš?";
-"onboarding.step2.subtitle"          = "Izaberi kako da računamo tvoju mesečnu štednju.";
-"onboarding.step2.method_label"      = "Način štednje";
+"onboarding.step2.title"             = "Koliko Å¾eliÅ¡ da Å¡tediÅ¡?";
+"onboarding.step2.subtitle"          = "Izaberi kako da raÄunamo tvoju meseÄnu Å¡tednju.";
+"onboarding.step2.method_label"      = "NaÄin Å¡tednje";
 "onboarding.step2.percentage_method" = "% od plate";
 "onboarding.step2.fixed_method"      = "Fiksni iznos";
-"onboarding.step2.percentage_label"  = "Procenat štednje";
-"onboarding.step2.fixed_label"       = "Fiksni iznos štednje";
-"onboarding.step2.preview_label"     = "Mesečno ćeš odvojiti";
+"onboarding.step2.percentage_label"  = "Procenat Å¡tednje";
+"onboarding.step2.fixed_label"       = "Fiksni iznos Å¡tednje";
+"onboarding.step2.preview_label"     = "MeseÄno ÄeÅ¡ odvojiti";
 
-// MARK: - Onboarding · Step 3
+// MARK: - Onboarding Â· Step 3
 
-"onboarding.step3.title"            = "Fiksni troškovi";
-"onboarding.step3.subtitle"         = "Dodaj rekurentne troškove — kirija, rate, pretplate...";
+"onboarding.step3.title"            = "Fiksni troÅ¡kovi";
+"onboarding.step3.subtitle"         = "Dodaj rekurentne troÅ¡kove â kirija, rate, pretplate...";
 "onboarding.step3.progress_suffix"  = "Opciono";
-"onboarding.step3.add_expense_btn"  = "Dodaj trošak";
+"onboarding.step3.add_expense_btn"  = "Dodaj troÅ¡ak";
 "onboarding.step3.total_label"      = "Ukupno fiksnih";
-"onboarding.step3.sheet_title"      = "Dodaj trošak";
-"onboarding.step3.name_label"       = "Naziv troška";
+"onboarding.step3.sheet_title"      = "Dodaj troÅ¡ak";
+"onboarding.step3.name_label"       = "Naziv troÅ¡ka";
 "onboarding.step3.name_placeholder" = "npr. Struja, Pretplata...";
 "onboarding.step3.amount_label"     = "Iznos";
-"onboarding.step3.default_note"     = "Mesečna uplata";
+"onboarding.step3.default_note"     = "MeseÄna uplata";
 
-// MARK: - Onboarding · Step 4
+// MARK: - Onboarding Â· Step 4
 
 "onboarding.step4.title"      = "Koja valuta?";
-"onboarding.step4.subtitle"   = "Možeš je promeniti u podešavanjima u bilo kom trenutku.";
-"onboarding.step4.finish_btn" = "Završi podešavanje";
+"onboarding.step4.subtitle"   = "MoÅ¾eÅ¡ je promeniti u podeÅ¡avanjima u bilo kom trenutku.";
+"onboarding.step4.finish_btn" = "ZavrÅ¡i podeÅ¡avanje";
 
 // MARK: - Currency
 
 "currency.rsd_name" = "Srpski dinar";
 "currency.eur_name" = "Euro";
-"currency.usd_name" = "Američki dolar";
+"currency.usd_name" = "AmeriÄki dolar";
 
 // MARK: - Dashboard
 
-"dashboard.empty_state"             = "Završi podešavanje da bi video svoju početnu stranu ovde.";
-"dashboard.this_month_saving_label" = "Ušteda ovog meseca";
-"dashboard.share_of_salary"         = "Udeo u mesečnoj plati";
+"dashboard.empty_state"             = "ZavrÅ¡i podeÅ¡avanje da bi video svoju poÄetnu stranu ovde.";
+"dashboard.this_month_saving_label" = "UÅ¡teda ovog meseca";
+"dashboard.share_of_salary"         = "Udeo u meseÄnoj plati";
 "dashboard.salary_card_label"       = "Plata ovog meseca";
 "dashboard.entered_badge"           = "uneto";
-"dashboard.savings_stat"            = "Štednja";
+"dashboard.savings_stat"            = "Å tednja";
 "dashboard.fixed_stat"              = "Fiksni";
 "dashboard.free_stat"               = "Slobodno";
-"dashboard.expenses_label"          = "Fiksni troškovi";
-"dashboard.days_until_payday_label" = "Do sledeće plate";
-/* %d = broj dana do sledeće plate */
+"dashboard.expenses_label"          = "Fiksni troÅ¡kovi";
+"dashboard.days_until_payday_label" = "Do sledeÄe plate";
+/* %d = broj dana do sledeÄe plate */
 "dashboard.days_value"              = "%d dana";
 
 // MARK: - Settings (Izmena plate)
 
-"settings.title"             = "Podešavanje plate";
-"settings.subtitle"          = "Ažurirajte podatke o vašim mesečnim prihodima.";
-"settings.info"              = "Ove promene će se primeniti od sledećeg meseca.";
-"settings.save_btn"          = "Sačuvaj promene";
-"settings.projection_label"  = "Projekcija budžeta";
-"settings.projection_title"  = "Vaša nova štednja";
+"settings.title"             = "PodeÅ¡avanje plate";
+"settings.subtitle"          = "AÅ¾urirajte podatke o vaÅ¡im meseÄnim prihodima.";
+"settings.info"              = "Ove promene Äe se primeniti od sledeÄeg meseca.";
+"settings.save_btn"          = "SaÄuvaj promene";
+"settings.projection_label"  = "Projekcija budÅ¾eta";
+"settings.projection_title"  = "VaÅ¡a nova Å¡tednja";
 /* Dodaje se posle koda valute, npr. "RSD/mes" */
 "settings.per_month_suffix"  = "/mes";
 
 // MARK: - Common (shared)
 
-"common.coming_soon" = "Uskoro";
 
 // MARK: - Tab bar
 
 "tab.vault"   = "Trezor";
 "tab.goals"   = "Ciljevi";
-"tab.monthly" = "Mesečno";
+"tab.monthly" = "MeseÄno";
 "tab.account" = "Nalog";
 
-// MARK: - Goals (Lista želja)
+// MARK: - Goals (Lista Å¾elja)
 
-"goals.title"               = "Lista želja";
-"goals.subtitle"            = "Štedi za ono što želiš, po prioritetu.";
-"goals.empty_title"         = "Još nema ciljeva";
-"goals.empty_subtitle"      = "Dodaj prvu želju i počni da štediš za nju.";
+"goals.title"               = "Lista Å¾elja";
+"goals.subtitle"            = "Å tedi za ono Å¡to Å¾eliÅ¡, po prioritetu.";
+"goals.empty_title"         = "JoÅ¡ nema ciljeva";
+"goals.empty_subtitle"      = "Dodaj prvu Å¾elju i poÄni da Å¡tediÅ¡ za nju.";
 "goals.empty_cta"           = "Dodaj cilj";
 
 "goals.no_deadline"         = "Bez roka";
@@ -118,49 +117,62 @@
 "goals.priority.high"   = "Visok";
 
 "goals.add_title"           = "Novi cilj";
-"goals.name_label"          = "Naziv želje";
+"goals.name_label"          = "Naziv Å¾elje";
 "goals.name_placeholder"    = "npr. PlayStation 5";
 "goals.amount_label"        = "Ukupan iznos";
 "goals.priority_label"      = "Prioritet";
 "goals.deadline_label"      = "Rok (opciono)";
-"goals.contribution_label"  = "Mesečni doprinos";
+"goals.contribution_label"  = "MeseÄni doprinos";
 "goals.add_cta"             = "Dodaj na listu";
 
-// MARK: - Goals · detalj i izmena
+// MARK: - Goals Â· detalj i izmena
 
 "goals.edit_title"           = "Izmeni cilj";
-"goals.save_cta"             = "Sačuvaj izmene";
-"goals.saved_label"          = "Već ušteđeno (opciono)";
+"goals.save_cta"             = "SaÄuvaj izmene";
+"goals.saved_label"          = "VeÄ uÅ¡teÄeno (opciono)";
 /* %@ = preostali iznos */
-"goals.remaining"            = "još %@ RSD";
-"goals.planned_monthly"      = "Planirano mesečno";
+"goals.remaining"            = "joÅ¡ %@ RSD";
+"goals.planned_monthly"      = "Planirano meseÄno";
 /* %d = broj meseci do cilja */
-"goals.eta"                  = "≈ %d meseci do cilja";
-"goals.eta_done"             = "Cilj dostignut 🎉";
-"goals.eta_set_monthly"      = "Postavi mesečni iznos";
-/* %@ = planirani mesečni iznos */
+"goals.eta"                  = "â %d meseci do cilja";
+"goals.eta_done"             = "Cilj dostignut ð";
+"goals.eta_set_monthly"      = "Postavi meseÄni iznos";
+/* %@ = planirani meseÄni iznos */
 "goals.deposit_month_cta"    = "Odvojio sam ovog meseca (+%@)";
 "goals.deposit_custom_cta"   = "Dodaj proizvoljan iznos";
-"goals.delete_cta"           = "Obriši cilj";
+"goals.delete_cta"           = "ObriÅ¡i cilj";
 "goals.delete_confirm_title" = "Obrisati ovaj cilj?";
-"goals.deposit_title"        = "Dodaj u štednju";
+"goals.deposit_title"        = "Dodaj u Å¡tednju";
 "goals.deposit_cta"          = "Dodaj";
 
-// MARK: - Goals · budget sheet
+// MARK: - Goals Â· budget sheet
 
-"goals.budget_title"        = "Budžet za ciljeve";
-"goals.budget_intro"        = "Podesite maksimalni iznos koji želite da odvojite svakog meseca za sve ciljeve.";
-"goals.budget_input_label"  = "Maksimalni mesečni budžet";
-"goals.budget_info"         = "Ovaj iznos se raspoređuje na ciljeve prema prioritetima.";
+"goals.budget_title"        = "BudÅ¾et za ciljeve";
+"goals.budget_intro"        = "Podesite maksimalni iznos koji Å¾elite da odvojite svakog meseca za sve ciljeve.";
+"goals.budget_input_label"  = "Maksimalni meseÄni budÅ¾et";
+"goals.budget_info"         = "Ovaj iznos se rasporeÄuje na ciljeve prema prioritetima.";
 "goals.allocation_header"   = "Pregled raspodele";
-"goals.budget_empty"        = "Dodaj ciljeve da vidiš kako se budžet deli.";
-"goals.unallocated"         = "Neraspoređeno";
-"goals.budget_save_cta"     = "Sačuvaj podešavanja";
+"goals.budget_empty"        = "Dodaj ciljeve da vidiÅ¡ kako se budÅ¾et deli.";
+"goals.unallocated"         = "NerasporeÄeno";
+"goals.budget_save_cta"     = "SaÄuvaj podeÅ¡avanja";
 
 
-// MARK: - Goals · pregled
+// MARK: - Goals Â· pregled
 
-"goals.summary_saved_label"  = "Ukupno ušteđeno";
-"goals.summary_budget_label" = "Mesečni budžet";
-/* %d = broj završenih ciljeva */
-"goals.completed"            = "%d završeno";
+"goals.summary_saved_label"  = "Ukupno uÅ¡teÄeno";
+"goals.summary_budget_label" = "MeseÄni budÅ¾et";
+/* %d = broj zavrÅ¡enih ciljeva */
+"goals.completed"            = "%d zavrÅ¡eno";
+
+// MARK: - Account
+
+"account.title"                 = "Nalog";
+"account.subtitle"              = "Upravljaj svojim podeÅ¡avanjima.";
+"account.salary_row"            = "Plata i Å¡tednja";
+"account.currency_row"          = "Valuta";
+"account.restart_row"           = "Ponovi podeÅ¡avanje";
+"account.restart_confirm_title" = "Ponoviti podešavanje?";
+"account.restart_confirm"       = "Podaci ostaju sačuvani — samo ponovo prolaziš podešavanje.";
+"account.restart_cta"           = "Ponovi";
+"account.currency_picker_title" = "Valuta";
+"account.currency_error"         = "Ne mogu da povučem kurseve. Pokušaj ponovo.";

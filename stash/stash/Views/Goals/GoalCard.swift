@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GoalCard: View {
     let goal: SavingsGoal
+    var currencyCode: String = Currency.rsd.code
 
     var body: some View {
         VStack(spacing: Spacing.md) {
@@ -83,7 +84,7 @@ struct GoalCard: View {
     private var amountsText: String {
         let saved = goal.savedAmount.serbianFormatted
         let target = goal.targetAmount.serbianFormatted
-        return "\(saved) / \(target) \(String(localized: "common.rsd"))"
+        return "\(saved) / \(target) \(currencyCode)"
     }
 
     private var deadlineText: String {

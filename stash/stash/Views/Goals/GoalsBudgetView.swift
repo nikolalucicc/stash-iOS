@@ -13,6 +13,9 @@ struct GoalsBudgetView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavingsGoal.sortOrder) private var goals: [SavingsGoal]
+    @Query private var profiles: [UserProfile]
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
     @State private var vm = GoalsBudgetVM()
 
     var body: some View {
@@ -58,7 +61,7 @@ struct GoalsBudgetView: View {
                     .font(.displayValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.sectionHeaderStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
@@ -118,7 +121,7 @@ struct GoalsBudgetView: View {
                     .font(.secondaryStyle)
                     .foregroundColor(.onSurfaceVariant)
                 Spacer()
-                Text(verbatim: "\(amount.serbianFormatted) \(String(localized: "common.rsd"))")
+                Text(verbatim: "\(amount.serbianFormatted) \(currencyCode)")
                     .font(.navTitleStyle)
                     .foregroundColor(.appPrimary)
             }
@@ -142,7 +145,7 @@ struct GoalsBudgetView: View {
                 .font(.secondaryStyle)
                 .foregroundColor(.onSurfaceVariant)
             Spacer()
-            Text(verbatim: "\(amount.serbianFormatted) \(String(localized: "common.rsd"))")
+            Text(verbatim: "\(amount.serbianFormatted) \(currencyCode)")
                 .font(.navTitleStyle)
                 .foregroundColor(.onSurfaceVariant)
         }

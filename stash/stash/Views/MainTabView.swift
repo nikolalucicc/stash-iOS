@@ -29,36 +29,12 @@ struct MainTabView: View {
             .tag(Tab.monthly)
 
             NavigationStack {
-                PlaceholderTab(titleKey: "tab.account", systemImage: "person.fill")
+                AccountView()
             }
             .tabItem { Label("tab.account", systemImage: "person.fill") }
             .tag(Tab.account)
         }
         .tint(.accent)
-    }
-}
-
-/// Simple "coming soon" content for tabs not built yet.
-struct PlaceholderTab: View {
-    let titleKey: LocalizedStringKey
-    let systemImage: String
-
-    var body: some View {
-        StashTheme {
-            VStack(spacing: Spacing.md) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 40))
-                    .foregroundColor(.appPrimary.opacity(0.6))
-                Text(titleKey)
-                    .font(.screenTitleStyle)
-                    .foregroundColor(.onSurface)
-                Text("common.coming_soon")
-                    .font(.secondaryStyle)
-                    .foregroundColor(.onSurfaceVariant)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .navigationBarHidden(true)
     }
 }
 

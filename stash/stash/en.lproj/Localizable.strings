@@ -94,7 +94,6 @@
 
 // MARK: - Common (shared)
 
-"common.coming_soon" = "Coming soon";
 
 // MARK: - Tab bar
 
@@ -166,3 +165,16 @@
 "goals.summary_budget_label" = "Monthly budget";
 /* %d = number of completed goals */
 "goals.completed"            = "%d completed";
+
+// MARK: - Account
+
+"account.title"                 = "Account";
+"account.subtitle"              = "Manage your setup.";
+"account.salary_row"            = "Salary & saving";
+"account.currency_row"          = "Currency";
+"account.restart_row"           = "Redo setup";
+"account.restart_confirm_title" = "Redo setup?";
+"account.restart_confirm"       = "Your data is kept — you'll just go through setup again.";
+"account.restart_cta"           = "Redo setup";
+"account.currency_picker_title" = "Currency";
+"account.currency_error"         = "Couldn't fetch exchange rates. Try again.";

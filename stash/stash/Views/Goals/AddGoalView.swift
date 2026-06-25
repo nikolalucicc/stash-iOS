@@ -12,7 +12,10 @@ struct AddGoalView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm: AddGoalVM
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     init(nextSortOrder: Int) {
         _vm = State(initialValue: AddGoalVM(sortOrder: nextSortOrder))
@@ -100,7 +103,7 @@ struct AddGoalView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
@@ -124,7 +127,7 @@ struct AddGoalView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
@@ -195,7 +198,7 @@ struct AddGoalView: View {
             HStack {
                 fieldLabel("goals.contribution_label")
                 Spacer()
-                Text(verbatim: "\(vm.desiredMonthly.serbianFormatted) \(String(localized: "common.rsd"))")
+                Text(verbatim: "\(vm.desiredMonthly.serbianFormatted) \(currencyCode)")
                     .font(.sectionHeaderStyle)
                     .foregroundColor(.appPrimary)
             }

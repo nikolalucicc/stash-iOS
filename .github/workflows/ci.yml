@@ -45,11 +45,17 @@ jobs:
           echo "Runtime: $RT"
           UDID=$(xcrun simctl create ci-iphone com.apple.CoreSimulator.SimDeviceType.iPhone-16 "$RT")
           echo "Created simulator: $UDID"
+          # Boot and wait until ready — a freshly created sim that xcodebuild
+          # clones for parallel testing can fail to launch the test host
+          # ("launchSession should not be nil", exit 134).
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID"
           xcodebuild test \
             -project stash/stash.xcodeproj \
             -scheme stash \
             -destination "id=$UDID" \
             -only-testing:stashTests \
+            -parallel-testing-enabled NO \
             -resultBundlePath TestResults
 
       - name: Upload test results
