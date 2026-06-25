@@ -12,6 +12,7 @@ import Foundation
 struct DashboardView: View {
 
     @Query private var profiles: [UserProfile]
+    @State private var showStash = false
 
     private var profile: UserProfile? { profiles.first }
     private var currencyCode: String { (profile?.currency ?? .rsd).code }
@@ -23,6 +24,7 @@ struct DashboardView: View {
                     headerBar
 
                     if let profile {
+                        stashCard(for: profile)
                         savingHeroCard(for: profile)
                         currentMonthCard(for: profile)
                         statsGrid(for: profile)
@@ -39,6 +41,53 @@ struct DashboardView: View {
             }
         }
         .navigationBarHidden(true)
+        .sheet(isPresented: $showStash) {
+            if let profile {
+                StashDepositSheet(currentBalance: profile.stashBalance, currencyCode: currencyCode)
+                    .presentationDetents([.height(300)])
+                    .presentationBackground(Color.surfaceContainerLow)
+            }
+        }
+    }
+
+    // MARK: - Stash Card
+
+    private func stashCard(for profile: UserProfile) -> some View {
+        Button { showStash = true } label: {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                HStack {
+                    Text("stash.total_label")
+                        .font(.labelCapsStyle)
+                        .tracking(0.6)
+                        .foregroundColor(.onSurfaceVariant)
+                    Spacer()
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 18))
+                        .foregroundColor(.appPrimary)
+                }
+                HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
+                    Text(verbatim: profile.stashBalance.serbianFormatted)
+                        .font(.heroNumStyle)
+                        .foregroundColor(.onSurface)
+                    Text(verbatim: currencyCode)
+                        .font(.displayValStyle)
+                        .foregroundColor(.appPrimary)
+                }
+                Text("stash.hint")
+                    .font(.noteStyle)
+                    .foregroundColor(.onSurfaceVariant)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Spacing.lg)
+            .background(Color.appPrimary.opacity(0.08))
+            .cornerRadius(20)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Header Bar

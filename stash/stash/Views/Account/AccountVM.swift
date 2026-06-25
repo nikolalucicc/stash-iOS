@@ -43,6 +43,7 @@ final class AccountVM {
         profile.monthlySalary *= rate
         profile.savingFixedAmount *= rate
         profile.goalsMonthlyBudget *= rate
+        profile.stashBalance *= rate
         for expense in profile.expenses {
             expense.amount *= rate
         }

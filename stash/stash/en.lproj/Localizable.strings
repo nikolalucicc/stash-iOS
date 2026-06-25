@@ -178,3 +178,12 @@
 "account.restart_cta"           = "Redo setup";
 "account.currency_picker_title" = "Currency";
 "account.currency_error"         = "Couldn't fetch exchange rates. Try again.";
+
+// MARK: - Stash (general savings)
+
+"stash.total_label"   = "Total stashed";
+"stash.hint"          = "Saved money that isn't for goals";
+"stash.add_title"     = "Add to stash";
+"stash.current_label" = "Current balance";
+"stash.add_cta"       = "Add to stash";
+"stash.set_cta"       = "Set as current balance";
