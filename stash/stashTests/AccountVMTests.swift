@@ -36,6 +36,7 @@ final class AccountVMTests: XCTestCase {
         profile.monthlySalary = 100_000
         profile.savingFixedAmount = 20_000
         profile.goalsMonthlyBudget = 15_000
+        profile.stashBalance = 50_000
         let goal = SavingsGoal(name: "G", targetAmount: 50_000, savedAmount: 10_000, desiredMonthly: 5_000)
         context.insert(goal)
 
@@ -44,6 +45,7 @@ final class AccountVMTests: XCTestCase {
         XCTAssertEqual(profile.monthlySalary, 1_000, accuracy: 0.001)
         XCTAssertEqual(profile.savingFixedAmount, 200, accuracy: 0.001)
         XCTAssertEqual(profile.goalsMonthlyBudget, 150, accuracy: 0.001)
+        XCTAssertEqual(profile.stashBalance, 500, accuracy: 0.001)
         XCTAssertEqual(goal.targetAmount, 500, accuracy: 0.001)
         XCTAssertEqual(goal.savedAmount, 100, accuracy: 0.001)
         XCTAssertEqual(goal.desiredMonthly, 50, accuracy: 0.001)
