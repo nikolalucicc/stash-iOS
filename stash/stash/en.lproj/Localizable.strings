@@ -127,6 +127,11 @@
 "goals.contribution_label"  = "Monthly contribution";
 "goals.add_cta"             = "Add to list";
 
+/* %@ = amount left in the stash after buying, e.g. "12.000 RSD" */
+"goals.affordable_title"     = "You can already afford this";
+"goals.affordable_remaining" = "Buy it now and you'll have %@ left in your stash.";
+"goals.buy_now_cta"          = "Buy now";
+
 // MARK: - Goals · detail & edit
 
 "goals.edit_title"           = "Edit goal";

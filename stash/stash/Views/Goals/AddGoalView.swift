@@ -16,6 +16,10 @@ struct AddGoalView: View {
     @State private var vm: AddGoalVM
 
     private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
+    private var stashBalance: Double { profiles.first?.stashBalance ?? 0 }
+    private var canAffordNow: Bool {
+        !vm.isEditing && vm.targetAmount > 0 && stashBalance >= vm.targetAmount
+    }
 
     init(nextSortOrder: Int) {
         _vm = State(initialValue: AddGoalVM(sortOrder: nextSortOrder))
@@ -33,6 +37,9 @@ struct AddGoalView: View {
                     VStack(alignment: .leading, spacing: Spacing.lg) {
                         nameField
                         amountField
+                        if canAffordNow {
+                            affordableBanner
+                        }
                         savedField
                         prioritySelector
                         deadlineField
@@ -116,6 +123,53 @@ struct AddGoalView: View {
                     .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
             )
         }
+    }
+
+    private var affordableMessage: String {
+        let remaining = "\(max(0, stashBalance - vm.targetAmount).serbianFormatted) \(currencyCode)"
+        return String(format: String(localized: "goals.affordable_remaining"), remaining)
+    }
+
+    private var affordableBanner: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 15))
+                    .foregroundColor(.appPrimary)
+                Text("goals.affordable_title")
+                    .font(.secondaryStyle)
+                    .foregroundColor(.onSurface)
+            }
+            Text(verbatim: affordableMessage)
+                .font(.noteStyle)
+                .foregroundColor(.onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+            Button {
+                Task {
+                    await vm.buyNow(in: modelContext)
+                    dismiss()
+                }
+            } label: {
+                Text("goals.buy_now_cta")
+                    .font(.secondaryStyle)
+                    .foregroundColor(.appPrimary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        RoundedRectangle(cornerRadius: Radius.lg)
+                            .fill(Color.appPrimary.opacity(0.12))
+                    )
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(Spacing.md)
+        .background(Color.appPrimary.opacity(0.07))
+        .cornerRadius(Radius.xl)
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+        )
     }
 
     private var savedField: some View {

@@ -52,6 +52,16 @@ final class AddGoalVM {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && targetAmount > 0
     }
 
+    /// Spends the goal's price straight from the stash (no goal is created).
+    /// Used when the user already has enough saved and buys the item now.
+    func buyNow(in context: ModelContext) async {
+        guard !isEditing, targetAmount > 0 else { return }
+        let profile = UserProfile.current(in: context)
+        guard profile.stashBalance >= targetAmount else { return }
+        profile.stashBalance -= targetAmount
+        try? context.save()
+    }
+
     func save(to context: ModelContext) async {
         guard canSave else { return }
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
