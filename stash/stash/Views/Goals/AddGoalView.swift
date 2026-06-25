@@ -40,10 +40,9 @@ struct AddGoalView: View {
                         if canAffordNow {
                             affordableBanner
                         }
-                        savedField
                         prioritySelector
                         deadlineField
-                        contributionSlider
+                        contributionField
                     }
                     .padding(.horizontal, Spacing.containerPadding)
                     .padding(.top, Spacing.lg)
@@ -172,30 +171,6 @@ struct AddGoalView: View {
         )
     }
 
-    private var savedField: some View {
-        let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.xs) {
-            fieldLabel("goals.saved_label")
-            HStack {
-                TextField("0", text: bindable.savedText)
-                    .font(.inputValStyle)
-                    .foregroundColor(.onSurface)
-                    .keyboardType(.numberPad)
-                Text(verbatim: currencyCode)
-                    .font(.labelCapsStyle)
-                    .foregroundColor(.appPrimary)
-            }
-            .frame(height: 56)
-            .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.04))
-            .cornerRadius(Radius.xl)
-            .overlay(
-                RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
-            )
-        }
-    }
-
     private var prioritySelector: some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
             fieldLabel("goals.priority_label")
@@ -246,18 +221,27 @@ struct AddGoalView: View {
         .padding(.horizontal, 4)
     }
 
-    private var contributionSlider: some View {
+    private var contributionField: some View {
         let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.sm) {
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
+            fieldLabel("goals.contribution_label")
             HStack {
-                fieldLabel("goals.contribution_label")
-                Spacer()
-                Text(verbatim: "\(vm.desiredMonthly.serbianFormatted) \(currencyCode)")
-                    .font(.sectionHeaderStyle)
+                TextField("0", text: bindable.monthlyText)
+                    .font(.inputValStyle)
+                    .foregroundColor(.onSurface)
+                    .keyboardType(.numberPad)
+                Text(verbatim: currencyCode)
+                    .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            Slider(value: bindable.desiredMonthly, in: 500...50_000, step: 500)
-                .tint(.accent)
+            .frame(height: 56)
+            .padding(.horizontal, Spacing.md)
+            .background(Color.white.opacity(0.04))
+            .cornerRadius(Radius.xl)
+            .overlay(
+                RoundedRectangle(cornerRadius: Radius.xl)
+                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+            )
         }
     }
 
