@@ -92,7 +92,6 @@
 
 // MARK: - Common (shared)
 
-"common.coming_soon" = "Uskoro";
 
 // MARK: - Tab bar
 
@@ -164,3 +163,14 @@
 "goals.summary_budget_label" = "Mesečni budžet";
 /* %d = broj završenih ciljeva */
 "goals.completed"            = "%d završeno";
+
+// MARK: - Account
+
+"account.title"                 = "Nalog";
+"account.subtitle"              = "Upravljaj svojim podešavanjima.";
+"account.salary_row"            = "Plata i štednja";
+"account.currency_row"          = "Valuta";
+"account.restart_row"           = "Ponovi podešavanje";
+"account.restart_confirm"       = "Ponoviti podešavanje? Podaci ostaju sačuvani.";
+"account.restart_cta"           = "Ponovi";
+"account.currency_picker_title" = "Valuta";

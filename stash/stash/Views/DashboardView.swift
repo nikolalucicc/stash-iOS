@@ -12,7 +12,6 @@ import Foundation
 struct DashboardView: View {
 
     @Query private var profiles: [UserProfile]
-    @State private var showSettings = false
 
     private var profile: UserProfile? { profiles.first }
 
@@ -39,9 +38,6 @@ struct DashboardView: View {
             }
         }
         .navigationBarHidden(true)
-        .fullScreenCover(isPresented: $showSettings) {
-            ChangeSalaryView()
-        }
     }
 
     // MARK: - Header Bar
@@ -54,18 +50,6 @@ struct DashboardView: View {
                 .textCase(.uppercase)
                 .tracking(1)
             Spacer()
-            Button { showSettings = true } label: {
-                ZStack {
-                    Circle()
-                        .fill(Color.white.opacity(0.05))
-                        .overlay(Circle().stroke(Color.white.opacity(0.1), lineWidth: 0.5))
-                        .frame(width: 36, height: 36)
-                    Image(systemName: "gearshape")
-                        .font(.system(size: 16))
-                        .foregroundColor(.white.opacity(0.6))
-                }
-            }
-            .buttonStyle(.plain)
         }
         .padding(.bottom, Spacing.xs)
     }
