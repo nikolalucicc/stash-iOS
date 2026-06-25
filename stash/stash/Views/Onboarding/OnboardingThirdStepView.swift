@@ -215,15 +215,13 @@ struct OnboardingThirdStepView: View {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                Button {
-                    saveExpenses()
-                    dismiss()
-                } label: {
+                NavigationLink(destination: OnboardingFourthStepView()) {
                     Text("common.skip_btn")
                         .font(.secondaryStyle)
                         .foregroundColor(.onSurfaceVariant)
                 }
                 .buttonStyle(.plain)
+                .simultaneousGesture(TapGesture().onEnded { saveExpenses() })
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
