@@ -14,9 +14,12 @@ struct GoalDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm = GoalDetailVM()
     @State private var showEdit = false
     @State private var showDeleteConfirm = false
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -42,7 +45,7 @@ struct GoalDetailView: View {
                 .presentationBackground(Color.surfaceContainerLow)
         }
         .sheet(isPresented: Bindable(vm).showDepositSheet) {
-            DepositSheet(vm: vm, goal: goal)
+            DepositSheet(vm: vm, goal: goal, currencyCode: currencyCode)
                 .presentationDetents([.height(280)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
@@ -102,7 +105,7 @@ struct GoalDetailView: View {
                 Text(verbatim: goal.savedAmount.serbianFormatted)
                     .font(.displayLgStyle)
                     .foregroundColor(.onSurface)
-                Text(verbatim: "/ \(goal.targetAmount.serbianFormatted) \(String(localized: "common.rsd"))")
+                Text(verbatim: "/ \(goal.targetAmount.serbianFormatted) \(currencyCode)")
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
@@ -140,7 +143,7 @@ struct GoalDetailView: View {
                     .font(.labelCapsStyle)
                     .tracking(0.6)
                     .foregroundColor(.onSurfaceVariant)
-                Text(verbatim: "\(goal.desiredMonthly.serbianFormatted) \(String(localized: "common.rsd"))")
+                Text(verbatim: "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)")
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
             }
@@ -216,6 +219,7 @@ struct GoalDetailView: View {
 private struct DepositSheet: View {
     @Bindable var vm: GoalDetailVM
     let goal: SavingsGoal
+    let currencyCode: String
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -228,7 +232,7 @@ private struct DepositSheet: View {
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }

@@ -14,6 +14,7 @@ struct DashboardView: View {
     @Query private var profiles: [UserProfile]
 
     private var profile: UserProfile? { profiles.first }
+    private var currencyCode: String { (profile?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -280,7 +281,7 @@ private extension DashboardView {
                 Text(verbatim: expense.amount.serbianFormatted)
                     .font(.displayValStyle)
                     .foregroundColor(.onSurface)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.labelSmStyle)
                     .foregroundColor(.onSurface)
             }

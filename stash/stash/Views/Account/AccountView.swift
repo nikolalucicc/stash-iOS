@@ -147,15 +147,32 @@ private struct CurrencyPickerSheet: View {
             ForEach(Currency.allCases, id: \.self) { currency in
                 row(currency)
             }
+            if vm.conversionFailed {
+                Text("account.currency_error")
+                    .font(.noteStyle)
+                    .foregroundColor(.appError)
+            }
             Spacer()
         }
         .padding(Spacing.containerPadding)
         .padding(.top, Spacing.md)
+        .overlay {
+            if vm.isConverting {
+                ZStack {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    ProgressView().tint(.appPrimary)
+                }
+            }
+        }
+        .disabled(vm.isConverting)
     }
 
     private func row(_ currency: Currency) -> some View {
         Button {
-            Task { await vm.setCurrency(currency, in: modelContext); dismiss() }
+            Task {
+                await vm.setCurrency(currency, in: modelContext)
+                if !vm.conversionFailed { dismiss() }
+            }
         } label: {
             HStack(spacing: Spacing.md) {
                 Text(verbatim: currency.flag).font(.system(size: 22))

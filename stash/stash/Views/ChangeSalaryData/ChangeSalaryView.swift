@@ -13,7 +13,10 @@ struct ChangeSalaryView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm = ChangeSalaryVM()
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -95,7 +98,7 @@ struct ChangeSalaryView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.4))
             }
@@ -173,7 +176,7 @@ struct ChangeSalaryView: View {
                         .keyboardType(.numberPad)
                 }
                 Spacer()
-                Text(verbatim: vm.savingMethod.inputUnit)
+                Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.4))
             }
@@ -289,7 +292,7 @@ private extension ChangeSalaryView {
     }
 
     private var projectionUnit: String {
-        "\(String(localized: "common.rsd"))\(String(localized: "settings.per_month_suffix"))"
+        "\(currencyCode)\(String(localized: "settings.per_month_suffix"))"
     }
 
     // MARK: - Footer

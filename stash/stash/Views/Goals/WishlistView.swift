@@ -16,6 +16,7 @@ struct WishlistView: View {
     @State private var showBudget = false
 
     private var monthlyBudget: Double { profiles.first?.goalsMonthlyBudget ?? 0 }
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -76,7 +77,7 @@ struct WishlistView: View {
                 Text(verbatim: summary.totalSaved.serbianFormatted)
                     .font(.displayLgStyle)
                     .foregroundColor(.onSurface)
-                Text(verbatim: "/ \(summary.totalTarget.serbianFormatted) \(String(localized: "common.rsd"))")
+                Text(verbatim: "/ \(summary.totalTarget.serbianFormatted) \(currencyCode)")
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
@@ -120,7 +121,7 @@ struct WishlistView: View {
                     Text("goals.summary_budget_label")
                         .font(.labelSmStyle)
                         .foregroundColor(.onSurfaceVariant)
-                    Text(verbatim: "\(monthlyBudget.serbianFormatted) \(String(localized: "common.rsd"))")
+                    Text(verbatim: "\(monthlyBudget.serbianFormatted) \(currencyCode)")
                         .font(.secondaryStyle)
                         .foregroundColor(.onSurface)
                 }
@@ -138,7 +139,7 @@ struct WishlistView: View {
         VStack(spacing: Spacing.gutter) {
             ForEach(goals.sortedByPriority) { goal in
                 NavigationLink(value: goal) {
-                    GoalCard(goal: goal)
+                    GoalCard(goal: goal, currencyCode: currencyCode)
                 }
                 .buttonStyle(.plain)
             }
