@@ -176,3 +176,12 @@
 "account.restart_cta"           = "Ponovi";
 "account.currency_picker_title" = "Valuta";
 "account.currency_error"         = "Ne mogu da povučem kurseve. Pokušaj ponovo.";
+
+// MARK: - Stash (opšta ušteda)
+
+"stash.total_label"   = "Ukupno u šteku";
+"stash.hint"          = "Ušteđen novac koji nije za ciljeve";
+"stash.add_title"     = "Dodaj u štek";
+"stash.current_label" = "Trenutno stanje";
+"stash.add_cta"       = "Dodaj u štek";
+"stash.set_cta"       = "Postavi kao trenutno stanje";
