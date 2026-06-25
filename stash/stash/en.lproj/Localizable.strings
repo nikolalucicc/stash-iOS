@@ -107,9 +107,6 @@
 
 "goals.title"               = "Wishlist";
 "goals.subtitle"            = "Save toward what you want, by priority.";
-"goals.budget_label"        = "Total monthly budget for goals";
-/* %d = number of goals currently being saved for */
-"goals.active_count"        = "%d goals in progress";
 "goals.empty_title"         = "No goals yet";
 "goals.empty_subtitle"      = "Add your first wish and start saving toward it.";
 "goals.empty_cta"           = "Add a goal";
@@ -162,15 +159,10 @@
 "goals.unallocated"         = "Unallocated";
 "goals.budget_save_cta"     = "Save settings";
 
-// MARK: - Vault
 
-"vault.title"              = "Vault";
-"vault.subtitle"           = "Your savings across all goals.";
-"vault.total_saved_label"  = "Total saved";
-"vault.active_goals"       = "Active goals";
-"vault.saved_monthly"      = "Monthly toward goals";
+// MARK: - Goals · summary
+
+"goals.summary_saved_label"  = "Total saved";
+"goals.summary_budget_label" = "Monthly budget";
 /* %d = number of completed goals */
-"vault.completed"          = "%d completed";
-"vault.breakdown_header"   = "By goal";
-"vault.empty_title"        = "Your vault is empty";
-"vault.empty_subtitle"     = "Add goals on the Goals tab to start growing your vault.";
+"goals.completed"            = "%d completed";

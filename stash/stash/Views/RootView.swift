@@ -12,7 +12,6 @@ import SwiftData
 struct RootView: View {
 
     @Query private var profiles: [UserProfile]
-    @State private var router = AppRouter()
 
     private var onboardingCompleted: Bool {
         profiles.first?.onboardingCompleted ?? false
@@ -22,7 +21,6 @@ struct RootView: View {
         Group {
             if onboardingCompleted {
                 MainTabView()
-                    .environment(router)
             } else {
                 NavigationStack { OnboardingFirstStepView() }
             }

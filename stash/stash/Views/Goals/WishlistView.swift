@@ -25,7 +25,7 @@ struct WishlistView: View {
                     if goals.isEmpty {
                         emptyState
                     } else {
-                        budgetCard
+                        summaryCard
                         goalsList
                     }
                 }
@@ -62,45 +62,73 @@ struct WishlistView: View {
         }
     }
 
-    private var budgetCard: some View {
-        Button { showBudget = true } label: {
-            VStack(alignment: .leading, spacing: Spacing.sm) {
-                Text("goals.budget_label")
-                    .font(.labelCapsStyle)
-                    .tracking(0.6)
+    private var summary: VaultSummary {
+        VaultSummary(goals: goals, budget: monthlyBudget)
+    }
+
+    private var summaryCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            Text("goals.summary_saved_label")
+                .font(.labelCapsStyle)
+                .tracking(0.6)
+                .foregroundColor(.onSurfaceVariant)
+            HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
+                Text(verbatim: summary.totalSaved.serbianFormatted)
+                    .font(.displayLgStyle)
+                    .foregroundColor(.onSurface)
+                Text(verbatim: "/ \(summary.totalTarget.serbianFormatted) \(String(localized: "common.rsd"))")
+                    .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
-                HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
-                    Text(verbatim: monthlyBudget.serbianFormatted)
-                        .font(.displayLgStyle)
-                        .foregroundColor(.onSurface)
-                    Text("common.rsd")
-                        .font(.displayValStyle)
-                        .foregroundColor(.appPrimary)
-                }
-                HStack(spacing: Spacing.xs) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 12))
-                        .foregroundColor(.appPrimary)
-                    Text(verbatim: String(format: String(localized: "goals.active_count"), goals.count))
-                        .font(.noteStyle)
-                        .foregroundColor(.onSurfaceVariant)
+            }
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Color.white.opacity(0.05))
+                    Capsule().fill(Color.appPrimary)
+                        .frame(width: proxy.size.width * summary.progress)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(Spacing.lg)
-            .background(Color.appPrimary.opacity(0.08))
-            .cornerRadius(20)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
-            )
-            .overlay(
+            .frame(height: 8)
+            HStack {
+                Text(verbatim: "\(Int((summary.progress * 100).rounded()))%")
+                    .font(.labelCapsStyle)
+                    .foregroundColor(.appPrimary)
+                Spacer()
+                if summary.completedCount > 0 {
+                    Text(verbatim: String(format: String(localized: "goals.completed"), summary.completedCount))
+                        .font(.noteStyle)
+                        .foregroundColor(.appPrimary)
+                }
+            }
+            Rectangle()
+                .fill(Color.white.opacity(0.08))
+                .frame(height: 0.5)
+            budgetRow
+        }
+        .padding(Spacing.lg)
+        .background(Color.appPrimary.opacity(0.08))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+        )
+    }
+
+    private var budgetRow: some View {
+        Button { showBudget = true } label: {
+            HStack(spacing: Spacing.sm) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("goals.summary_budget_label")
+                        .font(.labelSmStyle)
+                        .foregroundColor(.onSurfaceVariant)
+                    Text(verbatim: "\(monthlyBudget.serbianFormatted) \(String(localized: "common.rsd"))")
+                        .font(.secondaryStyle)
+                        .foregroundColor(.onSurface)
+                }
+                Spacer()
                 Image(systemName: "slider.horizontal.3")
                     .font(.system(size: 16))
                     .foregroundColor(.appPrimary)
-                    .padding(Spacing.lg),
-                alignment: .topTrailing
-            )
+            }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

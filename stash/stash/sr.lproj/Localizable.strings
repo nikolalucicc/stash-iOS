@@ -105,9 +105,6 @@
 
 "goals.title"               = "Lista želja";
 "goals.subtitle"            = "Štedi za ono što želiš, po prioritetu.";
-"goals.budget_label"        = "Ukupan mesečni budžet za ciljeve";
-/* %d = broj ciljeva za koje se trenutno štedi */
-"goals.active_count"        = "%d ciljeva u toku";
 "goals.empty_title"         = "Još nema ciljeva";
 "goals.empty_subtitle"      = "Dodaj prvu želju i počni da štediš za nju.";
 "goals.empty_cta"           = "Dodaj cilj";
@@ -160,15 +157,10 @@
 "goals.unallocated"         = "Neraspoređeno";
 "goals.budget_save_cta"     = "Sačuvaj podešavanja";
 
-// MARK: - Vault
 
-"vault.title"              = "Trezor";
-"vault.subtitle"           = "Tvoja ušteda kroz sve ciljeve.";
-"vault.total_saved_label"  = "Ukupno ušteđeno";
-"vault.active_goals"       = "Aktivni ciljevi";
-"vault.saved_monthly"      = "Mesečno za ciljeve";
+// MARK: - Goals · pregled
+
+"goals.summary_saved_label"  = "Ukupno ušteđeno";
+"goals.summary_budget_label" = "Mesečni budžet";
 /* %d = broj završenih ciljeva */
-"vault.completed"          = "%d završeno";
-"vault.breakdown_header"   = "Po cilju";
-"vault.empty_title"        = "Trezor je prazan";
-"vault.empty_subtitle"     = "Dodaj ciljeve na Ciljevi tabu da počneš da puniš trezor.";
+"goals.completed"            = "%d završeno";
