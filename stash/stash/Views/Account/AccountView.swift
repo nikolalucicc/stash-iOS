@@ -37,11 +37,13 @@ struct AccountView: View {
                 .presentationDetents([.height(320)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
-        .confirmationDialog("account.restart_confirm", isPresented: $showRestartConfirm,
-                            titleVisibility: .visible) {
-            Button("account.restart_cta") {
+        .alert("account.restart_confirm_title", isPresented: $showRestartConfirm) {
+            Button("common.cancel_btn", role: .cancel) {}
+            Button("account.restart_cta", role: .destructive) {
                 Task { await vm.restartOnboarding(in: modelContext) }
             }
+        } message: {
+            Text("account.restart_confirm")
         }
     }
 

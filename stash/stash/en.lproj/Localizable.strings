@@ -173,7 +173,8 @@
 "account.salary_row"            = "Salary & saving";
 "account.currency_row"          = "Currency";
 "account.restart_row"           = "Redo setup";
-"account.restart_confirm"       = "Redo setup? Your data is kept.";
+"account.restart_confirm_title" = "Redo setup?";
+"account.restart_confirm"       = "Your data is kept — you'll just go through setup again.";
 "account.restart_cta"           = "Redo setup";
 "account.currency_picker_title" = "Currency";
 "account.currency_error"         = "Couldn't fetch exchange rates. Try again.";
