@@ -17,7 +17,7 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selection) {
             NavigationStack {
-                PlaceholderTab(titleKey: "tab.vault", systemImage: "creditcard.fill")
+                VaultView()
             }
             .tabItem { Label("tab.vault", systemImage: "creditcard.fill") }
             .tag(Tab.vault)

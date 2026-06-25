@@ -161,3 +161,16 @@
 "goals.budget_empty"        = "Add goals to see how the budget splits.";
 "goals.unallocated"         = "Unallocated";
 "goals.budget_save_cta"     = "Save settings";
+
+// MARK: - Vault
+
+"vault.title"              = "Vault";
+"vault.subtitle"           = "Your savings across all goals.";
+"vault.total_saved_label"  = "Total saved";
+"vault.active_goals"       = "Active goals";
+"vault.saved_monthly"      = "Set aside monthly";
+/* %d = number of completed goals */
+"vault.completed"          = "%d completed";
+"vault.breakdown_header"   = "By goal";
+"vault.empty_title"        = "Your vault is empty";
+"vault.empty_subtitle"     = "Add goals on the Goals tab to start growing your vault.";

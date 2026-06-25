@@ -159,3 +159,16 @@
 "goals.budget_empty"        = "Dodaj ciljeve da vidiš kako se budžet deli.";
 "goals.unallocated"         = "Neraspoređeno";
 "goals.budget_save_cta"     = "Sačuvaj podešavanja";
+
+// MARK: - Vault
+
+"vault.title"              = "Trezor";
+"vault.subtitle"           = "Tvoja ušteda kroz sve ciljeve.";
+"vault.total_saved_label"  = "Ukupno ušteđeno";
+"vault.active_goals"       = "Aktivni ciljevi";
+"vault.saved_monthly"      = "Mesečno se odvaja";
+/* %d = broj završenih ciljeva */
+"vault.completed"          = "%d završeno";
+"vault.breakdown_header"   = "Po cilju";
+"vault.empty_title"        = "Trezor je prazan";
+"vault.empty_subtitle"     = "Dodaj ciljeve na Ciljevi tabu da počneš da puniš trezor.";
