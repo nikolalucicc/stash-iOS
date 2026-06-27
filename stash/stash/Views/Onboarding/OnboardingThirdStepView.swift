@@ -12,7 +12,10 @@ struct OnboardingThirdStepView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm = OnboardingThirdStepVM()
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -20,7 +23,7 @@ struct OnboardingThirdStepView: View {
                 OnboardingAppBar(onBack: { dismiss() })
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        ProgressIndicator(currentStep: 3, suffix: String(localized: "onboarding.step3.progress_suffix"))
+                        ProgressIndicator(currentStep: 4, suffix: String(localized: "onboarding.step3.progress_suffix"))
                             .padding(.bottom, Spacing.xl)
                         headerSection
                             .padding(.bottom, Spacing.xl)
@@ -42,7 +45,7 @@ struct OnboardingThirdStepView: View {
             get: { vm.showAddSheet },
             set: { vm.showAddSheet = $0 }
         )) {
-            AddExpenseSheetView(vm: vm)
+            AddExpenseSheetView(vm: vm, currencyCode: currencyCode)
                 .presentationDetents([.height(480)])
                 .presentationBackground(Color.surfaceContainerLow)
                 .presentationDragIndicator(.visible)
@@ -68,6 +71,12 @@ struct OnboardingThirdStepView: View {
         profile.expenses = vm.expenses.map {
             FixedExpenseEntity(name: $0.name, note: $0.note, amount: $0.amount, icon: $0.icon)
         }
+        try? modelContext.save()
+    }
+
+    private func finishOnboarding() {
+        let profile = UserProfile.current(in: modelContext)
+        profile.onboardingCompleted = true
         try? modelContext.save()
     }
 
@@ -119,7 +128,7 @@ struct OnboardingThirdStepView: View {
                 Text(verbatim: expense.amount.serbianFormatted)
                     .font(.displayValStyle)
                     .foregroundColor(.onSurface)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.labelSmStyle)
                     .foregroundColor(.onSurface)
             }
@@ -175,7 +184,7 @@ struct OnboardingThirdStepView: View {
                 Text(verbatim: vm.totalFormatted)
                     .font(.displayLgStyle)
                     .foregroundColor(.appPrimary)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.bodyStyle)
                     .foregroundColor(.onSurface)
             }
@@ -194,34 +203,34 @@ struct OnboardingThirdStepView: View {
 
     private var footerSection: some View {
         VStack(spacing: Spacing.md) {
-            NavigationLink(destination: OnboardingFourthStepView()) {
-                HStack(spacing: Spacing.sm) {
-                    Text("common.continue_btn")
-                        .font(.navTitleStyle)
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 16, weight: .medium))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md)
-                .background(Color.accent)
-                .cornerRadius(Radius.xl)
-                .contentShape(Rectangle())
+            Button {
+                saveExpenses()
+                finishOnboarding()
+            } label: {
+                Text("onboarding.step4.finish_btn")
+                    .font(.navTitleStyle)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Spacing.md)
+                    .background(Color.accent)
+                    .cornerRadius(Radius.xl)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .simultaneousGesture(TapGesture().onEnded { saveExpenses() })
 
             HStack(spacing: Spacing.md) {
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
-                NavigationLink(destination: OnboardingFourthStepView()) {
+                Button {
+                    saveExpenses()
+                    finishOnboarding()
+                } label: {
                     Text("common.skip_btn")
                         .font(.secondaryStyle)
                         .foregroundColor(.onSurfaceVariant)
                 }
                 .buttonStyle(.plain)
-                .simultaneousGesture(TapGesture().onEnded { saveExpenses() })
                 Rectangle()
                     .fill(Color.outlineVariant.opacity(0.5))
                     .frame(height: 0.5)
@@ -237,6 +246,7 @@ struct OnboardingThirdStepView: View {
 struct AddExpenseSheetView: View {
 
     @Bindable var vm: OnboardingThirdStepVM
+    var currencyCode: String = Currency.rsd.code
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -317,7 +327,7 @@ struct AddExpenseSheetView: View {
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
                 Spacer()
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }

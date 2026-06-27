@@ -22,7 +22,7 @@ struct RootView: View {
             if onboardingCompleted {
                 MainTabView()
             } else {
-                NavigationStack { OnboardingFirstStepView() }
+                NavigationStack { OnboardingFourthStepView() }
             }
         }
     }
