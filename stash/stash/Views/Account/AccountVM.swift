@@ -55,10 +55,18 @@ final class AccountVM {
         }
     }
 
-    /// Sends the user back through onboarding (data is kept).
+    /// Wipes every stored record (profile, goals, expenses, stash) so the user
+    /// starts onboarding completely fresh.
     func restartOnboarding(in context: ModelContext) async {
-        let profile = UserProfile.current(in: context)
-        profile.onboardingCompleted = false
+        for goal in (try? context.fetch(FetchDescriptor<SavingsGoal>())) ?? [] {
+            context.delete(goal)
+        }
+        for expense in (try? context.fetch(FetchDescriptor<FixedExpenseEntity>())) ?? [] {
+            context.delete(expense)
+        }
+        for profile in (try? context.fetch(FetchDescriptor<UserProfile>())) ?? [] {
+            context.delete(profile)
+        }
         try? context.save()
     }
 }

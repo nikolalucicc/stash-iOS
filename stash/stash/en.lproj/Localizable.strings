@@ -179,7 +179,7 @@
 "account.currency_row"          = "Currency";
 "account.restart_row"           = "Redo setup";
 "account.restart_confirm_title" = "Redo setup?";
-"account.restart_confirm"       = "Your data is kept — you'll just go through setup again.";
+"account.restart_confirm"       = "This erases all your data and starts setup from scratch.";
 "account.restart_cta"           = "Redo setup";
 "account.currency_picker_title" = "Currency";
 "account.currency_error"         = "Couldn't fetch exchange rates. Try again.";
