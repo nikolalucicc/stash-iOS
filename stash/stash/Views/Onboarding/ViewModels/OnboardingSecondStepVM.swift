@@ -32,11 +32,11 @@ enum SavingMethod: String, CaseIterable {
 class OnboardingSecondStepVM {
 
     var savingMethod: SavingMethod = .percentage
-    var percentageText: String = "25"
-    var fixedAmountText: String = Double(20_000).serbianFormatted
+    var percentageText: String = ""
+    var fixedAmountText: String = ""
     var monthlySalary: Double
 
-    init(monthlySalary: Double = 85_000) {
+    init(monthlySalary: Double = 0) {
         self.monthlySalary = monthlySalary
     }
 

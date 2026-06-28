@@ -32,11 +32,11 @@ final class UserProfile {
     var expenses: [FixedExpenseEntity] = []
 
     init(
-        monthlySalary: Double = 85_000,
+        monthlySalary: Double = 0,
         paydayPeriod: String = "",
         savingMethodRaw: String = SavingMethod.percentage.rawValue,
-        savingPercentage: Double = 25,
-        savingFixedAmount: Double = 20_000,
+        savingPercentage: Double = 0,
+        savingFixedAmount: Double = 0,
         currencyRaw: String = Currency.rsd.rawValue,
         onboardingCompleted: Bool = false,
         goalsMonthlyBudget: Double = 15_000,

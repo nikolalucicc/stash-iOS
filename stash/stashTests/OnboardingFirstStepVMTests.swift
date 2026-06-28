@@ -11,9 +11,9 @@ import XCTest
 @MainActor
 final class OnboardingFirstStepVMTests: XCTestCase {
 
-    func testDefaultSalaryText() {
+    func testSalaryStartsEmpty() {
         let vm = OnboardingFirstStepVM()
-        XCTAssertEqual(vm.salaryText, "85.000")
+        XCTAssertEqual(vm.salaryText, "")
     }
 
     func testPaydayOptionsHasThreeChoices() {
