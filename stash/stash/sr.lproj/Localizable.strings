@@ -123,6 +123,9 @@
 "goals.priority_label"      = "Prioritet";
 "goals.deadline_label"      = "Rok (opciono)";
 "goals.contribution_label"  = "MeseÄni doprinos";
+/* %d = broj meseci do roka */
+"goals.months_count"        = "%d meseci";
+"goals.deadline_auto_note"  = "Izračunato iz roka da na vreme skupiš za cilj.";
 "goals.add_cta"             = "Dodaj na listu";
 
 /* %@ = iznos koji ostaje u šteku posle kupovine */

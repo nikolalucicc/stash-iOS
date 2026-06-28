@@ -46,4 +46,34 @@ final class AddGoalVMTests: XCTestCase {
 
         XCTAssertEqual(UserProfile.existing(in: context)?.stashBalance, 30_000)
     }
+
+    func testDeadlineMonthlyDividesPriceByMonths() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.amountText = "13000"
+        vm.hasDeadline = true
+        vm.deadline = Calendar.current.date(byAdding: .month, value: 13, to: .now) ?? .now
+
+        XCTAssertEqual(vm.monthsUntilDeadline, 13)
+        XCTAssertEqual(vm.deadlineMonthly, 1_000)
+        XCTAssertEqual(vm.desiredMonthly, 1_000)
+    }
+
+    func testDeadlineMonthlyRoundsUp() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.amountText = "10000"
+        vm.hasDeadline = true
+        vm.deadline = Calendar.current.date(byAdding: .month, value: 3, to: .now) ?? .now
+
+        // 10000 / 3 = 3333.3 → rounded up so the goal is fully covered
+        XCTAssertEqual(vm.deadlineMonthly, 3_334)
+    }
+
+    func testWithoutDeadlineUsesManualMonthly() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.amountText = "13000"
+        vm.hasDeadline = false
+        vm.monthlyText = "500"
+
+        XCTAssertEqual(vm.desiredMonthly, 500)
+    }
 }

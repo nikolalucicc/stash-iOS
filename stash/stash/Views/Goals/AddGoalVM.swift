@@ -47,7 +47,25 @@ final class AddGoalVM {
     var isEditing: Bool { editingGoal != nil }
     var targetAmount: Double { amountText.parsedSerbianNumber }
     var savedAmount: Double { min(savedText.parsedSerbianNumber, targetAmount) }
-    var desiredMonthly: Double { monthlyText.parsedSerbianNumber }
+    /// Whole calendar months from this month until the deadline (at least 1).
+    var monthsUntilDeadline: Int {
+        let calendar = Calendar.current
+        let now = calendar.dateComponents([.year, .month], from: .now)
+        let end = calendar.dateComponents([.year, .month], from: deadline)
+        let months = ((end.year ?? 0) - (now.year ?? 0)) * 12 + ((end.month ?? 0) - (now.month ?? 0))
+        return max(1, months)
+    }
+
+    /// Monthly amount needed to reach the target by the deadline (price / months).
+    var deadlineMonthly: Double {
+        guard hasDeadline, targetAmount > 0 else { return 0 }
+        return (targetAmount / Double(monthsUntilDeadline)).rounded(.up)
+    }
+
+    /// With a deadline the monthly amount is derived; otherwise it's user-entered.
+    var desiredMonthly: Double {
+        hasDeadline ? deadlineMonthly : monthlyText.parsedSerbianNumber
+    }
 
     var canSave: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && targetAmount > 0
