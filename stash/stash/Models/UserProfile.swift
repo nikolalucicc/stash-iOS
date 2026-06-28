@@ -23,7 +23,8 @@ final class UserProfile {
     var currencyRaw: String
     var onboardingCompleted: Bool
     /// Max total the user is willing to put toward wishlist goals each month.
-    var goalsMonthlyBudget: Double = 15_000
+    /// Starts at 0 — the user sets it from the goals budget sheet.
+    var goalsMonthlyBudget: Double = 0
     /// Accumulated general savings the user has set aside (not tied to goals).
     var stashBalance: Double = 0
     var createdAt: Date
@@ -39,7 +40,7 @@ final class UserProfile {
         savingFixedAmount: Double = 20_000,
         currencyRaw: String = Currency.rsd.rawValue,
         onboardingCompleted: Bool = false,
-        goalsMonthlyBudget: Double = 15_000,
+        goalsMonthlyBudget: Double = 0,
         stashBalance: Double = 0
     ) {
         self.monthlySalary = monthlySalary
