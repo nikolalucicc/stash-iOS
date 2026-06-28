@@ -125,6 +125,9 @@
 "goals.priority_label"      = "Priority";
 "goals.deadline_label"      = "Deadline (optional)";
 "goals.contribution_label"  = "Monthly contribution";
+/* %d = number of months until the deadline */
+"goals.months_count"        = "%d months";
+"goals.deadline_auto_note"  = "Calculated from your deadline to reach the goal in time.";
 "goals.add_cta"             = "Add to list";
 
 /* %@ = amount left in the stash after buying, e.g. "12.000 RSD" */

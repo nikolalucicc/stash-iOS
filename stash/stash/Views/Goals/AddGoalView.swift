@@ -221,7 +221,16 @@ struct AddGoalView: View {
         .padding(.horizontal, 4)
     }
 
+    @ViewBuilder
     private var contributionField: some View {
+        if vm.hasDeadline {
+            deadlineMonthlyField
+        } else {
+            manualContributionField
+        }
+    }
+
+    private var manualContributionField: some View {
         let bindable = Bindable(vm)
         return VStack(alignment: .leading, spacing: Spacing.xs) {
             fieldLabel("goals.contribution_label")
@@ -242,6 +251,40 @@ struct AddGoalView: View {
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
             )
+        }
+    }
+
+    private var deadlineMonthsNote: String {
+        String(format: String(localized: "goals.months_count"), vm.monthsUntilDeadline)
+    }
+
+    private var deadlineMonthlyField: some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            fieldLabel("goals.contribution_label")
+            HStack(alignment: .lastTextBaseline) {
+                Text(verbatim: vm.deadlineMonthly.serbianFormatted)
+                    .font(.inputValStyle)
+                    .foregroundColor(.appPrimary)
+                Text(verbatim: currencyCode)
+                    .font(.labelCapsStyle)
+                    .foregroundColor(.appPrimary)
+                Spacer()
+                Text(verbatim: deadlineMonthsNote)
+                    .font(.noteStyle)
+                    .foregroundColor(.onSurfaceVariant)
+            }
+            .frame(height: 56)
+            .padding(.horizontal, Spacing.md)
+            .background(Color.appPrimary.opacity(0.07))
+            .cornerRadius(Radius.xl)
+            .overlay(
+                RoundedRectangle(cornerRadius: Radius.xl)
+                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            )
+            Text("goals.deadline_auto_note")
+                .font(.noteStyle)
+                .foregroundColor(.onSurfaceVariant)
+                .padding(.leading, 4)
         }
     }
 
