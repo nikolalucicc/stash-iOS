@@ -16,6 +16,10 @@ struct AddGoalView: View {
     @State private var vm: AddGoalVM
 
     private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
+    private var stashBalance: Double { profiles.first?.stashBalance ?? 0 }
+    private var canAffordNow: Bool {
+        !vm.isEditing && vm.targetAmount > 0 && stashBalance >= vm.targetAmount
+    }
 
     init(nextSortOrder: Int) {
         _vm = State(initialValue: AddGoalVM(sortOrder: nextSortOrder))
@@ -33,10 +37,12 @@ struct AddGoalView: View {
                     VStack(alignment: .leading, spacing: Spacing.lg) {
                         nameField
                         amountField
-                        savedField
+                        if canAffordNow {
+                            affordableBanner
+                        }
                         prioritySelector
                         deadlineField
-                        contributionSlider
+                        contributionField
                     }
                     .padding(.horizontal, Spacing.containerPadding)
                     .padding(.top, Spacing.lg)
@@ -118,28 +124,51 @@ struct AddGoalView: View {
         }
     }
 
-    private var savedField: some View {
-        let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.xs) {
-            fieldLabel("goals.saved_label")
-            HStack {
-                TextField("0", text: bindable.savedText)
-                    .font(.inputValStyle)
-                    .foregroundColor(.onSurface)
-                    .keyboardType(.numberPad)
-                Text(verbatim: currencyCode)
-                    .font(.labelCapsStyle)
+    private var affordableMessage: String {
+        let remaining = "\(max(0, stashBalance - vm.targetAmount).serbianFormatted) \(currencyCode)"
+        return String(format: String(localized: "goals.affordable_remaining"), remaining)
+    }
+
+    private var affordableBanner: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 15))
                     .foregroundColor(.appPrimary)
+                Text("goals.affordable_title")
+                    .font(.secondaryStyle)
+                    .foregroundColor(.onSurface)
             }
-            .frame(height: 56)
-            .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.04))
-            .cornerRadius(Radius.xl)
-            .overlay(
-                RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
-            )
+            Text(verbatim: affordableMessage)
+                .font(.noteStyle)
+                .foregroundColor(.onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+            Button {
+                Task {
+                    await vm.buyNow(in: modelContext)
+                    dismiss()
+                }
+            } label: {
+                Text("goals.buy_now_cta")
+                    .font(.secondaryStyle)
+                    .foregroundColor(.appPrimary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        RoundedRectangle(cornerRadius: Radius.lg)
+                            .fill(Color.appPrimary.opacity(0.12))
+                    )
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
         }
+        .padding(Spacing.md)
+        .background(Color.appPrimary.opacity(0.07))
+        .cornerRadius(Radius.xl)
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+        )
     }
 
     private var prioritySelector: some View {
@@ -192,18 +221,27 @@ struct AddGoalView: View {
         .padding(.horizontal, 4)
     }
 
-    private var contributionSlider: some View {
+    private var contributionField: some View {
         let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.sm) {
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
+            fieldLabel("goals.contribution_label")
             HStack {
-                fieldLabel("goals.contribution_label")
-                Spacer()
-                Text(verbatim: "\(vm.desiredMonthly.serbianFormatted) \(currencyCode)")
-                    .font(.sectionHeaderStyle)
+                TextField("0", text: bindable.monthlyText)
+                    .font(.inputValStyle)
+                    .foregroundColor(.onSurface)
+                    .keyboardType(.numberPad)
+                Text(verbatim: currencyCode)
+                    .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            Slider(value: bindable.desiredMonthly, in: 500...50_000, step: 500)
-                .tint(.accent)
+            .frame(height: 56)
+            .padding(.horizontal, Spacing.md)
+            .background(Color.white.opacity(0.04))
+            .cornerRadius(Radius.xl)
+            .overlay(
+                RoundedRectangle(cornerRadius: Radius.xl)
+                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+            )
         }
     }
 

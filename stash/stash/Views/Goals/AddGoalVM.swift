@@ -19,7 +19,7 @@ final class AddGoalVM {
     var priority: GoalPriority = .medium
     var hasDeadline: Bool = false
     var deadline: Date = .now
-    var desiredMonthly: Double = 5_000
+    var monthlyText: String = ""
 
     private let sortOrder: Int
     private let editingGoal: SavingsGoal?
@@ -41,15 +41,26 @@ final class AddGoalVM {
         priority = goal.priority
         hasDeadline = goal.deadline != nil
         deadline = goal.deadline ?? .now
-        desiredMonthly = goal.desiredMonthly
+        monthlyText = goal.desiredMonthly > 0 ? goal.desiredMonthly.serbianFormatted : ""
     }
 
     var isEditing: Bool { editingGoal != nil }
     var targetAmount: Double { amountText.parsedSerbianNumber }
     var savedAmount: Double { min(savedText.parsedSerbianNumber, targetAmount) }
+    var desiredMonthly: Double { monthlyText.parsedSerbianNumber }
 
     var canSave: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && targetAmount > 0
+    }
+
+    /// Spends the goal's price straight from the stash (no goal is created).
+    /// Used when the user already has enough saved and buys the item now.
+    func buyNow(in context: ModelContext) async {
+        guard !isEditing, targetAmount > 0 else { return }
+        let profile = UserProfile.current(in: context)
+        guard profile.stashBalance >= targetAmount else { return }
+        profile.stashBalance -= targetAmount
+        try? context.save()
     }
 
     func save(to context: ModelContext) async {

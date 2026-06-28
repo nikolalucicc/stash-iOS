@@ -125,6 +125,11 @@
 "goals.contribution_label"  = "MeseÄni doprinos";
 "goals.add_cta"             = "Dodaj na listu";
 
+/* %@ = iznos koji ostaje u šteku posle kupovine */
+"goals.affordable_title"     = "Ovo već možeš da priuštiš";
+"goals.affordable_remaining" = "Kupi odmah i u šteku ti ostaje %@.";
+"goals.buy_now_cta"          = "Kupi odmah";
+
 // MARK: - Goals Â· detalj i izmena
 
 "goals.edit_title"           = "Izmeni cilj";
