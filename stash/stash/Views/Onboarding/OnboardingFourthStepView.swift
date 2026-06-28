@@ -10,17 +10,16 @@ import SwiftData
 
 struct OnboardingFourthStepView: View {
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var vm = OnboardingFourthStepVM()
 
     var body: some View {
         StashTheme {
             VStack(spacing: 0) {
-                OnboardingAppBar(onBack: { dismiss() })
+                OnboardingAppBar()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        ProgressIndicator(currentStep: 4)
+                        ProgressIndicator(currentStep: 1)
                             .padding(.bottom, Spacing.xs)
                         headerSection
                             .padding(.bottom, Spacing.xl)
@@ -44,10 +43,9 @@ struct OnboardingFourthStepView: View {
         vm.selectedCurrency = profile.currency
     }
 
-    private func finishOnboarding() {
+    private func saveCurrency() {
         let profile = UserProfile.current(in: modelContext)
         profile.currency = vm.selectedCurrency
-        profile.onboardingCompleted = true
         try? modelContext.save()
     }
 
@@ -140,43 +138,29 @@ struct OnboardingFourthStepView: View {
 
     private var footerSection: some View {
         VStack(spacing: Spacing.md) {
-            Button { finishOnboarding() } label: {
-                Text("onboarding.step4.finish_btn")
-                    .font(.navTitleStyle)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.md)
-                    .background(
-                        LinearGradient(
-                            colors: [Color(hex: "#534AB7"), Color(hex: "#7F77DD")],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+            NavigationLink(destination: OnboardingFirstStepView()) {
+                HStack(spacing: Spacing.sm) {
+                    Text("common.continue_btn")
+                        .font(.navTitleStyle)
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 16, weight: .medium))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, Spacing.md)
+                .background(
+                    LinearGradient(
+                        colors: [Color(hex: "#534AB7"), Color(hex: "#7F77DD")],
+                        startPoint: .leading,
+                        endPoint: .trailing
                     )
-                    .cornerRadius(Radius.xl)
-                    .shadow(color: Color(hex: "#534AB7").opacity(0.3), radius: 15, x: 0, y: 8)
-                    .contentShape(Rectangle())
+                )
+                .cornerRadius(Radius.xl)
+                .shadow(color: Color(hex: "#534AB7").opacity(0.3), radius: 15, x: 0, y: 8)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-
-            HStack(spacing: Spacing.md) {
-                Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
-                    .frame(height: 0.5)
-                Button { dismiss() } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "arrow.left")
-                            .font(.system(size: 13))
-                        Text("common.back_btn")
-                            .font(.secondaryStyle)
-                    }
-                    .foregroundColor(.onSurfaceVariant)
-                }
-                .buttonStyle(.plain)
-                Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
-                    .frame(height: 0.5)
-            }
+            .simultaneousGesture(TapGesture().onEnded { saveCurrency() })
         }
         .padding(.horizontal, Spacing.containerPadding)
         .padding(.bottom, Spacing.xl)

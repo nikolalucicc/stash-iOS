@@ -12,7 +12,10 @@ struct OnboardingSecondStepView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm = OnboardingSecondStepVM()
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
@@ -20,7 +23,7 @@ struct OnboardingSecondStepView: View {
                 OnboardingAppBar(onBack: { dismiss() })
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        ProgressIndicator(currentStep: 2)
+                        ProgressIndicator(currentStep: 3)
                             .padding(.bottom, Spacing.xl)
                         headerSection
                             .padding(.bottom, Spacing.xl)
@@ -158,7 +161,7 @@ struct OnboardingSecondStepView: View {
                         .keyboardType(.numberPad)
                 }
                 Spacer()
-                Text(verbatim: vm.savingMethod.inputUnit)
+                Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)
                     .font(.inputValStyle)
                     .foregroundColor(.white.opacity(0.35))
             }
@@ -203,7 +206,7 @@ struct OnboardingSecondStepView: View {
                     Text(verbatim: vm.monthlySavingFormatted)
                         .font(.displayValStyle)
                         .foregroundColor(Color(hex: "#AFA9EC"))
-                    Text("common.rsd")
+                    Text(verbatim: currencyCode)
                         .font(.inputValStyle)
                         .foregroundColor(.white.opacity(0.35))
                 }

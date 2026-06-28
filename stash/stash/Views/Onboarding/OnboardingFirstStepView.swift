@@ -10,16 +10,20 @@ import SwiftData
 
 struct OnboardingFirstStepView: View {
 
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var profiles: [UserProfile]
     @State private var vm = OnboardingFirstStepVM()
+
+    private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
         StashTheme {
             VStack(spacing: 0) {
-                OnboardingAppBar()
+                OnboardingAppBar(onBack: { dismiss() })
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        ProgressIndicator(currentStep: 1)
+                        ProgressIndicator(currentStep: 2)
                             .padding(.bottom, Spacing.xl)
                         headerSection
                             .padding(.bottom, Spacing.xl)
@@ -90,7 +94,7 @@ struct OnboardingFirstStepView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
-                Text("common.rsd")
+                Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.35))
                     .padding(.leading, Spacing.sm)

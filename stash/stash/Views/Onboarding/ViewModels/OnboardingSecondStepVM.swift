@@ -25,12 +25,6 @@ enum SavingMethod: String, CaseIterable {
         }
     }
 
-    var inputUnit: String {
-        switch self {
-        case .percentage: return "%"
-        case .fixed:      return String(localized: "common.rsd")
-        }
-    }
 }
 
 @Observable
