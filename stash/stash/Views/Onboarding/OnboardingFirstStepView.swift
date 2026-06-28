@@ -44,7 +44,9 @@ struct OnboardingFirstStepView: View {
 
     private func loadSavedProfile() {
         guard let profile = UserProfile.existing(in: modelContext) else { return }
-        vm.salaryText = profile.monthlySalary.serbianFormatted
+        if profile.monthlySalary > 0 {
+            vm.salaryText = profile.monthlySalary.serbianFormatted
+        }
         if vm.paydayOptions.contains(profile.paydayPeriod) {
             vm.selectedPeriod = profile.paydayPeriod
         }
