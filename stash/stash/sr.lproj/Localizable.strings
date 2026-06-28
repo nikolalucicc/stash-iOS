@@ -177,7 +177,7 @@
 "account.currency_row"          = "Valuta";
 "account.restart_row"           = "Ponovi podeÅ¡avanje";
 "account.restart_confirm_title" = "Ponoviti podešavanje?";
-"account.restart_confirm"       = "Podaci ostaju sačuvani — samo ponovo prolaziš podešavanje.";
+"account.restart_confirm"       = "Ovo briše sve tvoje podatke i kreće podešavanje ispočetka.";
 "account.restart_cta"           = "Ponovi";
 "account.currency_picker_title" = "Valuta";
 "account.currency_error"         = "Ne mogu da povučem kurseve. Pokušaj ponovo.";

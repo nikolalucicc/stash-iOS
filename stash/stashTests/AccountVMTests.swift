@@ -24,11 +24,18 @@ final class AccountVMTests: XCTestCase {
 
     private var context: ModelContext { container.mainContext }
 
-    func testRestartOnboardingClearsFlag() async {
+    func testRestartOnboardingWipesEverything() async {
         let profile = UserProfile.current(in: context)
         profile.onboardingCompleted = true
+        profile.stashBalance = 5_000
+        profile.expenses = [FixedExpenseEntity(name: "Rent", note: "", amount: 500, icon: "house")]
+        context.insert(SavingsGoal(name: "G", targetAmount: 10_000))
+
         await AccountVM().restartOnboarding(in: context)
-        XCTAssertEqual(UserProfile.existing(in: context)?.onboardingCompleted, false)
+
+        XCTAssertNil(UserProfile.existing(in: context))
+        XCTAssertEqual((try? context.fetch(FetchDescriptor<SavingsGoal>()))?.count, 0)
+        XCTAssertEqual((try? context.fetch(FetchDescriptor<FixedExpenseEntity>()))?.count, 0)
     }
 
     func testApplyRateMultipliesAllAmounts() {
