@@ -90,16 +90,18 @@ struct ChangeSalaryView: View {
     }
 
     private var salaryField: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
+        let bindable = Bindable(vm)
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
             fieldLabel("onboarding.step1.salary_label")
             HStack {
-                TextField("", text: Binding(
-                    get: { vm.salaryText },
-                    set: { vm.salaryText = $0.groupedThousandsInput }
-                ))
+                TextField("", text: bindable.salaryText)
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
+                    .onChange(of: vm.salaryText) { _, value in
+                        let formatted = value.groupedThousandsInput
+                        if formatted != value { vm.salaryText = formatted }
+                    }
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.4))
