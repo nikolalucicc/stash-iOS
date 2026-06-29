@@ -1,0 +1,12 @@
+# Signing certificates + provisioning profiles are stored (encrypted) in a
+# separate private git repo. Set MATCH_GIT_URL to that repo and MATCH_PASSWORD
+# to the encryption passphrase. See fastlane/README.md.
+git_url(ENV["MATCH_GIT_URL"])
+storage_mode("git")
+
+type("appstore")
+app_identifier(["ios.projects.stash"])
+team_id("VYA59VWVM3")
+
+# Never let CI create/modify certificates — it only reads them.
+readonly(ENV["CI"] == "true")
