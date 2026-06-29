@@ -180,6 +180,7 @@
 "account.subtitle"              = "Manage your setup.";
 "account.salary_row"            = "Salary & saving";
 "account.currency_row"          = "Currency";
+"account.walkthrough_row"       = "Show walkthrough";
 "account.restart_row"           = "Redo setup";
 "account.restart_confirm_title" = "Redo setup?";
 "account.restart_confirm"       = "This erases all your data and starts setup from scratch.";
@@ -195,3 +196,16 @@
 "stash.current_label" = "Current balance";
 "stash.add_cta"       = "Add to stash";
 "stash.set_cta"       = "Set as current balance";
+
+// MARK: - Walkthrough
+
+"walkthrough.skip"          = "Skip";
+"walkthrough.done"          = "Get started";
+"walkthrough.goals_title"   = "Wishlist goals";
+"walkthrough.goals_text"    = "Save toward what you want, by priority. Add a deadline and we'll work out the monthly amount.";
+"walkthrough.monthly_title" = "Your month";
+"walkthrough.monthly_text"  = "See how your salary splits into savings, fixed costs and free money.";
+"walkthrough.stash_title"   = "Your stash";
+"walkthrough.stash_text"    = "Track money you've set aside that isn't tied to a goal — add to it anytime.";
+"walkthrough.account_title" = "Account";
+"walkthrough.account_text"  = "Change your salary, currency or redo setup here — and replay this tour whenever you like.";

@@ -178,6 +178,7 @@
 "account.subtitle"              = "Upravljaj svojim podeÅ¡avanjima.";
 "account.salary_row"            = "Plata i Å¡tednja";
 "account.currency_row"          = "Valuta";
+"account.walkthrough_row"       = "Prikaži vodič";
 "account.restart_row"           = "Ponovi podeÅ¡avanje";
 "account.restart_confirm_title" = "Ponoviti podešavanje?";
 "account.restart_confirm"       = "Ovo briše sve tvoje podatke i kreće podešavanje ispočetka.";
@@ -193,3 +194,16 @@
 "stash.current_label" = "Trenutno stanje";
 "stash.add_cta"       = "Dodaj u štek";
 "stash.set_cta"       = "Postavi kao trenutno stanje";
+
+// MARK: - Walkthrough
+
+"walkthrough.skip"          = "Preskoči";
+"walkthrough.done"          = "Počni";
+"walkthrough.goals_title"   = "Lista želja";
+"walkthrough.goals_text"    = "Štedi za ono što želiš, po prioritetu. Dodaj rok pa ćemo izračunati mesečni iznos.";
+"walkthrough.monthly_title" = "Tvoj mesec";
+"walkthrough.monthly_text"  = "Vidi kako se plata deli na štednju, fiksne troškove i slobodan novac.";
+"walkthrough.stash_title"   = "Tvoj štek";
+"walkthrough.stash_text"    = "Prati novac koji si odvojio, a nije vezan za cilj — dodaj kad god želiš.";
+"walkthrough.account_title" = "Nalog";
+"walkthrough.account_text"  = "Ovde menjaš platu, valutu ili ponovo pokrećeš podešavanje — i puštaš ovaj vodič kad god hoćeš.";
