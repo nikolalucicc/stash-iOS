@@ -74,3 +74,13 @@ crashlytics-build.properties
 
 # AppCode
 .idea/
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/test_output/
+build/
+vendor/bundle/
+
+# App Store Connect API key & secrets — never commit
+*.p8
+.env

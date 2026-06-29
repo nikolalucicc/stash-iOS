@@ -1,0 +1,7 @@
+app_identifier("ios.projects.stash")
+team_id("VYA59VWVM3")
+
+# Apple ID / App Store Connect team are resolved from the App Store Connect
+# API key (see fastlane/README.md). Override here if you prefer Apple ID auth:
+# apple_id(ENV["FASTLANE_APPLE_ID"])
+# itc_team_id(ENV["ITC_TEAM_ID"])
