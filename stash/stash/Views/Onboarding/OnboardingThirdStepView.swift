@@ -326,6 +326,7 @@ struct AddExpenseSheetView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
+                    .thousandsGrouped($vm.newAmountText)
                 Spacer()
                 Text(verbatim: currencyCode)
                     .font(.bodyStyle)

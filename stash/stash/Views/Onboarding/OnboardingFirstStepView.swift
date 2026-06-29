@@ -96,6 +96,7 @@ struct OnboardingFirstStepView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
+                    .thousandsGrouped(bindable.salaryText)
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.35))

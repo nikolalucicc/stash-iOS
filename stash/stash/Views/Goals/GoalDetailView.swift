@@ -232,6 +232,7 @@ private struct DepositSheet: View {
                     .font(.inputValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
+                    .thousandsGrouped($vm.depositText)
                 Text(verbatim: currencyCode)
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)

@@ -98,6 +98,7 @@ struct ChangeSalaryView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
+                    .thousandsGrouped(bindable.salaryText)
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.4))
@@ -174,6 +175,7 @@ struct ChangeSalaryView: View {
                         .font(.inputValStyle)
                         .foregroundColor(.white)
                         .keyboardType(.numberPad)
+                        .thousandsGrouped(bindable.fixedAmountText)
                 }
                 Spacer()
                 Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)

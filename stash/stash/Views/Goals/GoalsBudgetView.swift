@@ -61,6 +61,7 @@ struct GoalsBudgetView: View {
                     .font(.displayValStyle)
                     .foregroundColor(.onSurface)
                     .keyboardType(.numberPad)
+                    .thousandsGrouped(bindable.budgetText)
                 Text(verbatim: currencyCode)
                     .font(.sectionHeaderStyle)
                     .foregroundColor(.onSurfaceVariant)
