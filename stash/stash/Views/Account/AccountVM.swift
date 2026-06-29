@@ -55,6 +55,13 @@ final class AccountVM {
         }
     }
 
+    /// Clears the walkthrough flag so the first-run tour shows again.
+    func replayWalkthrough(in context: ModelContext) {
+        let profile = UserProfile.current(in: context)
+        profile.walkthroughCompleted = false
+        try? context.save()
+    }
+
     /// Wipes every stored record (profile, goals, expenses, stash) so the user
     /// starts onboarding completely fresh.
     func restartOnboarding(in context: ModelContext) async {

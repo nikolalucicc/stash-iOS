@@ -27,6 +27,8 @@ final class UserProfile {
     var goalsMonthlyBudget: Double = 0
     /// Accumulated general savings the user has set aside (not tied to goals).
     var stashBalance: Double = 0
+    /// Whether the first-run feature tour has been shown.
+    var walkthroughCompleted: Bool = false
     var createdAt: Date
 
     @Relationship(deleteRule: .cascade, inverse: \FixedExpenseEntity.profile)
@@ -41,7 +43,8 @@ final class UserProfile {
         currencyRaw: String = Currency.rsd.rawValue,
         onboardingCompleted: Bool = false,
         goalsMonthlyBudget: Double = 0,
-        stashBalance: Double = 0
+        stashBalance: Double = 0,
+        walkthroughCompleted: Bool = false
     ) {
         self.monthlySalary = monthlySalary
         self.paydayPeriod = paydayPeriod
@@ -52,6 +55,7 @@ final class UserProfile {
         self.onboardingCompleted = onboardingCompleted
         self.goalsMonthlyBudget = goalsMonthlyBudget
         self.stashBalance = stashBalance
+        self.walkthroughCompleted = walkthroughCompleted
         self.createdAt = .now
     }
 }

@@ -73,6 +73,11 @@ struct AccountView: View {
             }
             .buttonStyle(.plain)
 
+            Button { vm.replayWalkthrough(in: modelContext) } label: {
+                settingsRow(icon: "questionmark.circle", title: "account.walkthrough_row", value: nil)
+            }
+            .buttonStyle(.plain)
+
             Button { showRestartConfirm = true } label: {
                 settingsRow(icon: "arrow.counterclockwise", title: "account.restart_row", value: nil)
             }

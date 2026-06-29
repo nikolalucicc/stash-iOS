@@ -24,6 +24,13 @@ final class AccountVMTests: XCTestCase {
 
     private var context: ModelContext { container.mainContext }
 
+    func testReplayWalkthroughClearsFlag() {
+        let profile = UserProfile.current(in: context)
+        profile.walkthroughCompleted = true
+        AccountVM().replayWalkthrough(in: context)
+        XCTAssertEqual(UserProfile.existing(in: context)?.walkthroughCompleted, false)
+    }
+
     func testRestartOnboardingWipesEverything() async {
         let profile = UserProfile.current(in: context)
         profile.onboardingCompleted = true
