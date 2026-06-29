@@ -51,6 +51,7 @@ struct StashDepositSheet: View {
                 .font(.inputValStyle)
                 .foregroundColor(.onSurface)
                 .keyboardType(.numberPad)
+                .thousandsGrouped(bindable.amountText)
             Text(verbatim: currencyCode)
                 .font(.labelCapsStyle)
                 .foregroundColor(.appPrimary)

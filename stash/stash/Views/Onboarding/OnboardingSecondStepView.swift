@@ -159,6 +159,7 @@ struct OnboardingSecondStepView: View {
                         .font(.inputValStyle)
                         .foregroundColor(.white)
                         .keyboardType(.numberPad)
+                        .thousandsGrouped(bindable.fixedAmountText)
                 }
                 Spacer()
                 Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)

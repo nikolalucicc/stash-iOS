@@ -96,10 +96,7 @@ struct OnboardingFirstStepView: View {
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
-                    .onChange(of: vm.salaryText) { _, value in
-                        let formatted = value.groupedThousandsInput
-                        if formatted != value { vm.salaryText = formatted }
-                    }
+                    .thousandsGrouped(bindable.salaryText)
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
                     .foregroundColor(.white.opacity(0.35))
