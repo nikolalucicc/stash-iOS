@@ -90,11 +90,13 @@ struct ChangeSalaryView: View {
     }
 
     private var salaryField: some View {
-        let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.xs) {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
             fieldLabel("onboarding.step1.salary_label")
             HStack {
-                TextField("", text: bindable.salaryText)
+                TextField("", text: Binding(
+                    get: { vm.salaryText },
+                    set: { vm.salaryText = $0.groupedThousandsInput }
+                ))
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)

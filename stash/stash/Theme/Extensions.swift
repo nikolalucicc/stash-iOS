@@ -36,4 +36,18 @@ extension String {
     var parsedSerbianNumber: Double {
         Double(replacingOccurrences(of: ".", with: "")) ?? 0
     }
+
+    /// Live thousands grouping for number-pad input: keeps digits only, drops
+    /// leading zeros, and inserts "." every three digits (e.g. "085000" → "85.000").
+    var groupedThousandsInput: String {
+        let digits = String(filter(\.isNumber).drop(while: { $0 == "0" }))
+        guard !digits.isEmpty else { return "" }
+        let count = digits.count
+        var result = ""
+        for (index, char) in digits.enumerated() {
+            if index != 0 && (count - index) % 3 == 0 { result.append(".") }
+            result.append(char)
+        }
+        return result
+    }
 }

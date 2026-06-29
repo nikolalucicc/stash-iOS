@@ -83,8 +83,7 @@ struct OnboardingFirstStepView: View {
     }
 
     private var salaryField: some View {
-        let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.xs) {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
             Text("onboarding.step1.salary_label")
                 .font(.labelCapsStyle)
                 .tracking(0.6)
@@ -92,7 +91,10 @@ struct OnboardingFirstStepView: View {
                 .padding(.leading, 4)
 
             HStack {
-                TextField("", text: bindable.salaryText)
+                TextField("", text: Binding(
+                    get: { vm.salaryText },
+                    set: { vm.salaryText = $0.groupedThousandsInput }
+                ))
                     .font(.inputValStyle)
                     .foregroundColor(.white)
                     .keyboardType(.numberPad)
