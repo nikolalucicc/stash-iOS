@@ -153,6 +153,7 @@
 "goals.deposit_custom_cta"   = "Add a custom amount";
 "goals.delete_cta"           = "Delete goal";
 "goals.delete_confirm_title" = "Delete this goal?";
+"goals.delete_confirm_message" = "This can't be undone.";
 "goals.deposit_title"        = "Add to savings";
 "goals.deposit_cta"          = "Add";
 
