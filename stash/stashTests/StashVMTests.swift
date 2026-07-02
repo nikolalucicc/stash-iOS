@@ -70,4 +70,51 @@ final class StashVMTests: XCTestCase {
 
         XCTAssertEqual(profile.stashBalance, 10_000)
     }
+
+    private func date(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) ?? Date()
+    }
+
+    private func savingProfile(payday: String) -> UserProfile {
+        let profile = UserProfile.current(in: context)
+        profile.savingMethod = .fixed
+        profile.savingFixedAmount = 1_000
+        profile.paydayPeriod = payday
+        return profile
+    }
+
+    func testPaydayDueFromBeginningOfMonth() {
+        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        XCTAssertTrue(profile.isPaydayDue(reference: date(2026, 7, 3)))
+    }
+
+    func testPaydayNotDueBeforeMidMonthPayday() {
+        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_middle"))
+        XCTAssertFalse(profile.isPaydayDue(reference: date(2026, 7, 10)))
+        XCTAssertTrue(profile.isPaydayDue(reference: date(2026, 7, 15)))
+    }
+
+    func testPaydayNotDueAfterConfirmingThisMonth() {
+        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        let reference = date(2026, 7, 20)
+        profile.confirmMonthlySaving(reference: reference)
+        XCTAssertFalse(profile.isPaydayDue(reference: reference))
+    }
+
+    func testPaydayNotDueWithoutMonthlySaving() {
+        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        profile.savingFixedAmount = 0
+        XCTAssertFalse(profile.isPaydayDue(reference: date(2026, 7, 10)))
+    }
+
+    func testConfirmMonthlySavingStampsMonthAndAdds() {
+        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        profile.savingFixedAmount = 1_150
+        profile.stashBalance = 3_500
+
+        profile.confirmMonthlySaving(reference: date(2026, 8, 1))
+
+        XCTAssertEqual(profile.stashBalance, 4_650)
+        XCTAssertEqual(profile.lastSavingConfirmedMonth, "2026-08")
+    }
 }

@@ -2,12 +2,10 @@
 //  PaydayReminderCard.swift
 //  stash
 //
-//  Shown under the stash card when the salary has landed: prompts the user to
-//  confirm they set aside this month's saving, then adds it to the stash.
-//
-//  NOTE: the "payday landed" trigger is currently hardcoded (shows whenever a
-//  monthly saving exists and it hasn't been confirmed this session) so the flow
-//  can be tested. Real payday-date tracking will replace `shouldShow`.
+//  Shown under the stash card once the salary has landed for the month (based
+//  on the chosen payday period): prompts the user to confirm they set aside
+//  this month's saving, then adds it to the stash. Shows once per payday until
+//  confirmed (tracked on the profile, so it survives relaunches).
 //
 
 import SwiftUI
@@ -19,9 +17,8 @@ struct PaydayReminderCard: View {
     let currencyCode: String
 
     @Environment(\.modelContext) private var modelContext
-    @State private var confirmed = false
 
-    private var shouldShow: Bool { !confirmed && profile.monthlySaving > 0 }
+    private var shouldShow: Bool { profile.isPaydayDue() }
 
     private var amountText: String {
         "\(profile.monthlySaving.serbianFormatted) \(currencyCode)"
@@ -78,8 +75,9 @@ struct PaydayReminderCard: View {
     }
 
     private func confirm() {
-        profile.addMonthlySavingToStash()
-        try? modelContext.save()
-        withAnimation { confirmed = true }
+        withAnimation {
+            profile.confirmMonthlySaving()
+            try? modelContext.save()
+        }
     }
 }
