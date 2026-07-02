@@ -352,11 +352,11 @@ private extension DashboardView {
 private extension DashboardView {
 
     func fixedTotal(for profile: UserProfile) -> Double {
-        profile.expenses.reduce(0) { $0 + $1.amount }
+        profile.fixedExpensesTotal
     }
 
     func freeAmount(for profile: UserProfile) -> Double {
-        max(0, profile.monthlySalary - profile.monthlySaving - fixedTotal(for: profile))
+        profile.freeMoney
     }
 
     func breakdown(for profile: UserProfile) -> SalaryBreakdown {

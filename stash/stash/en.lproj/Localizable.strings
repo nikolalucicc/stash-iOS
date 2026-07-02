@@ -100,6 +100,7 @@
 "tab.vault"   = "Vault";
 "tab.goals"   = "Goals";
 "tab.monthly" = "Monthly";
+"tab.spending" = "Spending";
 "tab.account" = "Account";
 
 // MARK: - Goals (Wishlist)
@@ -216,3 +217,23 @@
 /* %@ = this month's saving amount, e.g. "1.150 EUR" */
 "payday.prompt"      = "Move %@ into your stash for this month?";
 "payday.confirm_cta" = "Yes, I set it aside";
+
+// MARK: - Spending
+
+"spending.title"              = "Spending";
+"spending.subtitle"           = "Log what you spend from this month's free money.";
+"spending.free_label"         = "Free to spend";
+/* %@ = total free money this month, e.g. "40.000 RSD" */
+"spending.of_free"            = "of %@ free this month";
+"spending.categories_header"  = "Categories";
+"spending.recent_header"      = "This month";
+"spending.empty"              = "Finish setup to track your spending.";
+"spending.note_placeholder"   = "Note (optional)";
+"spending.save_cta"           = "Add";
+
+"spending.category.food"      = "Food";
+"spending.category.transport" = "Transport";
+"spending.category.fun"       = "Fun";
+"spending.category.shopping"  = "Shopping";
+"spending.category.health"    = "Health";
+"spending.category.other"     = "Other";
