@@ -15,13 +15,16 @@ import SwiftData
 /// to fetch it (or create it on first use).
 @Model
 final class UserProfile {
-    var monthlySalary: Double
-    var payPeriodRaw: String
-    var savingMethodRaw: String
-    var savingPercentage: Double
-    var savingFixedAmount: Double
-    var currencyRaw: String
-    var onboardingCompleted: Bool
+    // Every stored property has a default so SwiftData can perform an automatic
+    // lightweight migration when the schema changes (a new/renamed non-optional
+    // property without a default fails to migrate and resets the store).
+    var monthlySalary: Double = 0
+    var payPeriodRaw: String = PayPeriod.beginning.rawValue
+    var savingMethodRaw: String = SavingMethod.percentage.rawValue
+    var savingPercentage: Double = 0
+    var savingFixedAmount: Double = 0
+    var currencyRaw: String = Currency.rsd.rawValue
+    var onboardingCompleted: Bool = false
     /// Max total the user is willing to put toward wishlist goals each month.
     /// Starts at 0 — the user sets it from the goals budget sheet.
     var goalsMonthlyBudget: Double = 0
