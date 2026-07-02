@@ -25,6 +25,7 @@ struct DashboardView: View {
 
                     if let profile {
                         stashCard(for: profile)
+                        PaydayReminderCard(profile: profile, currencyCode: currencyCode)
                         savingHeroCard(for: profile)
                         currentMonthCard(for: profile)
                         statsGrid(for: profile)

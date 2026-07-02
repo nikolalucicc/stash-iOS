@@ -29,6 +29,8 @@ final class UserProfile {
     var stashBalance: Double = 0
     /// Whether the first-run feature tour has been shown.
     var walkthroughCompleted: Bool = false
+    /// "yyyy-MM" of the month the payday saving was last confirmed into the stash.
+    var lastSavingConfirmedMonth: String = ""
     var createdAt: Date
 
     @Relationship(deleteRule: .cascade, inverse: \FixedExpenseEntity.profile)
@@ -44,7 +46,8 @@ final class UserProfile {
         onboardingCompleted: Bool = false,
         goalsMonthlyBudget: Double = 0,
         stashBalance: Double = 0,
-        walkthroughCompleted: Bool = false
+        walkthroughCompleted: Bool = false,
+        lastSavingConfirmedMonth: String = ""
     ) {
         self.monthlySalary = monthlySalary
         self.paydayPeriod = paydayPeriod
@@ -56,6 +59,7 @@ final class UserProfile {
         self.goalsMonthlyBudget = goalsMonthlyBudget
         self.stashBalance = stashBalance
         self.walkthroughCompleted = walkthroughCompleted
+        self.lastSavingConfirmedMonth = lastSavingConfirmedMonth
         self.createdAt = .now
     }
 }
@@ -81,6 +85,43 @@ extension UserProfile {
         case .percentage: return monthlySalary * savingPercentage / 100
         case .fixed:      return savingFixedAmount
         }
+    }
+
+    /// Adds this month's planned saving to the stash balance.
+    func addMonthlySavingToStash() {
+        stashBalance += monthlySaving
+    }
+
+    /// "yyyy-MM" key used to remember which month's saving was confirmed.
+    static func monthKey(_ date: Date, calendar: Calendar = .current) -> String {
+        let parts = calendar.dateComponents([.year, .month], from: date)
+        return String(format: "%04d-%02d", parts.year ?? 0, parts.month ?? 0)
+    }
+
+    /// Day of the month the salary is expected, from the chosen payday period.
+    func paydayDay(reference: Date, calendar: Calendar = .current) -> Int {
+        switch paydayPeriod {
+        case String(localized: "onboarding.step1.payday_middle"):
+            return 15
+        case String(localized: "onboarding.step1.payday_end"):
+            return calendar.range(of: .day, in: .month, for: reference)?.count ?? 28
+        default:
+            return 1
+        }
+    }
+
+    /// Whether the payday saving reminder should be shown: there's a saving to
+    /// set aside, the salary has landed this month, and it isn't confirmed yet.
+    func isPaydayDue(reference: Date = .now, calendar: Calendar = .current) -> Bool {
+        guard monthlySaving > 0 else { return false }
+        guard lastSavingConfirmedMonth != Self.monthKey(reference, calendar: calendar) else { return false }
+        return calendar.component(.day, from: reference) >= paydayDay(reference: reference, calendar: calendar)
+    }
+
+    /// Confirms the saving was set aside: adds it to the stash and stamps the month.
+    func confirmMonthlySaving(reference: Date = .now, calendar: Calendar = .current) {
+        addMonthlySavingToStash()
+        lastSavingConfirmedMonth = Self.monthKey(reference, calendar: calendar)
     }
 }
 

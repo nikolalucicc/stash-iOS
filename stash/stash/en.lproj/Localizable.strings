@@ -209,3 +209,10 @@
 "walkthrough.stash_text"    = "Track money you've set aside that isn't tied to a goal — add to it anytime.";
 "walkthrough.account_title" = "Account";
 "walkthrough.account_text"  = "Change your salary, currency or redo setup here — and replay this tour whenever you like.";
+
+// MARK: - Payday reminder
+
+"payday.title"       = "Payday landed";
+/* %@ = this month's saving amount, e.g. "1.150 EUR" */
+"payday.prompt"      = "Move %@ into your stash for this month?";
+"payday.confirm_cta" = "Yes, I set it aside";
