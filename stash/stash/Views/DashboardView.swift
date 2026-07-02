@@ -374,7 +374,7 @@ private extension DashboardView {
     func daysUntilNextPayday(for profile: UserProfile) -> Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
-        let timing = paydayTiming(for: profile)
+        let timing = profile.payPeriod
 
         let candidates = [0, 1].compactMap {
             payday(monthsFromNow: $0, timing: timing, calendar: calendar, today: today)
@@ -385,21 +385,11 @@ private extension DashboardView {
         return max(0, calendar.dateComponents([.day], from: today, to: upcoming).day ?? 0)
     }
 
-    func payday(monthsFromNow: Int, timing: PaydayTiming, calendar: Calendar, today: Date) -> Date? {
+    func payday(monthsFromNow: Int, timing: PayPeriod, calendar: Calendar, today: Date) -> Date? {
         guard let monthDate = calendar.date(byAdding: .month, value: monthsFromNow, to: today) else { return nil }
         var components = calendar.dateComponents([.year, .month], from: monthDate)
-        switch timing {
-        case .beginning: components.day = 1
-        case .middle:    components.day = 15
-        case .end:       components.day = calendar.range(of: .day, in: .month, for: monthDate)?.count ?? 28
-        }
+        components.day = timing.day(in: monthDate, calendar: calendar)
         return calendar.date(from: components)
-    }
-
-    func paydayTiming(for profile: UserProfile) -> PaydayTiming {
-        if profile.paydayPeriod == String(localized: "onboarding.step1.payday_middle") { return .middle }
-        if profile.paydayPeriod == String(localized: "onboarding.step1.payday_end") { return .end }
-        return .beginning
     }
 }
 

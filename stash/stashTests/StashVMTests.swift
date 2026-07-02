@@ -75,40 +75,40 @@ final class StashVMTests: XCTestCase {
         Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) ?? Date()
     }
 
-    private func savingProfile(payday: String) -> UserProfile {
+    private func savingProfile(payday: PayPeriod) -> UserProfile {
         let profile = UserProfile.current(in: context)
         profile.savingMethod = .fixed
         profile.savingFixedAmount = 1_000
-        profile.paydayPeriod = payday
+        profile.payPeriod = payday
         return profile
     }
 
     func testPaydayDueFromBeginningOfMonth() {
-        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        let profile = savingProfile(payday: .beginning)
         XCTAssertTrue(profile.isPaydayDue(reference: date(2026, 7, 3)))
     }
 
     func testPaydayNotDueBeforeMidMonthPayday() {
-        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_middle"))
+        let profile = savingProfile(payday: .middle)
         XCTAssertFalse(profile.isPaydayDue(reference: date(2026, 7, 10)))
         XCTAssertTrue(profile.isPaydayDue(reference: date(2026, 7, 15)))
     }
 
     func testPaydayNotDueAfterConfirmingThisMonth() {
-        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        let profile = savingProfile(payday: .beginning)
         let reference = date(2026, 7, 20)
         profile.confirmMonthlySaving(reference: reference)
         XCTAssertFalse(profile.isPaydayDue(reference: reference))
     }
 
     func testPaydayNotDueWithoutMonthlySaving() {
-        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        let profile = savingProfile(payday: .beginning)
         profile.savingFixedAmount = 0
         XCTAssertFalse(profile.isPaydayDue(reference: date(2026, 7, 10)))
     }
 
     func testConfirmMonthlySavingStampsMonthAndAdds() {
-        let profile = savingProfile(payday: String(localized: "onboarding.step1.payday_beginning"))
+        let profile = savingProfile(payday: .beginning)
         profile.savingFixedAmount = 1_150
         profile.stashBalance = 3_500
 

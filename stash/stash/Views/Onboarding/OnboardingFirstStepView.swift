@@ -47,15 +47,13 @@ struct OnboardingFirstStepView: View {
         if profile.monthlySalary > 0 {
             vm.salaryText = profile.monthlySalary.serbianFormatted
         }
-        if vm.paydayOptions.contains(profile.paydayPeriod) {
-            vm.selectedPeriod = profile.paydayPeriod
-        }
+        vm.selectedPeriod = profile.payPeriod.label
     }
 
     private func saveProfile() {
         let profile = UserProfile.current(in: modelContext)
         profile.monthlySalary = vm.salaryText.parsedSerbianNumber
-        profile.paydayPeriod = vm.selectedPeriod
+        profile.payPeriod = PayPeriod.from(label: vm.selectedPeriod)
         try? modelContext.save()
     }
 

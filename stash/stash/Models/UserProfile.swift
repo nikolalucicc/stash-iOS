@@ -16,7 +16,7 @@ import SwiftData
 @Model
 final class UserProfile {
     var monthlySalary: Double
-    var paydayPeriod: String
+    var payPeriodRaw: String
     var savingMethodRaw: String
     var savingPercentage: Double
     var savingFixedAmount: Double
@@ -38,7 +38,7 @@ final class UserProfile {
 
     init(
         monthlySalary: Double = 0,
-        paydayPeriod: String = "",
+        payPeriodRaw: String = PayPeriod.beginning.rawValue,
         savingMethodRaw: String = SavingMethod.percentage.rawValue,
         savingPercentage: Double = 0,
         savingFixedAmount: Double = 0,
@@ -50,7 +50,7 @@ final class UserProfile {
         lastSavingConfirmedMonth: String = ""
     ) {
         self.monthlySalary = monthlySalary
-        self.paydayPeriod = paydayPeriod
+        self.payPeriodRaw = payPeriodRaw
         self.savingMethodRaw = savingMethodRaw
         self.savingPercentage = savingPercentage
         self.savingFixedAmount = savingFixedAmount
@@ -79,6 +79,12 @@ extension UserProfile {
         set { currencyRaw = newValue.rawValue }
     }
 
+    /// Payday period derived from the stored raw value (defaults to `.beginning`).
+    var payPeriod: PayPeriod {
+        get { PayPeriod(rawValue: payPeriodRaw) ?? .beginning }
+        set { payPeriodRaw = newValue.rawValue }
+    }
+
     /// The amount set aside each month, derived from the chosen saving method.
     var monthlySaving: Double {
         switch savingMethod {
@@ -98,24 +104,12 @@ extension UserProfile {
         return String(format: "%04d-%02d", parts.year ?? 0, parts.month ?? 0)
     }
 
-    /// Day of the month the salary is expected, from the chosen payday period.
-    func paydayDay(reference: Date, calendar: Calendar = .current) -> Int {
-        switch paydayPeriod {
-        case String(localized: "onboarding.step1.payday_middle"):
-            return 15
-        case String(localized: "onboarding.step1.payday_end"):
-            return calendar.range(of: .day, in: .month, for: reference)?.count ?? 28
-        default:
-            return 1
-        }
-    }
-
     /// Whether the payday saving reminder should be shown: there's a saving to
     /// set aside, the salary has landed this month, and it isn't confirmed yet.
     func isPaydayDue(reference: Date = .now, calendar: Calendar = .current) -> Bool {
         guard monthlySaving > 0 else { return false }
         guard lastSavingConfirmedMonth != Self.monthKey(reference, calendar: calendar) else { return false }
-        return calendar.component(.day, from: reference) >= paydayDay(reference: reference, calendar: calendar)
+        return calendar.component(.day, from: reference) >= payPeriod.day(in: reference, calendar: calendar)
     }
 
     /// Confirms the saving was set aside: adds it to the stash and stamps the month.
