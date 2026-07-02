@@ -49,10 +49,13 @@ struct GoalDetailView: View {
                 .presentationDetents([.height(280)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
-        .confirmationDialog("goals.delete_confirm_title", isPresented: $showDeleteConfirm) {
+        .alert("goals.delete_confirm_title", isPresented: $showDeleteConfirm) {
+            Button("common.cancel_btn", role: .cancel) {}
             Button("goals.delete_cta", role: .destructive) {
                 Task { await vm.delete(goal, in: modelContext); dismiss() }
             }
+        } message: {
+            Text("goals.delete_confirm_message")
         }
     }
 

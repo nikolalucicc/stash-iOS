@@ -151,6 +151,7 @@
 "goals.deposit_custom_cta"   = "Dodaj proizvoljan iznos";
 "goals.delete_cta"           = "ObriÅ¡i cilj";
 "goals.delete_confirm_title" = "Obrisati ovaj cilj?";
+"goals.delete_confirm_message" = "Ovo se ne može poništiti.";
 "goals.deposit_title"        = "Dodaj u Å¡tednju";
 "goals.deposit_cta"          = "Dodaj";
 
