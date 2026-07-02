@@ -11,10 +11,6 @@ import Foundation
 @MainActor
 class OnboardingFirstStepVM {
     var salaryText: String = ""
-    var selectedPeriod: String = String(localized: "onboarding.step1.payday_beginning")
-    let paydayOptions: [String] = [
-        String(localized: "onboarding.step1.payday_beginning"),
-        String(localized: "onboarding.step1.payday_middle"),
-        String(localized: "onboarding.step1.payday_end")
-    ]
+    var selectedPeriod: String = PayPeriod.beginning.label
+    let paydayOptions: [String] = PayPeriod.allCases.map { $0.label }
 }

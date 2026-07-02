@@ -14,16 +14,12 @@ import SwiftData
 final class ChangeSalaryVM {
 
     var salaryText: String = ""
-    var selectedPeriod: String = String(localized: "onboarding.step1.payday_beginning")
+    var selectedPeriod: String = PayPeriod.beginning.label
     var savingMethod: SavingMethod = .percentage
     var percentageText: String = "25"
     var fixedAmountText: String = Double(20_000).serbianFormatted
 
-    let paydayOptions: [String] = [
-        String(localized: "onboarding.step1.payday_beginning"),
-        String(localized: "onboarding.step1.payday_middle"),
-        String(localized: "onboarding.step1.payday_end")
-    ]
+    let paydayOptions: [String] = PayPeriod.allCases.map { $0.label }
 
     // MARK: - Derived
 
@@ -60,9 +56,7 @@ final class ChangeSalaryVM {
     func load(from context: ModelContext) async {
         guard let profile = UserProfile.existing(in: context) else { return }
         salaryText = profile.monthlySalary.serbianFormatted
-        if paydayOptions.contains(profile.paydayPeriod) {
-            selectedPeriod = profile.paydayPeriod
-        }
+        selectedPeriod = profile.payPeriod.label
         savingMethod = profile.savingMethod
         if profile.savingPercentage > 0 {
             percentageText = String(format: "%.0f", profile.savingPercentage)
@@ -78,7 +72,7 @@ final class ChangeSalaryVM {
         guard canSave else { return }
         let profile = UserProfile.current(in: context)
         profile.monthlySalary = monthlySalary
-        profile.paydayPeriod = selectedPeriod
+        profile.payPeriod = PayPeriod.from(label: selectedPeriod)
         profile.savingMethod = savingMethod
         profile.savingPercentage = Double(percentageText) ?? profile.savingPercentage
         profile.savingFixedAmount = fixedAmountText.parsedSerbianNumber

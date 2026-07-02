@@ -9,10 +9,6 @@ import SwiftUI
 
 // MARK: - Models
 
-enum PaydayTiming {
-    case beginning, middle, end
-}
-
 struct SalaryBreakdown {
     let savingRatio: Double
     let fixedRatio: Double
