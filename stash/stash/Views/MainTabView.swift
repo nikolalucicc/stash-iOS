@@ -10,7 +10,7 @@ import SwiftData
 
 struct MainTabView: View {
 
-    private enum Tab: Hashable { case goals, monthly, spending, account }
+    private enum Tab: Hashable, CaseIterable { case goals, monthly, spending, account }
 
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
@@ -44,6 +44,9 @@ struct MainTabView: View {
             .tag(Tab.account)
         }
         .tint(.accent)
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 24).onEnded(switchTab)
+        )
         .onAppear { showWalkthrough = profiles.first?.walkthroughCompleted == false }
         .onChange(of: profiles.first?.walkthroughCompleted) { _, completed in
             if completed == false { showWalkthrough = true }
@@ -51,6 +54,16 @@ struct MainTabView: View {
         .fullScreenCover(isPresented: $showWalkthrough, onDismiss: markWalkthroughSeen) {
             WalkthroughView { showWalkthrough = false }
         }
+    }
+
+    /// Moves to the adjacent tab on a mostly-horizontal swipe (left = next).
+    private func switchTab(_ drag: DragGesture.Value) {
+        guard abs(drag.translation.width) > abs(drag.translation.height) else { return }
+        let tabs = Tab.allCases
+        guard let index = tabs.firstIndex(of: selection) else { return }
+        let next = index + (drag.translation.width < 0 ? 1 : -1)
+        guard tabs.indices.contains(next) else { return }
+        withAnimation { selection = tabs[next] }
     }
 
     private func markWalkthroughSeen() {
