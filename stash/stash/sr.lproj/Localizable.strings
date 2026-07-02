@@ -207,3 +207,10 @@
 "walkthrough.stash_text"    = "Prati novac koji si odvojio, a nije vezan za cilj — dodaj kad god želiš.";
 "walkthrough.account_title" = "Nalog";
 "walkthrough.account_text"  = "Ovde menjaš platu, valutu ili ponovo pokrećeš podešavanje — i puštaš ovaj vodič kad god hoćeš.";
+
+// MARK: - Payday reminder
+
+"payday.title"       = "Legla je plata";
+/* %@ = ovomesečna ušteda, npr. "1.150 EUR" */
+"payday.prompt"      = "Da prebacimo %@ u štek za ovaj mesec?";
+"payday.confirm_cta" = "Da, odvojio sam";

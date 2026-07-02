@@ -82,6 +82,11 @@ extension UserProfile {
         case .fixed:      return savingFixedAmount
         }
     }
+
+    /// Confirms that this month's planned saving was set aside — adds it to the stash.
+    func addMonthlySavingToStash() {
+        stashBalance += monthlySaving
+    }
 }
 
 // MARK: - Lookup

@@ -47,4 +47,27 @@ final class StashVMTests: XCTestCase {
         await vm.add(in: context)
         XCTAssertEqual(UserProfile.existing(in: context)?.stashBalance, 750)
     }
+
+    func testPaydayAddsFixedMonthlySavingToStash() {
+        let profile = UserProfile.current(in: context)
+        profile.savingMethod = .fixed
+        profile.savingFixedAmount = 1_150
+        profile.stashBalance = 3_500
+
+        profile.addMonthlySavingToStash()
+
+        XCTAssertEqual(profile.stashBalance, 4_650)
+    }
+
+    func testPaydayAddsPercentageMonthlySavingToStash() {
+        let profile = UserProfile.current(in: context)
+        profile.savingMethod = .percentage
+        profile.monthlySalary = 100_000
+        profile.savingPercentage = 10
+        profile.stashBalance = 0
+
+        profile.addMonthlySavingToStash()
+
+        XCTAssertEqual(profile.stashBalance, 10_000)
+    }
 }
