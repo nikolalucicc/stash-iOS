@@ -98,6 +98,7 @@
 "tab.vault"   = "Trezor";
 "tab.goals"   = "Ciljevi";
 "tab.monthly" = "MeseÄno";
+"tab.spending" = "Potrošnja";
 "tab.account" = "Nalog";
 
 // MARK: - Goals (Lista Å¾elja)
@@ -214,3 +215,23 @@
 /* %@ = ovomesečna ušteda, npr. "1.150 EUR" */
 "payday.prompt"      = "Da prebacimo %@ u štek za ovaj mesec?";
 "payday.confirm_cta" = "Da, odvojio sam";
+
+// MARK: - Spending
+
+"spending.title"              = "Potrošnja";
+"spending.subtitle"           = "Beleži na šta trošiš od slobodnog novca ovog meseca.";
+"spending.free_label"         = "Slobodno za trošenje";
+/* %@ = ukupno slobodno ovog meseca, npr. "40.000 RSD" */
+"spending.of_free"            = "od %@ slobodno ovog meseca";
+"spending.categories_header"  = "Kategorije";
+"spending.recent_header"      = "Ovog meseca";
+"spending.empty"              = "Završi podešavanje da bi pratio potrošnju.";
+"spending.note_placeholder"   = "Napomena (opciono)";
+"spending.save_cta"           = "Dodaj";
+
+"spending.category.food"      = "Hrana";
+"spending.category.transport" = "Prevoz";
+"spending.category.fun"       = "Zabava";
+"spending.category.shopping"  = "Kupovina";
+"spending.category.health"    = "Zdravlje";
+"spending.category.other"     = "Ostalo";

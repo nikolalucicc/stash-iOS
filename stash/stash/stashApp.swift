@@ -15,6 +15,6 @@ struct StashApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self])
+        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self])
     }
 }

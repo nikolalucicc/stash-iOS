@@ -2,7 +2,7 @@
 //  MainTabView.swift
 //  stash
 //
-//  Root tab bar shown after onboarding: Vault, Goals, Monthly, Account.
+//  Root tab bar shown after onboarding: Goals, Monthly, Spending, Account.
 //
 
 import SwiftUI
@@ -10,7 +10,7 @@ import SwiftData
 
 struct MainTabView: View {
 
-    private enum Tab: Hashable { case goals, monthly, account }
+    private enum Tab: Hashable { case goals, monthly, spending, account }
 
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
@@ -30,6 +30,12 @@ struct MainTabView: View {
             }
             .tabItem { Label("tab.monthly", systemImage: "calendar") }
             .tag(Tab.monthly)
+
+            NavigationStack {
+                SpendingView()
+            }
+            .tabItem { Label("tab.spending", systemImage: "creditcard.fill") }
+            .tag(Tab.spending)
 
             NavigationStack {
                 AccountView()
@@ -56,5 +62,8 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
-        .modelContainer(for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self], inMemory: true)
+        .modelContainer(
+            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self],
+            inMemory: true
+        )
 }

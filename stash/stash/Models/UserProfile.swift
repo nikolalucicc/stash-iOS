@@ -93,6 +93,16 @@ extension UserProfile {
         }
     }
 
+    /// Total of the fixed/recurring expenses.
+    var fixedExpensesTotal: Double {
+        expenses.reduce(0) { $0 + $1.amount }
+    }
+
+    /// Money left to spend each month after saving and fixed expenses.
+    var freeMoney: Double {
+        max(0, monthlySalary - monthlySaving - fixedExpensesTotal)
+    }
+
     /// Adds this month's planned saving to the stash balance.
     func addMonthlySavingToStash() {
         stashBalance += monthlySaving
