@@ -1,82 +1,95 @@
 # Stash 💰
 
-> **Stash** ti pomaže da odvojiš štednju čim legne plata — pre nego što je potrošiš. Uneseš platu, app ti kaže šta ide na štednju, šta na fiksne troškove, šta ostaje za život, i pomaže ti da skupiš za ono što želiš.
+> **Stash** ti pomaže da odvojiš štednju čim legne plata — pre nego što je potrošiš. Uneseš platu, app ti pokaže šta ide na štednju, šta na fiksne troškove, a šta ostaje za život; pratiš „štek", ciljeve/želje i dnevnu potrošnju.
 
 ---
 
 ## O projektu
 
-Stash je mobilna aplikacija za Android i iOS namenjena jednostavnom upravljanju mesečnom štednjom. Filozofija aplikacije je **"plati sebi prvo"** — čim legne plata, korisnik unosi iznos i aplikacija odmah izračunava raspodelu između štednje, fiksnih troškova i slobodnog novca. Pored mesečne raspodele, app prati i **ciljeve štednje** (lista želja) i opšti **„štek"** — novac koji si odvojio, a nije vezan za konkretan cilj.
+Stash je iOS aplikacija (SwiftUI) za jednostavno upravljanje mesečnom štednjom i budžetom. Filozofija je **„plati sebi prvo"** — čim legne plata, aplikacija odmah izračunava raspodelu između štednje, fiksnih troškova i slobodnog novca, a onda ti pomaže da: skupiš za konkretne želje, gomilaš opšti „štek" i pratiš na šta trošiš.
 
-Projekat je razvijen kao lična vežba sa ciljem upoznavanja sa celim životnim ciklusom mobilne aplikacije: od arhitekture i razvoja, kroz testove i CI/CD pipeline, do release procesa na Google Play Store i Apple App Store.
+Svi podaci žive **lokalno na uređaju** (SwiftData). Jedini mrežni poziv je dohvat javnih kurseva valuta (bez ličnih podataka).
 
-> **Napomena:** Ovo je **iOS** repozitorijum (SwiftUI). Deo dokumenta opisuje ciljnu viziju za obe platforme; aktuelno stanje iOS implementacije je u sekciji [Trenutni status](#trenutni-status-ios).
+Projekat je razvijan kao lična vežba kroz ceo životni ciklus mobilne aplikacije: arhitektura → razvoj → testovi → CI/CD → release na TestFlight/App Store.
 
----
-
-## Trenutni status (iOS)
-
-Implementirano do sada:
-
-- ✅ **Onboarding (4 koraka)** — valuta se bira **prva**, pa svi sledeći koraci prikazuju izabranu valutu:
-  1. **Valuta** (RSD / EUR / USD)
-  2. **Plata** + period isplate (početak / sredina / kraj meseca)
-  3. **Način štednje** — procenat plate ili fiksni iznos, sa live pregledom mesečne štednje
-  4. **Fiksni troškovi** — dodavanje/brisanje preko sheet-a, sa automatskim biranjem ikonice po nazivu
-- ✅ **Tab navigacija** — `Ciljevi` / `Mesečno` / `Nalog`
-- ✅ **Ciljevi (lista želja)** — dodavanje cilja sa prioritetom i rokom; **mesečni doprinos se automatski računa iz roka** (cena / broj meseci do roka); depoziti na cilj; **„kupi odmah iz šteka"** kad već imaš dovoljno; **budžet za ciljeve** sa raspodelom po prioritetu
-- ✅ **Štek (opšta ušteda)** — kartica „Total stashed" na `Mesečno` tabu; dodaj iznos ili postavi trenutno stanje
-- ✅ **Dashboard (Mesečno)** — plata, raspodela (štednja / fiksni / slobodno), štek, mesečna ušteda, dani do sledeće plate, lista fiksnih troškova
-- ✅ **Nalog (podešavanja)** — izmena plate i štednje, izbor valute sa **live konverzijom svih iznosa** (kursevi sa interneta), „redo setup" (briše sve podatke i kreće ispočetka), ponovno pokretanje vodiča
-- ✅ **Valutna konverzija** — promenom valute se povuče live kurs (`open.er-api.com`) i **konvertuju svi iznosi** (plata, troškovi, ciljevi, budžet, štek)
-- ✅ **Walkthrough** — kratak vodič kroz ekrane na prvom startu, sa opcijom da se ponovo pokrene iz `Nalog`-a
-- ✅ **Live formatiranje iznosa** — dok kucaš, vodeća nula se briše i „." se ubacuje na svake 3 cifre (npr. `85000` → `85.000`)
-- ✅ **Lokalno čuvanje (SwiftData)** — `UserProfile`, `FixedExpenseEntity`, `SavingsGoal` modeli; svi podaci ostaju na uređaju
-- ✅ **Dizajn sistem** — `AppTheme` (boje, Inter tipografija, `Spacing` i `Radius` tokeni) + `StashTheme` pozadinski wrapper
-- ✅ **Reusable komponente** — `DropdownPicker`, `OnboardingAppBar`, `ProgressIndicator`, `.thousandsGrouped(_:)` modifier
-- ✅ **MVVM** — `@Observable @MainActor` ViewModeli
-- ✅ **Lokalizacija** — engleski (default) + srpski (`Localizable.strings`, en/sr paritet)
-- ✅ **SwiftLint + CI** — `swiftlint --strict` (pre-push hook + GitHub Actions), `lint` + `build & test` job; `main` zaštićena branch protection-om
-
-Sledeće na redu: istorija mesečnih entrija, notifikacije (podsetnik na platu), App lock (Face ID / PIN).
+> Napomena: aplikacija je trenutno na **engleskom** jeziku. (Android verzija je moguća buduća vizija; ovaj repo je iOS.)
 
 ---
 
-## Funkcionalnosti (ciljna vizija)
+## Funkcionalnosti
 
-- 📥 **Unos plate** — uneseš iznos, aplikacija odmah računa raspodelu ✅
-- 🎯 **Cilj štednje** — fiksni iznos ili procenat plate ✅
-- 🧾 **Fiksni troškovi** — kirija, rate, pretplate — automatski se uračunavaju ✅
-- 📊 **Dashboard** — pregled tekućeg meseca i raspodele plate ✅
-- ⭐ **Lista želja (ciljevi)** — štednja po prioritetu, sa rokom i auto-računatim mesečnim iznosom ✅
-- 🐷 **Štek** — opšta ušteda van ciljeva ✅
-- 💱 **Valute** — RSD / EUR / USD sa live konverzijom ✅
-- 🧭 **Walkthrough** — vodič kroz aplikaciju ✅
-- 📅 **Istorija** — mesečni i godišnji pregled svih entrija 🚧
-- 🔥 **Streak tracker** — broj uzastopnih meseci sa unetom platom 🚧
-- 🔔 **Notifikacije** — podsetnik na dan isplate 🚧
-- 🔒 **App lock** — biometrija ili PIN 🚧
-- 💾 **Export** — CSV i PDF izveštaji, lokalni backup 🚧
-- 🌙 **Dark mode** — trenutno fiksno dark 🚧
+Aplikacija ima četiri taba: **Goals** · **Monthly** · **Spending** · **Account**.
 
-Svi lični podaci su lokalni — aplikacija ih ne šalje na server. Jedini mrežni poziv je dohvat javnih kurseva valuta (bez ličnih podataka). _(✅ = urađeno, 🚧 = planirano)_
+### Onboarding (4 koraka)
+Valuta → Plata + period isplate → Način štednje (procenat/fiksno) → Fiksni troškovi. Sva polja kreću prazna; izabrana valuta se prikazuje kroz celu app.
+
+### 🎯 Goals (lista želja)
+- Dodavanje cilja sa prioritetom i (opcionim) rokom
+- **Mesečni doprinos se automatski računa iz roka** (cena ÷ broj meseci)
+- Depoziti na cilj; **„kupi odmah iz šteka"** kada već imaš dovoljno
+- **Budžet za ciljeve** sa raspodelom po prioritetu
+
+### 📊 Monthly (dashboard)
+- Raspodela plate: štednja / fiksni / slobodno
+- **„Total stashed"** kartica (opšta ušteda)
+- **Payday podsetnik** — kad legne plata, jednim tapom potvrdiš da si odvojio mesečnu uštedu (dodaje se u štek, jednom po mesecu)
+- Dani do sledeće plate, lista fiksnih troškova
+
+### 💳 Spending
+- Loguješ dnevnu potrošnju u kategorije; oduzima se od **slobodnog novca** za tekući mesec
+- **Dodavanje i brisanje kategorija** (naziv + izbor ikonice); brisanje kategorije briše i njene troškove
+- Pregled potrošnje po kategoriji + lista unosa sa brisanjem
+
+### ⚙️ Account
+- Izmena plate i štednje
+- **Valuta (RSD / EUR / USD)** sa **live konverzijom** svih iznosa (kurs sa interneta)
+- „Redo setup" (briše sve i kreće ispočetka)
+- Ponovno pokretanje vodiča (walkthrough)
+
+### Ostalo
+- **Walkthrough** na prvom startu
+- **Live formatiranje iznosa** dok kucaš (npr. `85000` → `85.000`)
+
+**Planirano** 🚧: notifikacije (podsetnik na platu), App lock (Face ID/PIN), istorija/grafikoni, export (CSV/PDF).
 
 ---
 
-## Tech Stack
+## Arhitektura
 
-### Android
-| Tehnologija | Svrha |
-|---|---|
-| Kotlin + Jetpack Compose | UI |
-| Room | Lokalna baza |
-| Hilt | Dependency injection |
-| DataStore | User preferences |
-| WorkManager | Scheduled notifikacije |
-| JUnit5 + MockK | Unit testovi |
-| Compose Testing | UI testovi |
+**MVVM** sa `@Observable` ViewModelima, **SwiftData** za perzistenciju, deljeni dizajn sloj.
 
-### iOS
+```
+stash/stash/
+├── stashApp.swift                  # Entry point — modelContainer(for:)
+├── Models/                         # SwiftData @Model + domenski enum-ovi
+│   ├── UserProfile.swift           #   Profil (plata, štednja, valuta, štek, flag-ovi)
+│   ├── FixedExpenseEntity.swift    #   Fiksni trošak
+│   ├── SavingsGoal.swift           #   Cilj / želja
+│   ├── SpendingEntry.swift         #   Zabeležena potrošnja
+│   ├── SpendingCategory.swift      #   Kategorija potrošnje (dodaje/briše korisnik)
+│   └── PayPeriod.swift             #   Period isplate (enum)
+├── Services/
+│   └── ExchangeRateService.swift   # Live kursevi (open.er-api.com)
+├── Theme/
+│   ├── AppTheme.swift              # Boje, tipografija, Spacing, Radius
+│   ├── Extensions.swift            # Number/String helperi
+│   └── ThousandsGrouping.swift     # .thousandsGrouped(_:) live formatiranje
+├── Views/
+│   ├── RootView.swift              # Onboarding vs. glavni app
+│   ├── MainTabView.swift           # Tabovi + first-run walkthrough
+│   ├── Onboarding/                 # 4 koraka + ViewModels
+│   ├── Goals/ · Stash/ · Spending/ · Account/ · ChangeSalaryData/ · Walkthrough/
+│   ├── DashboardView.swift (+ DashboardComponents.swift)
+│   └── Components/                 # DropdownPicker, OnboardingAppBar, ProgressIndicator
+└── en.lproj/Localizable.strings    # Engleski
+```
+
+**Perzistencija:** jedan `UserProfile` po uređaju (`UserProfile.current(in:)` / `.existing(in:)`); UI čita preko `@Query` i osvežava se na `save()`. Svaki stored property ima default vrednost u deklaraciji da bi SwiftData „lightweight" migracija radila bez gubitka podataka pri promeni sheme.
+
+---
+
+## Tech Stack (iOS)
+
 | Tehnologija | Svrha |
 |---|---|
 | SwiftUI | UI |
@@ -84,144 +97,33 @@ Svi lični podaci su lokalni — aplikacija ih ne šalje na server. Jedini mrež
 | Swift Concurrency | Async operacije |
 | URLSession | Dohvat kursa valuta |
 | XCTest | Unit testovi |
-
----
-
-## Arhitektura
-
-### Aktuelna struktura (iOS)
-
-Trenutno je u upotrebi **MVVM** sa `@Observable` ViewModelima, **SwiftData** slojem za perzistenciju i deljenim dizajn slojem:
-
-```
-stash/stash/
-├── stashApp.swift                  # Entry point — postavlja modelContainer
-├── Models/                         # SwiftData @Model klase
-│   ├── UserProfile.swift           #   Profil (plata, štednja, valuta, štek, flag-ovi)
-│   ├── FixedExpenseEntity.swift    #   Fiksni trošak (relacija ka profilu)
-│   └── SavingsGoal.swift           #   Cilj / želja (prioritet, rok, ušteđeno)
-├── Services/
-│   └── ExchangeRateService.swift   # Live kursevi valuta (open.er-api.com)
-├── Theme/
-│   ├── AppTheme.swift              # Boje, tipografija, Spacing, Radius
-│   ├── Extensions.swift            # NumberFormatter / Double / String helperi
-│   └── ThousandsGrouping.swift     # .thousandsGrouped(_:) live formatiranje iznosa
-├── Views/
-│   ├── RootView.swift              # Rutiranje: onboarding vs. glavni app
-│   ├── MainTabView.swift           # Tabovi + first-run walkthrough
-│   ├── DashboardView.swift         # Pregled meseca (+ DashboardComponents.swift)
-│   ├── Components/                 # DropdownPicker, OnboardingAppBar, ProgressIndicator
-│   ├── Onboarding/                 # 4 koraka + ViewModels (@Observable @MainActor)
-│   ├── Goals/                      # Lista želja, dodaj/izmeni cilj, budžet, detalj
-│   ├── Stash/                      # Štek (StashVM, StashDepositSheet)
-│   ├── Account/                    # Podešavanja (AccountVM)
-│   ├── ChangeSalaryData/           # Izmena plate i štednje
-│   └── Walkthrough/                # First-run tour
-├── en.lproj/Localizable.strings    # Engleski (default)
-└── sr.lproj/Localizable.strings    # Srpski
-```
-
-**Perzistencija:** `modelContainer(for:)` se postavlja u `StashApp`, a `UserProfile` se čuva po principu „jedan profil po uređaju" (`UserProfile.current(in:)` / `.existing(in:)`). `RootView` na startu čita `onboardingCompleted` da odluči koji ekran prikazati, a `MainTabView` `walkthroughCompleted` da pusti vodič.
-
-### Ciljna arhitektura
-
-Kako projekat raste, prelazi se na **Clean Architecture** sa tri odvojena layera:
-
-```
-├── data/
-│   ├── local/          # Baza, DAO-i, entitiji
-│   └── repository/     # Implementacije repozitorijuma
-├── domain/
-│   ├── model/          # Čisti domain modeli
-│   ├── repository/     # Interfejsi
-│   └── usecase/        # Poslovna logika
-└── presentation/
-    ├── screen/         # Ekrani i ViewModeli
-    └── navigation/     # Navigacija
-```
-
-### Use Cases
-
-| Use Case | Opis |
-|---|---|
-| `SetupUserProfileUseCase` | Inicijalno podešavanje profila |
-| `ManageFixedExpensesUseCase` | Upravljanje fiksnim troškovima |
-| `CalculateSalaryAllocationUseCase` | Kalkulacija raspodele plate |
-| `RecordMonthlyEntryUseCase` | Čuvanje mesečnog entrija |
-| `GetSavingsProgressUseCase` | Agregacija statistika štednje |
-| `GetCurrentMonthStatusUseCase` | Status tekućeg meseca |
-
----
-
-## CI/CD
-
-### Android
-- **PR** → lint (ktlint) + unit testovi + debug build
-- **Merge u main** → release build (potpisani AAB) + auto-upload na Play Store Internal Testing track
-
-### iOS
-Aktuelni pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) na **`pull_request`** (merge-ovi u `main` su već prošli kroz PR, pa se push ne pokreće dvaput):
-- **`lint`** → `swiftlint --strict` na `ubuntu-latest` preko zvaničnog SwiftLint Docker image-a (Linux, bez macOS minuta)
-- **`build-and-test`** → `macos-15` + Xcode 16.4, kreira iOS simulator i pokreće `xcodebuild test` (scheme `stash`), uz upload test rezultata pri padu
-
-`main` grana je zaštićena: **force-push i brisanje su blokirani**, **PR je obavezan** pre merge-a, a **CI mora da bude zelen** (`SwiftLint` + `Build & Test`).
-
-Planirano: archive + automatski upload na TestFlight preko **Fastlane**, sa sertifikatima i provisioning profilima kroz **Fastlane match**.
+| Fastlane | Build + upload na TestFlight |
 
 ---
 
 ## Lokalni setup
 
-### Android
-
 ```bash
-# Kloniranje repozitorijuma
-git clone https://github.com/username/stash-android.git
-cd stash-android
-
-# Build
-./gradlew assembleDebug
-
-# Testovi
-./gradlew test
-./gradlew connectedAndroidTest
-```
-
-### iOS
-
-```bash
-# Kloniranje repozitorijuma
 git clone https://github.com/nikolalucicc/stash-iOS.git
 cd stash-iOS
+open stash/stash.xcodeproj      # Xcode 16+
 
-# Otvaranje u Xcode
-open stash/stash.xcodeproj
-
-# Lint (lokalno, isto što i CI radi)
-brew install swiftlint   # ako već nije instaliran
-swiftlint --strict       # iz root-a repozitorijuma
+# Lint (isto što i CI radi)
+brew install swiftlint
+swiftlint --strict              # iz root-a repozitorijuma
 ```
 
-> SwiftLint se pokreće i kroz **pre-push git hook** — push se odbija ako ima violations. Pokreni `swiftlint --strict` pre push-a da uhvatiš greške ranije.
+> SwiftLint se pokreće i kroz **pre-push git hook** — push se odbija ako ima violations.
 
-Zahtevi:
-- Android: Android Studio Hedgehog ili noviji, JDK 17+
-- iOS: Xcode 16+, macOS Sonoma ili noviji, SwiftLint
+Zahtevi: Xcode 16+, macOS Sonoma ili noviji, SwiftLint.
 
 ---
 
 ## Testovi
 
-Ciljna pokrivenost: **70%+ na logici/data layeru**. Unit testovi pokrivaju ViewModele (onboarding, plata, ciljevi, štek, nalog), alokaciju budžeta po prioritetu i formatiranje iznosa.
+Unit testovi pokrivaju ViewModele i modele (onboarding, plata, ciljevi, štek, potrošnja, payday, valuta, formatiranje).
 
 ```bash
-# Android — unit testovi
-./gradlew test
-
-# Android — coverage report
-./gradlew koverHtmlReport
-
-# iOS — testovi (zameni imenom simulatora koji imaš)
 xcodebuild test \
   -project stash/stash.xcodeproj \
   -scheme stash \
@@ -231,43 +133,58 @@ xcodebuild test \
 
 ---
 
-## Release
+## CI/CD
 
-| Platforma | Status |
-|---|---|
-| Google Play Store | 🚧 In progress |
-| Apple App Store | 🚧 In progress |
+Pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) na **`pull_request`**:
+- **`lint`** → `swiftlint --strict` na `ubuntu-latest` (Docker image, bez macOS minuta)
+- **`build-and-test`** → `macos-15` + Xcode 16.4 → `xcodebuild test`
+
+`main` je zaštićen: **force-push i brisanje blokirani**, **PR obavezan**, **CI mora zeleno** pre merge-a.
+
+Release: [`.github/workflows/release.yml`](.github/workflows/release.yml) pokreće `fastlane beta` na `v*` tag ili ručno.
+
+---
+
+## Objavljivanje na TestFlight
+
+Kod je spreman (app ikonica, export-compliance, Fastlane). Sledeći koraci su na Apple/GitHub strani. Detalji i tačne komande: [`fastlane/README.md`](fastlane/README.md).
+
+**Bundle ID:** `ios.projects.stash` · **verzija:** 1.0 (build se automatski podiže).
+
+1. **Apple Developer Program** — aktivan plaćeni nalog ($99/god).
+2. **App ID + App record** — registruj `ios.projects.stash` (Developer portal → Identifiers), pa napravi aplikaciju u **App Store Connect** (Apps → New App, iOS, ime „Stash", bundle `ios.projects.stash`).
+3. **App Store Connect API ključ** — Users and Access → Integrations → generiši ključ (**App Manager**), preuzmi `.p8`, zapamti **Key ID** i **Issuer ID**.
+4. **Lokalni Ruby** — `rbenv install 3.2 && bundle install`.
+5. **`match` (sertifikati)** — napravi prazan **privatan** repo (npr. `stash-certificates`), postavi env i pokreni:
+   ```bash
+   export ASC_KEY_ID=... ASC_ISSUER_ID=... ASC_KEY_CONTENT="$(base64 -i AuthKey_XXX.p8)"
+   export MATCH_GIT_URL=... MATCH_PASSWORD=...
+   bundle exec fastlane match appstore
+   ```
+6. **Slanje build-a na TestFlight:**
+   - lokalno: `bundle exec fastlane beta`
+   - ili iz CI-ja: dodaj GitHub secrets (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_CONTENT`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`) pa `git tag v1.0.0 && git push origin v1.0.0`.
+7. **TestFlight** — build se pojavi u App Store Connect → TestFlight (par minuta procesiranja) → dodaj internal testere (do 100, bez review-a) → instaliraju preko TestFlight app-a.
+
+### Dalje — App Store
+Screenshot-ovi (6.7"/6.9" iPhone) · opis + keywords · **Privacy Policy URL** · „App Privacy" upitnik (praktično „Data Not Collected") · **Submit for Review**.
 
 ---
 
 ## Roadmap
 
-**V1 — MVP (iOS)**
-- [x] Dizajn sistem i reusable komponente
-- [x] Onboarding (valuta → plata → štednja → troškovi)
-- [x] Lokalizacija (en + sr)
-- [x] CI/CD pipeline (SwiftLint + build & test) + branch protection
-- [x] Lokalno čuvanje podataka (SwiftData)
-- [x] Dashboard (Mesečno)
-- [x] Ciljevi / lista želja (prioritet, rok, auto mesečni iznos, depoziti)
-- [x] Štek (opšta ušteda)
+- [x] Onboarding, dizajn sistem, lokalno čuvanje (SwiftData)
+- [x] Dashboard (raspodela plate), štek, payday podsetnik
+- [x] Ciljevi / lista želja (prioritet, rok, auto mesečni iznos, budžet)
+- [x] Potrošnja po kategorijama (dodavanje/brisanje kategorija)
 - [x] Valute + live konverzija
-- [x] Nalog / podešavanja (plata, valuta, redo setup)
-- [x] Walkthrough
-- [ ] Istorija
-- [ ] Notifikacije
-- [ ] App lock
-- [ ] Play Store + App Store release
-
-**V2**
-- [ ] Projekcija dostizanja cilja kroz vreme
-- [ ] Godišnji pregled
-- [ ] Export (CSV + PDF)
-- [ ] Lokalni backup i restore
-
-**V3**
-- [ ] Višestruki prihodi
-- [ ] Cloud sync između uređaja
+- [x] Walkthrough, live formatiranje iznosa
+- [x] CI/CD + branch protection + Fastlane (TestFlight)
+- [ ] Notifikacije (podsetnik na platu)
+- [ ] App lock (Face ID / PIN)
+- [ ] Istorija + grafikoni
+- [ ] Export (CSV / PDF)
+- [ ] App Store release
 
 ---
 
