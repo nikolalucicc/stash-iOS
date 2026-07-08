@@ -2,7 +2,8 @@
 //  SpendingVM.swift
 //  stash
 //
-//  Backs the "add spending" sheet: logs a spend into a category.
+//  Backs the "add spending" sheet: logs a spend into a category, or deletes
+//  the category.
 //
 
 import Foundation
@@ -21,7 +22,17 @@ final class SpendingVM {
     func save(_ category: SpendingCategory, in context: ModelContext) async {
         guard canSave else { return }
         let trimmedNote = note.trimmingCharacters(in: .whitespaces)
-        context.insert(SpendingEntry(amount: amount, category: category, note: trimmedNote))
+        context.insert(SpendingEntry(
+            amount: amount,
+            categoryName: category.name,
+            categoryIcon: category.icon,
+            note: trimmedNote
+        ))
+        try? context.save()
+    }
+
+    func deleteCategory(_ category: SpendingCategory, in context: ModelContext) async {
+        context.delete(category)
         try? context.save()
     }
 }

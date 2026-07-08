@@ -2,7 +2,7 @@
 //  SpendingVMTests.swift
 //  stashTests
 //
-//  Unit tests for logging spending and the free-money calculation.
+//  Unit tests for logging spending, categories, and the free-money calculation.
 //
 
 import XCTest
@@ -17,7 +17,8 @@ final class SpendingVMTests: XCTestCase {
     override func setUpWithError() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
-            for: UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self,
+            for: UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self,
+            SpendingEntry.self, SpendingCategory.self,
             configurations: config
         )
     }
@@ -28,24 +29,65 @@ final class SpendingVMTests: XCTestCase {
         (try? context.fetch(FetchDescriptor<SpendingEntry>())) ?? []
     }
 
-    func testSaveInsertsEntry() async {
+    private var allCategories: [SpendingCategory] {
+        (try? context.fetch(FetchDescriptor<SpendingCategory>())) ?? []
+    }
+
+    func testSaveSnapshotsCategoryOntoEntry() async {
+        let category = SpendingCategory(name: "Food", icon: "fork.knife")
+        context.insert(category)
         let vm = SpendingVM()
         vm.amountText = "1.200"
         vm.note = "Lunch"
 
-        await vm.save(.food, in: context)
+        await vm.save(category, in: context)
 
         XCTAssertEqual(allEntries.count, 1)
         XCTAssertEqual(allEntries.first?.amount, 1_200)
-        XCTAssertEqual(allEntries.first?.category, .food)
+        XCTAssertEqual(allEntries.first?.categoryName, "Food")
+        XCTAssertEqual(allEntries.first?.categoryIcon, "fork.knife")
         XCTAssertEqual(allEntries.first?.note, "Lunch")
     }
 
     func testSaveIgnoredWhenAmountZero() async {
+        let category = SpendingCategory(name: "Food", icon: "fork.knife")
+        context.insert(category)
         let vm = SpendingVM()
         vm.amountText = ""
-        await vm.save(.food, in: context)
+        await vm.save(category, in: context)
         XCTAssertTrue(allEntries.isEmpty)
+    }
+
+    func testDeleteCategoryRemovesItButKeepsEntries() async {
+        let category = SpendingCategory(name: "Fun", icon: "gamecontroller.fill")
+        context.insert(category)
+        context.insert(SpendingEntry(amount: 500, categoryName: "Fun", categoryIcon: "gamecontroller.fill"))
+
+        await SpendingVM().deleteCategory(category, in: context)
+
+        XCTAssertTrue(allCategories.isEmpty)
+        XCTAssertEqual(allEntries.count, 1, "Past spends are kept when a category is deleted")
+    }
+
+    func testAddCategoryVMCreatesCategory() async {
+        let vm = AddCategoryVM()
+        vm.name = "Coffee"
+        vm.icon = "cup.and.saucer.fill"
+
+        await vm.save(in: context)
+
+        XCTAssertEqual(allCategories.count, 1)
+        XCTAssertEqual(allCategories.first?.name, "Coffee")
+        XCTAssertEqual(allCategories.first?.icon, "cup.and.saucer.fill")
+    }
+
+    func testSeedDefaultsInsertsOnceThenIsIdempotent() {
+        SpendingCategory.seedDefaultsIfNeeded(in: context)
+        let count = allCategories.count
+        XCTAssertGreaterThan(count, 0)
+
+        SpendingCategory.seedDefaultsIfNeeded(in: context)
+        XCTAssertEqual(allCategories.count, count, "Seeding again should not duplicate")
     }
 
     func testFreeMoneyIsSalaryMinusSavingAndFixed() {
