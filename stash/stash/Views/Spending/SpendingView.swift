@@ -46,7 +46,7 @@ struct SpendingView: View {
         }
         .sheet(isPresented: $showAddCategory) {
             AddCategorySheet()
-                .presentationDetents([.height(360)])
+                .presentationDetents([.height(450)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
     }

@@ -3,7 +3,8 @@
 //  stash
 //
 //  A single logged spend, deducted from the month's free money. The category
-//  name/icon are snapshotted so deleting a category leaves past spends intact.
+//  name/icon are snapshotted for display; deleting a category also deletes its
+//  spends (matched by name).
 //
 
 import Foundation

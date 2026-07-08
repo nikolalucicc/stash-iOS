@@ -58,15 +58,17 @@ final class SpendingVMTests: XCTestCase {
         XCTAssertTrue(allEntries.isEmpty)
     }
 
-    func testDeleteCategoryRemovesItButKeepsEntries() async {
+    func testDeleteCategoryAlsoDeletesItsSpends() async {
         let category = SpendingCategory(name: "Fun", icon: "gamecontroller.fill")
         context.insert(category)
         context.insert(SpendingEntry(amount: 500, categoryName: "Fun", categoryIcon: "gamecontroller.fill"))
+        context.insert(SpendingEntry(amount: 800, categoryName: "Food", categoryIcon: "fork.knife"))
 
         await SpendingVM().deleteCategory(category, in: context)
 
         XCTAssertTrue(allCategories.isEmpty)
-        XCTAssertEqual(allEntries.count, 1, "Past spends are kept when a category is deleted")
+        XCTAssertEqual(allEntries.count, 1, "Only the deleted category's spends are removed")
+        XCTAssertEqual(allEntries.first?.categoryName, "Food")
     }
 
     func testAddCategoryVMCreatesCategory() async {

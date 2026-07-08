@@ -31,7 +31,15 @@ final class SpendingVM {
         try? context.save()
     }
 
+    /// Deletes the category and every spend logged under it.
     func deleteCategory(_ category: SpendingCategory, in context: ModelContext) async {
+        let name = category.name
+        let spends = (try? context.fetch(
+            FetchDescriptor<SpendingEntry>(predicate: #Predicate { $0.categoryName == name })
+        )) ?? []
+        for spend in spends {
+            context.delete(spend)
+        }
         context.delete(category)
         try? context.save()
     }
