@@ -74,6 +74,9 @@ final class AccountVM {
         for spend in (try? context.fetch(FetchDescriptor<SpendingEntry>())) ?? [] {
             context.delete(spend)
         }
+        for category in (try? context.fetch(FetchDescriptor<SpendingCategory>())) ?? [] {
+            context.delete(category)
+        }
         for profile in (try? context.fetch(FetchDescriptor<UserProfile>())) ?? [] {
             context.delete(profile)
         }

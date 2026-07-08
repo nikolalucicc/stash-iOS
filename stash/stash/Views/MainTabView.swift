@@ -63,7 +63,8 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
         .modelContainer(
-            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self],
+            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self,
+                  SpendingEntry.self, SpendingCategory.self],
             inMemory: true
         )
 }

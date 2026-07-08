@@ -3,7 +3,8 @@
 //  stash
 //
 //  Spending tab: log day-to-day spends into categories; they're deducted from
-//  this month's free money (salary − saving − fixed expenses).
+//  this month's free money (salary − saving − fixed expenses). Categories can
+//  be added and deleted.
 //
 
 import SwiftUI
@@ -13,8 +14,10 @@ struct SpendingView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
+    @Query(sort: \SpendingCategory.createdAt) private var categories: [SpendingCategory]
     @Query(sort: \SpendingEntry.createdAt, order: .reverse) private var entries: [SpendingEntry]
     @State private var addingCategory: SpendingCategory?
+    @State private var showAddCategory = false
 
     var body: some View {
         StashTheme {
@@ -35,9 +38,15 @@ struct SpendingView: View {
             }
         }
         .navigationBarHidden(true)
+        .onAppear { SpendingCategory.seedDefaultsIfNeeded(in: modelContext) }
         .sheet(item: $addingCategory) { category in
             AddSpendingSheet(category: category, currencyCode: currencyCode)
-                .presentationDetents([.height(340)])
+                .presentationDetents([.height(400)])
+                .presentationBackground(Color.surfaceContainerLow)
+        }
+        .sheet(isPresented: $showAddCategory) {
+            AddCategorySheet()
+                .presentationDetents([.height(450)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
     }
@@ -61,7 +70,7 @@ private extension SpendingView {
     var spentRatio: Double { freeMoney > 0 ? min(spentThisMonth / freeMoney, 1) : 0 }
 
     func spent(for category: SpendingCategory) -> Double {
-        monthEntries.filter { $0.category == category }.reduce(0) { $0 + $1.amount }
+        monthEntries.filter { $0.categoryName == category.name }.reduce(0) { $0 + $1.amount }
     }
 
     func delete(_ entry: SpendingEntry) {
@@ -121,12 +130,11 @@ private extension SpendingView {
                 .font(.labelCapsStyle)
                 .tracking(0.6)
                 .foregroundColor(.onSurfaceVariant)
-            ForEach(SpendingCategory.allCases) { category in
-                Button { addingCategory = category } label: {
-                    categoryRow(category)
-                }
-                .buttonStyle(.plain)
+            ForEach(categories) { category in
+                Button { addingCategory = category } label: { categoryRow(category) }
+                    .buttonStyle(.plain)
             }
+            addCategoryButton
         }
     }
 
@@ -140,7 +148,7 @@ private extension SpendingView {
                     .font(.system(size: 15))
                     .foregroundColor(.appPrimary)
             }
-            Text(verbatim: category.label)
+            Text(verbatim: category.name)
                 .font(.navTitleStyle)
                 .foregroundColor(.onSurface)
             Spacer()
@@ -161,6 +169,26 @@ private extension SpendingView {
         .contentShape(Rectangle())
     }
 
+    var addCategoryButton: some View {
+        Button { showAddCategory = true } label: {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: "plus")
+                    .font(.system(size: 14, weight: .semibold))
+                Text("spending.add_category")
+                    .font(.secondaryStyle)
+            }
+            .foregroundColor(.appPrimary)
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.xl)
+                    .fill(Color.appPrimary.opacity(0.08))
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
     var recentSection: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             Text("spending.recent_header")
@@ -175,11 +203,11 @@ private extension SpendingView {
 
     func entryRow(_ entry: SpendingEntry) -> some View {
         HStack(spacing: Spacing.md) {
-            Image(systemName: entry.category.icon)
+            Image(systemName: entry.categoryIcon)
                 .font(.system(size: 14))
                 .foregroundColor(.onSurfaceVariant)
                 .frame(width: 24)
-            Text(verbatim: entry.note.isEmpty ? entry.category.label : entry.note)
+            Text(verbatim: entry.note.isEmpty ? entry.categoryName : entry.note)
                 .font(.secondaryStyle)
                 .foregroundColor(.onSurface)
             Spacer()
@@ -211,7 +239,8 @@ private extension SpendingView {
 #Preview {
     NavigationStack { SpendingView() }
         .modelContainer(
-            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self],
+            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self,
+                  SpendingEntry.self, SpendingCategory.self],
             inMemory: true
         )
 }

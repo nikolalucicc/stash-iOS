@@ -2,7 +2,7 @@
 //  AddSpendingSheet.swift
 //  stash
 //
-//  Logs a new spend into the chosen category.
+//  Logs a new spend into the chosen category, or deletes the category.
 //
 
 import SwiftUI
@@ -16,6 +16,7 @@ struct AddSpendingSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var vm = SpendingVM()
+    @State private var showDeleteConfirm = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
@@ -23,10 +24,19 @@ struct AddSpendingSheet: View {
             amountField
             noteField
             saveButton
+            deleteButton
             Spacer()
         }
         .padding(Spacing.containerPadding)
         .padding(.top, Spacing.md)
+        .alert("spending.delete_category_title", isPresented: $showDeleteConfirm) {
+            Button("common.cancel_btn", role: .cancel) {}
+            Button("spending.delete_category_cta", role: .destructive) {
+                Task { await vm.deleteCategory(category, in: modelContext); dismiss() }
+            }
+        } message: {
+            Text("spending.delete_category_message")
+        }
     }
 
     private var header: some View {
@@ -34,7 +44,7 @@ struct AddSpendingSheet: View {
             Image(systemName: category.icon)
                 .font(.system(size: 16))
                 .foregroundColor(.appPrimary)
-            Text(verbatim: category.label)
+            Text(verbatim: category.name)
                 .font(.sectionHeaderStyle)
                 .foregroundColor(.onSurface)
         }
@@ -94,12 +104,25 @@ struct AddSpendingSheet: View {
         .disabled(!vm.canSave)
         .opacity(vm.canSave ? 1 : 0.4)
     }
+
+    private var deleteButton: some View {
+        Button { showDeleteConfirm = true } label: {
+            Text("spending.delete_category_cta")
+                .font(.bodyStyle)
+                .foregroundColor(.appError)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
 }
 
 #Preview {
-    AddSpendingSheet(category: .food, currencyCode: "RSD")
+    AddSpendingSheet(category: SpendingCategory(name: "Food", icon: "fork.knife"), currencyCode: "RSD")
         .modelContainer(
-            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self, SpendingEntry.self],
+            for: [UserProfile.self, FixedExpenseEntity.self, SavingsGoal.self,
+                  SpendingEntry.self, SpendingCategory.self],
             inMemory: true
         )
 }

@@ -238,3 +238,12 @@
 "spending.category.shopping"  = "Shopping";
 "spending.category.health"    = "Health";
 "spending.category.other"     = "Other";
+
+// MARK: - Spending · categories
+"spending.add_category"            = "Add category";
+"spending.new_category_title"      = "New category";
+"spending.category_name_placeholder" = "Category name";
+"spending.add_category_cta"        = "Add category";
+"spending.delete_category_cta"     = "Delete category";
+"spending.delete_category_title"   = "Delete category?";
+"spending.delete_category_message" = "This also deletes its spends. This can't be undone.";
