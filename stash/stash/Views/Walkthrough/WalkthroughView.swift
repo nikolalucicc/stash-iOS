@@ -69,7 +69,7 @@ struct WalkthroughView: View {
             Spacer()
             ZStack {
                 Circle()
-                    .fill(Color.appPrimary.opacity(0.12))
+                    .fill(Color.appPrimary.opacity(Opacity.borderStrong))
                     .frame(width: 132, height: 132)
                 Image(systemName: step.icon)
                     .font(.system(size: 54, weight: .medium))
@@ -96,9 +96,9 @@ struct WalkthroughView: View {
         HStack(spacing: Spacing.sm) {
             ForEach(steps.indices, id: \.self) { index in
                 Capsule()
-                    .fill(index == page ? Color.accent : Color.white.opacity(0.15))
+                    .fill(index == page ? Color.accent : Color.white.opacity(Opacity.tintFill))
                     .frame(width: index == page ? 20 : 7, height: 7)
-                    .animation(.easeInOut(duration: 0.2), value: page)
+                    .animation(.easeInOut(duration: AppDuration.standard), value: page)
             }
         }
     }

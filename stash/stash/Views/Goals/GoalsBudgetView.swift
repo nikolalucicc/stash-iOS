@@ -67,11 +67,11 @@ struct GoalsBudgetView: View {
                     .foregroundColor(.onSurfaceVariant)
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.appPrimary.opacity(0.4), lineWidth: 0.5)
+                    .stroke(Color.appPrimary.opacity(Opacity.muted), lineWidth: Line.hairline)
             )
         }
     }
@@ -79,7 +79,7 @@ struct GoalsBudgetView: View {
     private var infoBox: some View {
         HStack(alignment: .top, spacing: Spacing.md) {
             Image(systemName: "info.circle")
-                .font(.system(size: 18))
+                .font(.system(size: IconSize.lg))
                 .foregroundColor(.appPrimary)
             Text("goals.budget_info")
                 .font(.noteStyle)
@@ -87,7 +87,7 @@ struct GoalsBudgetView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.md)
-        .background(Color.appPrimary.opacity(0.08))
+        .background(Color.appPrimary.opacity(Opacity.fill))
         .cornerRadius(Radius.xl)
     }
 
@@ -128,7 +128,7 @@ struct GoalsBudgetView: View {
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.05))
+                    Capsule().fill(Color.white.opacity(Opacity.surface))
                     Capsule().fill(Color.appPrimary)
                         .frame(width: proxy.size.width * fraction(amount))
                 }
@@ -136,7 +136,7 @@ struct GoalsBudgetView: View {
             .frame(height: 6)
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
     }
 
@@ -163,7 +163,7 @@ struct GoalsBudgetView: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())

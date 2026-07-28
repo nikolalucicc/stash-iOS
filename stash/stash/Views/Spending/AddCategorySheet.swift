@@ -35,13 +35,13 @@ struct AddCategorySheet: View {
         return TextField("spending.category_name_placeholder", text: bindable.name)
             .font(.inputValStyle)
             .foregroundColor(.onSurface)
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.05))
+            .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
             )
     }
 
@@ -57,13 +57,13 @@ struct AddCategorySheet: View {
         let isSelected = vm.icon == choice
         return Button { vm.icon = choice } label: {
             Image(systemName: choice)
-                .font(.system(size: 18))
+                .font(.system(size: IconSize.lg))
                 .foregroundColor(isSelected ? .white : .appPrimary)
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
+                .frame(height: Size.controlMd)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.lg)
-                        .fill(isSelected ? Color.accent : Color.white.opacity(0.05))
+                        .fill(isSelected ? Color.accent : Color.white.opacity(Opacity.surface))
                 )
                 .contentShape(Rectangle())
         }
@@ -78,7 +78,7 @@ struct AddCategorySheet: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())

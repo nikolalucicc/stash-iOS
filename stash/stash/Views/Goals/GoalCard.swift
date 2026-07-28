@@ -17,11 +17,11 @@ struct GoalCard: View {
             progress
         }
         .padding(Spacing.lg)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -29,10 +29,10 @@ struct GoalCard: View {
         HStack(alignment: .top, spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 48, height: 48)
                 Text(verbatim: goal.emoji)
-                    .font(.system(size: 24))
+                    .font(.system(size: IconSize.xxl))
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(verbatim: goal.name)
@@ -53,9 +53,9 @@ struct GoalCard: View {
             .foregroundColor(priorityColor)
             .padding(.horizontal, Spacing.sm)
             .padding(.vertical, 4)
-            .background(priorityColor.opacity(0.15))
+            .background(priorityColor.opacity(Opacity.tintFill))
             .clipShape(Capsule())
-            .overlay(Capsule().stroke(priorityColor.opacity(0.3), lineWidth: 0.5))
+            .overlay(Capsule().stroke(priorityColor.opacity(Opacity.shadow), lineWidth: Line.hairline))
     }
 
     private var progress: some View {
@@ -71,7 +71,7 @@ struct GoalCard: View {
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.05))
+                    Capsule().fill(Color.white.opacity(Opacity.surface))
                     Capsule()
                         .fill(Color.appPrimary)
                         .frame(width: proxy.size.width * goal.progress)

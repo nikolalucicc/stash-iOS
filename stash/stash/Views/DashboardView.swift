@@ -63,7 +63,7 @@ struct DashboardView: View {
                         .foregroundColor(.onSurfaceVariant)
                     Spacer()
                     Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 18))
+                        .font(.system(size: IconSize.lg))
                         .foregroundColor(.appPrimary)
                 }
                 HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
@@ -80,11 +80,11 @@ struct DashboardView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Spacing.lg)
-            .background(Color.appPrimary.opacity(0.08))
-            .cornerRadius(20)
+            .background(Color.appPrimary.opacity(Opacity.fill))
+            .cornerRadius(Radius.card)
             .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: Radius.card)
+                    .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
             )
             .contentShape(Rectangle())
         }
@@ -97,7 +97,7 @@ struct DashboardView: View {
         HStack {
             Text(verbatim: monthYearLabel)
                 .font(.labelSmStyle)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
                 .textCase(.uppercase)
                 .tracking(1)
             Spacer()
@@ -115,7 +115,7 @@ struct DashboardView: View {
             .foregroundColor(.onSurfaceVariant)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.03))
+            .background(Color.white.opacity(Opacity.surfaceSubtle))
             .cornerRadius(Radius.xl)
     }
 
@@ -127,21 +127,21 @@ struct DashboardView: View {
                 Text("dashboard.this_month_saving_label")
                     .font(.labelCapsStyle)
                     .tracking(0.6)
-                    .foregroundColor(.white.opacity(0.4))
+                    .foregroundColor(.white.opacity(Opacity.muted))
                 HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                     Text(verbatim: profile.monthlySaving.serbianFormatted)
                         .font(.displayLgStyle)
                         .foregroundColor(.white)
                     Text(verbatim: profile.currency.code)
                         .font(.sectionHeaderStyle)
-                        .foregroundColor(.white.opacity(0.4))
+                        .foregroundColor(.white.opacity(Opacity.muted))
                 }
             }
             VStack(spacing: Spacing.xs) {
                 HStack {
                     Text("dashboard.share_of_salary")
                         .font(.noteStyle)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(.white.opacity(Opacity.strong))
                     Spacer()
                     Text(verbatim: "\(Int(savingShare(for: profile).rounded()))%")
                         .font(.noteStyle)
@@ -151,11 +151,11 @@ struct DashboardView: View {
             }
         }
         .padding(Spacing.lg)
-        .background(Color.white.opacity(0.04))
-        .cornerRadius(20)
+        .background(Color.white.opacity(Opacity.surfaceLow))
+        .cornerRadius(Radius.card)
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -181,11 +181,11 @@ struct DashboardView: View {
             currentMonthStats(for: profile)
         }
         .padding(Spacing.md + 2)
-        .background(Color.accent.opacity(0.1))
+        .background(Color.accent.opacity(Opacity.border))
         .cornerRadius(Radius.xl + 4)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl + 4)
-                .stroke(Color.accent.opacity(0.3), lineWidth: 0.5)
+                .stroke(Color.accent.opacity(Opacity.shadow), lineWidth: Line.hairline)
         )
     }
 
@@ -194,16 +194,16 @@ struct DashboardView: View {
             Text("dashboard.salary_card_label")
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(.white.opacity(Opacity.strong))
             Spacer()
             Text("dashboard.entered_badge")
                 .font(.labelSmStyle)
                 .foregroundColor(.appPrimary)
                 .padding(.horizontal, Spacing.sm)
                 .padding(.vertical, 3)
-                .background(Color.accent.opacity(0.2))
+                .background(Color.accent.opacity(Opacity.tintBorder))
                 .clipShape(Capsule())
-                .overlay(Capsule().stroke(Color.accent.opacity(0.3), lineWidth: 0.5))
+                .overlay(Capsule().stroke(Color.accent.opacity(Opacity.shadow), lineWidth: Line.hairline))
         }
     }
 
@@ -256,7 +256,7 @@ private extension DashboardView {
             )
             statTile(
                 icon: "calendar",
-                iconColor: .white.opacity(0.4),
+                iconColor: .white.opacity(Opacity.muted),
                 value: daysUntilPaydayLabel(for: profile),
                 label: String(localized: "dashboard.days_until_payday_label")
             )
@@ -267,10 +267,10 @@ private extension DashboardView {
         VStack(spacing: Spacing.sm) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 32, height: 32)
                 Image(systemName: icon)
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(iconColor)
             }
             Text(verbatim: value)
@@ -278,15 +278,15 @@ private extension DashboardView {
                 .foregroundColor(.onSurface)
             Text(verbatim: label)
                 .font(.labelSmStyle)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
         }
         .frame(maxWidth: .infinity)
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.04))
+        .background(Color.white.opacity(Opacity.surfaceLow))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -312,10 +312,10 @@ private extension DashboardView {
         HStack(spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 36, height: 36)
+                    .fill(Color.white.opacity(Opacity.surface))
+                    .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: expense.icon)
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -337,11 +337,11 @@ private extension DashboardView {
             }
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 

@@ -109,10 +109,10 @@ struct OnboardingThirdStepView: View {
         HStack(spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 36, height: 36)
+                    .fill(Color.white.opacity(Opacity.surface))
+                    .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: expense.icon)
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -134,17 +134,17 @@ struct OnboardingThirdStepView: View {
             }
             Button { vm.delete(expense) } label: {
                 Image(systemName: "trash")
-                    .font(.system(size: 18))
+                    .font(.system(size: IconSize.lg))
                     .foregroundColor(.appError)
             }
             .buttonStyle(.plain)
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -152,19 +152,19 @@ struct OnboardingThirdStepView: View {
         Button { vm.showAddSheet = true } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
-                    .font(.system(size: 18))
+                    .font(.system(size: IconSize.lg))
                     .foregroundColor(.onSurfaceVariant)
                 Text("onboarding.step3.add_expense_btn")
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 56)
-            .background(Color.white.opacity(0.05))
+            .frame(height: Size.field)
+            .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [5, 4]))
+                    .stroke(style: StrokeStyle(lineWidth: Line.regular, dash: [5, 4]))
                     .foregroundColor(.outlineVariant)
             )
             .contentShape(Rectangle())
@@ -220,7 +220,7 @@ struct OnboardingThirdStepView: View {
 
             HStack(spacing: Spacing.md) {
                 Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
+                    .fill(Color.outlineVariant.opacity(Opacity.half))
                     .frame(height: 0.5)
                 Button {
                     saveExpenses()
@@ -232,7 +232,7 @@ struct OnboardingThirdStepView: View {
                 }
                 .buttonStyle(.plain)
                 Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
+                    .fill(Color.outlineVariant.opacity(Opacity.half))
                     .frame(height: 0.5)
             }
         }
@@ -271,7 +271,7 @@ struct AddExpenseSheetView: View {
                         .font(.navTitleStyle)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                        .frame(height: Size.field)
                         .background(Color.accent)
                         .cornerRadius(Radius.xl)
                         .contentShape(Rectangle())
@@ -283,7 +283,7 @@ struct AddExpenseSheetView: View {
                         .font(.bodyStyle)
                         .foregroundColor(.onSurfaceVariant)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                        .frame(height: Size.field)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -303,13 +303,13 @@ struct AddExpenseSheetView: View {
             TextField("onboarding.step3.name_placeholder", text: $vm.newName)
                 .font(.inputValStyle)
                 .foregroundColor(.onSurface)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .padding(.horizontal, Spacing.md)
-                .background(Color.white.opacity(0.05))
+                .background(Color.white.opacity(Opacity.surface))
                 .cornerRadius(Radius.xl)
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                        .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
                 )
         }
     }
@@ -332,13 +332,13 @@ struct AddExpenseSheetView: View {
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.05))
+            .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
             )
         }
     }

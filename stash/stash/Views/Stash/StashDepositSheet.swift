@@ -56,13 +56,13 @@ struct StashDepositSheet: View {
                 .font(.labelCapsStyle)
                 .foregroundColor(.appPrimary)
         }
-        .frame(height: 56)
+        .frame(height: Size.field)
         .padding(.horizontal, Spacing.md)
-        .background(Color.white.opacity(0.05))
+        .background(Color.white.opacity(Opacity.surface))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
         )
     }
 
@@ -75,7 +75,7 @@ struct StashDepositSheet: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 56)
+                    .frame(height: Size.field)
                     .background(Color.accent)
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())
@@ -91,7 +91,7 @@ struct StashDepositSheet: View {
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 44)
+                    .frame(height: Size.controlSm)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

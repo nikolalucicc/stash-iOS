@@ -83,7 +83,7 @@ struct WishlistView: View {
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.05))
+                    Capsule().fill(Color.white.opacity(Opacity.surface))
                     Capsule().fill(Color.appPrimary)
                         .frame(width: proxy.size.width * summary.progress)
                 }
@@ -101,16 +101,16 @@ struct WishlistView: View {
                 }
             }
             Rectangle()
-                .fill(Color.white.opacity(0.08))
+                .fill(Color.white.opacity(Opacity.fill))
                 .frame(height: 0.5)
             budgetRow
         }
         .padding(Spacing.lg)
-        .background(Color.appPrimary.opacity(0.08))
-        .cornerRadius(20)
+        .background(Color.appPrimary.opacity(Opacity.fill))
+        .cornerRadius(Radius.card)
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
     }
 
@@ -127,7 +127,7 @@ struct WishlistView: View {
                 }
                 Spacer()
                 Image(systemName: "slider.horizontal.3")
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
             .contentShape(Rectangle())
@@ -149,12 +149,12 @@ struct WishlistView: View {
     private var addButton: some View {
         Button { showAddGoal = true } label: {
             Image(systemName: "plus")
-                .font(.system(size: 24, weight: .bold))
+                .font(.system(size: IconSize.xxl, weight: .bold))
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
                 .background(Color.accent)
                 .cornerRadius(18)
-                .shadow(color: Color.accent.opacity(0.3), radius: 12, x: 0, y: 6)
+                .shadow(color: Color.accent.opacity(Opacity.shadow), radius: 12, x: 0, y: 6)
         }
         .buttonStyle(.plain)
         .padding(Spacing.lg)
@@ -164,7 +164,7 @@ struct WishlistView: View {
         VStack(spacing: Spacing.md) {
             ZStack {
                 Circle()
-                    .fill(Color.appPrimary.opacity(0.1))
+                    .fill(Color.appPrimary.opacity(Opacity.border))
                     .frame(width: 88, height: 88)
                 Image(systemName: "star")
                     .font(.system(size: 36))

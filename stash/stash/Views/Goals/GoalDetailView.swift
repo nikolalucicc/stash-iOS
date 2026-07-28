@@ -64,7 +64,7 @@ struct GoalDetailView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.system(size: IconSize.lg, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -85,7 +85,7 @@ struct GoalDetailView: View {
         HStack(spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 56, height: 56)
                 Text(verbatim: goal.emoji)
                     .font(.system(size: 28))
@@ -114,7 +114,7 @@ struct GoalDetailView: View {
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.05))
+                    Capsule().fill(Color.white.opacity(Opacity.surface))
                     Capsule().fill(Color.appPrimary)
                         .frame(width: proxy.size.width * goal.progress)
                 }
@@ -131,11 +131,11 @@ struct GoalDetailView: View {
             }
         }
         .padding(Spacing.lg)
-        .background(Color.appPrimary.opacity(0.08))
-        .cornerRadius(20)
+        .background(Color.appPrimary.opacity(Opacity.fill))
+        .cornerRadius(Radius.card)
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
     }
 
@@ -156,11 +156,11 @@ struct GoalDetailView: View {
                 .foregroundColor(.appPrimary)
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -174,7 +174,7 @@ struct GoalDetailView: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 56)
+                    .frame(height: Size.field)
                     .background(Color.accent)
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())
@@ -186,8 +186,8 @@ struct GoalDetailView: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.appPrimary)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(Color.white.opacity(0.05))
+                    .frame(height: Size.field)
+                    .background(Color.white.opacity(Opacity.surface))
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())
             }
@@ -240,9 +240,9 @@ private struct DepositSheet: View {
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.05))
+            .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
 
             Button {
@@ -252,7 +252,7 @@ private struct DepositSheet: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 56)
+                    .frame(height: Size.field)
                     .background(Color.accent)
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())

@@ -116,5 +116,61 @@ enum Radius {
     static let `default`: CGFloat = 4
     static let lg: CGFloat        = 8
     static let xl: CGFloat        = 12
+    static let card: CGFloat      = 20
     static let full: CGFloat      = 9999
+}
+
+// MARK: - Border / stroke widths
+
+enum Line {
+    static let hairline: CGFloat = 0.5
+    static let regular: CGFloat  = 1
+}
+
+// MARK: - Icon sizes (SF Symbols & system-font glyphs)
+
+enum IconSize {
+    static let xs: CGFloat  = 11
+    static let sm: CGFloat  = 13
+    static let smd: CGFloat = 14
+    static let md: CGFloat  = 16
+    static let lg: CGFloat  = 18
+    static let xl: CGFloat  = 22
+    static let xxl: CGFloat = 24
+}
+
+// MARK: - Component sizes
+
+enum Size {
+    static let iconSlot: CGFloat  = 24   // small leading icon column
+    static let iconBadge: CGFloat = 36   // rounded icon container
+    static let controlSm: CGFloat = 44   // secondary button / row height
+    static let controlMd: CGFloat = 48   // medium control height
+    static let field: CGFloat     = 56   // input field / primary button height
+}
+
+// MARK: - Opacities (surfaces, borders, muted text)
+
+enum Opacity {
+    static let surfaceSubtle: Double = 0.03
+    static let surfaceLow: Double     = 0.04
+    static let surface: Double        = 0.05
+    static let tintSubtle: Double     = 0.07
+    static let fill: Double           = 0.08
+    static let border: Double         = 0.1
+    static let borderStrong: Double   = 0.12
+    static let tintFill: Double       = 0.15
+    static let tintBorder: Double     = 0.2
+    static let shadow: Double         = 0.3
+    static let mutedStrong: Double    = 0.35
+    static let muted: Double          = 0.4
+    static let half: Double           = 0.5
+    static let strong: Double         = 0.6
+}
+
+// MARK: - Animation durations
+
+enum AppDuration {
+    static let fast: Double     = 0.15
+    static let standard: Double = 0.2
 }

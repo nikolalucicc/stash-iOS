@@ -89,10 +89,10 @@ struct AccountView: View {
         HStack(spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 36, height: 36)
+                    .fill(Color.white.opacity(Opacity.surface))
+                    .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: icon)
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
             Text(title)
@@ -105,15 +105,15 @@ struct AccountView: View {
                     .foregroundColor(.onSurfaceVariant)
             }
             Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: IconSize.sm, weight: .medium))
                 .foregroundColor(.onSurfaceVariant)
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
         .contentShape(Rectangle())
     }
@@ -121,7 +121,7 @@ struct AccountView: View {
     private var versionFooter: some View {
         Text(verbatim: "Stash \(appVersion)")
             .font(.noteStyle)
-            .foregroundColor(.white.opacity(0.3))
+            .foregroundColor(.white.opacity(Opacity.shadow))
             .frame(maxWidth: .infinity)
             .padding(.top, Spacing.sm)
     }
@@ -166,7 +166,7 @@ private struct CurrencyPickerSheet: View {
         .overlay {
             if vm.isConverting {
                 ZStack {
-                    Color.black.opacity(0.3).ignoresSafeArea()
+                    Color.black.opacity(Opacity.shadow).ignoresSafeArea()
                     ProgressView().tint(.appPrimary)
                 }
             }
@@ -182,19 +182,19 @@ private struct CurrencyPickerSheet: View {
             }
         } label: {
             HStack(spacing: Spacing.md) {
-                Text(verbatim: currency.flag).font(.system(size: 22))
+                Text(verbatim: currency.flag).font(.system(size: IconSize.xl))
                 Text(verbatim: currency.name)
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
                 Spacer()
                 if currency == selected {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 14, weight: .bold))
+                        .font(.system(size: IconSize.smd, weight: .bold))
                         .foregroundColor(.appPrimary)
                 }
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .contentShape(Rectangle())
         }

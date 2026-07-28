@@ -39,7 +39,7 @@ struct PaydayReminderCard: View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "banknote.fill")
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
                 Text("payday.title")
                     .font(.sectionHeaderStyle)
@@ -52,11 +52,11 @@ struct PaydayReminderCard: View {
             confirmButton
         }
         .padding(Spacing.md)
-        .background(Color.appPrimary.opacity(0.08))
+        .background(Color.appPrimary.opacity(Opacity.fill))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.appPrimary.opacity(0.25), lineWidth: 0.5)
+                .stroke(Color.appPrimary.opacity(0.25), lineWidth: Line.hairline)
         )
     }
 
@@ -66,7 +66,7 @@ struct PaydayReminderCard: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
+                .frame(height: Size.controlMd)
                 .background(Color.accent)
                 .cornerRadius(Radius.lg)
                 .contentShape(Rectangle())

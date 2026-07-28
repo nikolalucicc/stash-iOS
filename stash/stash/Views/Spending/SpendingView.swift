@@ -116,11 +116,11 @@ private extension SpendingView {
                 .foregroundColor(.onSurfaceVariant)
         }
         .padding(Spacing.lg)
-        .background(Color.appPrimary.opacity(0.08))
-        .cornerRadius(20)
+        .background(Color.appPrimary.opacity(Opacity.fill))
+        .cornerRadius(Radius.card)
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
     }
 
@@ -142,8 +142,8 @@ private extension SpendingView {
         HStack(spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 36, height: 36)
+                    .fill(Color.white.opacity(Opacity.surface))
+                    .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: category.icon)
                     .font(.system(size: 15))
                     .foregroundColor(.appPrimary)
@@ -156,15 +156,15 @@ private extension SpendingView {
                 .font(.secondaryStyle)
                 .foregroundColor(.onSurfaceVariant)
             Image(systemName: "plus.circle.fill")
-                .font(.system(size: 18))
+                .font(.system(size: IconSize.lg))
                 .foregroundColor(.appPrimary)
         }
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
         .contentShape(Rectangle())
     }
@@ -173,16 +173,16 @@ private extension SpendingView {
         Button { showAddCategory = true } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: IconSize.smd, weight: .semibold))
                 Text("spending.add_category")
                     .font(.secondaryStyle)
             }
             .foregroundColor(.appPrimary)
             .frame(maxWidth: .infinity)
-            .frame(height: 48)
+            .frame(height: Size.controlMd)
             .background(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .fill(Color.appPrimary.opacity(0.08))
+                    .fill(Color.appPrimary.opacity(Opacity.fill))
             )
             .contentShape(Rectangle())
         }
@@ -204,7 +204,7 @@ private extension SpendingView {
     func entryRow(_ entry: SpendingEntry) -> some View {
         HStack(spacing: Spacing.md) {
             Image(systemName: entry.categoryIcon)
-                .font(.system(size: 14))
+                .font(.system(size: IconSize.smd))
                 .foregroundColor(.onSurfaceVariant)
                 .frame(width: 24)
             Text(verbatim: entry.note.isEmpty ? entry.categoryName : entry.note)
@@ -216,14 +216,14 @@ private extension SpendingView {
                 .foregroundColor(.onSurface)
             Button { delete(entry) } label: {
                 Image(systemName: "xmark.circle.fill")
-                    .font(.system(size: 16))
+                    .font(.system(size: IconSize.md))
                     .foregroundColor(.onSurfaceVariant)
             }
             .buttonStyle(.plain)
         }
         .padding(.vertical, Spacing.sm)
         .padding(.horizontal, Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.lg)
     }
 

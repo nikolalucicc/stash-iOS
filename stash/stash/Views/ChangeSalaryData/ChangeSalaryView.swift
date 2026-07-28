@@ -52,7 +52,7 @@ struct ChangeSalaryView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.system(size: IconSize.lg, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -85,7 +85,7 @@ struct ChangeSalaryView: View {
         Text(key)
             .font(.labelCapsStyle)
             .tracking(0.6)
-            .foregroundColor(.white.opacity(0.4))
+            .foregroundColor(.white.opacity(Opacity.muted))
             .padding(.leading, 4)
     }
 
@@ -101,14 +101,14 @@ struct ChangeSalaryView: View {
                     .thousandsGrouped(bindable.salaryText)
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
-                    .foregroundColor(.white.opacity(0.4))
+                    .foregroundColor(.white.opacity(Opacity.muted))
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
             )
         }
     }
@@ -136,25 +136,28 @@ struct ChangeSalaryView: View {
     private func methodButton(_ method: SavingMethod) -> some View {
         let isSelected = vm.savingMethod == method
         return Button {
-            withAnimation(.easeInOut(duration: 0.2)) { vm.savingMethod = method }
+            withAnimation(.easeInOut(duration: AppDuration.standard)) { vm.savingMethod = method }
         } label: {
             Text(verbatim: method.label)
                 .font(.secondaryStyle)
                 .foregroundColor(isSelected ? .appPrimary : .onSurfaceVariant)
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
+                .frame(height: Size.controlMd)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.xl)
-                        .fill(isSelected ? Color.appPrimary.opacity(0.15) : Color.white.opacity(0.05))
+                        .fill(isSelected
+                            ? Color.appPrimary.opacity(Opacity.tintFill)
+                            : Color.white.opacity(Opacity.surface))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(isSelected ? Color.appPrimary : Color.white.opacity(0.1), lineWidth: 0.5)
+                        .stroke(isSelected ? Color.appPrimary : Color.white.opacity(Opacity.border),
+                                lineWidth: Line.hairline)
                 )
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.2), value: isSelected)
+        .animation(.easeInOut(duration: AppDuration.standard), value: isSelected)
     }
 
     private var savingsField: some View {
@@ -180,16 +183,16 @@ struct ChangeSalaryView: View {
                 Spacer()
                 Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)
                     .font(.secondaryStyle)
-                    .foregroundColor(.white.opacity(0.4))
+                    .foregroundColor(.white.opacity(Opacity.muted))
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .stroke(
-                        vm.savingExceedsSalary ? Color.appError : Color.white.opacity(0.12),
-                        lineWidth: vm.savingExceedsSalary ? 1 : 0.5
+                        vm.savingExceedsSalary ? Color.appError : Color.white.opacity(Opacity.borderStrong),
+                        lineWidth: vm.savingExceedsSalary ? Line.regular : Line.hairline
                     )
             )
             if vm.savingExceedsSalary {
@@ -201,7 +204,7 @@ struct ChangeSalaryView: View {
     private var validationError: some View {
         HStack(spacing: Spacing.xs) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: 11))
+                .font(.system(size: IconSize.xs))
             Text("common.saving_exceeds_salary")
                 .font(.noteStyle)
         }
@@ -218,10 +221,10 @@ private extension ChangeSalaryView {
         HStack(alignment: .top, spacing: Spacing.md) {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 32, height: 32)
                 Image(systemName: "info.circle")
-                    .font(.system(size: 18))
+                    .font(.system(size: IconSize.lg))
                     .foregroundColor(.appPrimary)
             }
             Text("settings.info")
@@ -230,11 +233,11 @@ private extension ChangeSalaryView {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.03))
+        .background(Color.white.opacity(Opacity.surfaceSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
     }
 
@@ -245,10 +248,10 @@ private extension ChangeSalaryView {
             .padding(Spacing.lg)
             .frame(maxWidth: .infinity, minHeight: 160, alignment: .leading)
             .background(projectionBackground)
-            .cornerRadius(20)
+            .cornerRadius(Radius.card)
             .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: Radius.card)
+                    .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
             )
             .clipped()
     }
@@ -277,9 +280,9 @@ private extension ChangeSalaryView {
 
     private var projectionBackground: some View {
         ZStack {
-            Color.white.opacity(0.03)
+            Color.white.opacity(Opacity.surfaceSubtle)
             LinearGradient(
-                colors: [Color.appPrimary.opacity(0.2), .clear],
+                colors: [Color.appPrimary.opacity(Opacity.tintBorder), .clear],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -287,7 +290,7 @@ private extension ChangeSalaryView {
                 Spacer()
                 Image(systemName: "creditcard")
                     .font(.system(size: 120, weight: .ultraLight))
-                    .foregroundColor(.appPrimary.opacity(0.1))
+                    .foregroundColor(.appPrimary.opacity(Opacity.border))
                     .offset(x: 24, y: 28)
             }
         }
@@ -310,7 +313,7 @@ private extension ChangeSalaryView {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())

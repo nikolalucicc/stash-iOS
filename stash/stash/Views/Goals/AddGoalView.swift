@@ -63,7 +63,7 @@ struct AddGoalView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "xmark")
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: IconSize.md, weight: .medium))
                         .foregroundColor(.onSurfaceVariant)
                 }
                 .buttonStyle(.plain)
@@ -89,13 +89,13 @@ struct AddGoalView: View {
             TextField("goals.name_placeholder", text: bindable.name)
                 .font(.inputValStyle)
                 .foregroundColor(.onSurface)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .padding(.horizontal, Spacing.md)
-                .background(Color.white.opacity(0.04))
+                .background(Color.white.opacity(Opacity.surfaceLow))
                 .cornerRadius(Radius.xl)
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                        .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
                 )
         }
     }
@@ -114,13 +114,13 @@ struct AddGoalView: View {
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
             )
         }
     }
@@ -154,21 +154,21 @@ struct AddGoalView: View {
                     .font(.secondaryStyle)
                     .foregroundColor(.appPrimary)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 44)
+                    .frame(height: Size.controlSm)
                     .background(
                         RoundedRectangle(cornerRadius: Radius.lg)
-                            .fill(Color.appPrimary.opacity(0.12))
+                            .fill(Color.appPrimary.opacity(Opacity.borderStrong))
                     )
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
         }
         .padding(Spacing.md)
-        .background(Color.appPrimary.opacity(0.07))
+        .background(Color.appPrimary.opacity(Opacity.tintSubtle))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+                .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
     }
 
@@ -186,16 +186,16 @@ struct AddGoalView: View {
     private func priorityButton(_ option: GoalPriority) -> some View {
         let isSelected = vm.priority == option
         return Button {
-            withAnimation(.easeInOut(duration: 0.2)) { vm.priority = option }
+            withAnimation(.easeInOut(duration: AppDuration.standard)) { vm.priority = option }
         } label: {
             Text(verbatim: option.label)
                 .font(.secondaryStyle)
                 .foregroundColor(isSelected ? .onSecondaryContainer : .onSurfaceVariant)
                 .frame(maxWidth: .infinity)
-                .frame(height: 44)
+                .frame(height: Size.controlSm)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.lg)
-                        .fill(isSelected ? Color.secondaryContainer : Color.white.opacity(0.05))
+                        .fill(isSelected ? Color.secondaryContainer : Color.white.opacity(Opacity.surface))
                 )
                 .contentShape(Rectangle())
         }
@@ -245,13 +245,13 @@ struct AddGoalView: View {
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
             )
         }
     }
@@ -275,13 +275,13 @@ struct AddGoalView: View {
                     .font(.noteStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
-            .frame(height: 56)
+            .frame(height: Size.field)
             .padding(.horizontal, Spacing.md)
-            .background(Color.appPrimary.opacity(0.07))
+            .background(Color.appPrimary.opacity(Opacity.tintSubtle))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+                    .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
             )
             Text("goals.deadline_auto_note")
                 .font(.noteStyle)
@@ -301,7 +301,7 @@ struct AddGoalView: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())
