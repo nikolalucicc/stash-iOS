@@ -17,7 +17,7 @@ struct StashTheme<Content: View>: View {
 
             RadialGradient(
                 colors: [
-                    Color(red: 83/255, green: 74/255, blue: 183/255).opacity(0.3),
+                    Color(red: 83/255, green: 74/255, blue: 183/255).opacity(Opacity.shadow),
                     .clear
                 ],
                 center: .center,

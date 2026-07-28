@@ -24,7 +24,7 @@ struct OnboardingAppBar: View {
                 HStack {
                     Button { onBack() } label: {
                         Image(systemName: "arrow.left")
-                            .font(.system(size: 18, weight: .medium))
+                            .font(.system(size: IconSize.lg, weight: .medium))
                             .foregroundColor(.appPrimary)
                     }
                     .buttonStyle(.plain)

@@ -66,7 +66,7 @@ struct OnboardingFirstStepView: View {
                 .foregroundColor(.onSurface)
             Text("onboarding.step1.subtitle")
                 .font(.secondaryStyle)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
         }
     }
 
@@ -86,7 +86,7 @@ struct OnboardingFirstStepView: View {
             Text("onboarding.step1.salary_label")
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
                 .padding(.leading, 4)
 
             HStack {
@@ -97,15 +97,15 @@ struct OnboardingFirstStepView: View {
                     .thousandsGrouped(bindable.salaryText)
                 Text(verbatim: currencyCode)
                     .font(.secondaryStyle)
-                    .foregroundColor(.white.opacity(0.35))
+                    .foregroundColor(.white.opacity(Opacity.mutedStrong))
                     .padding(.leading, Spacing.sm)
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.03))
+            .background(Color.white.opacity(Opacity.surfaceSubtle))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.appPrimary.opacity(0.6), lineWidth: 0.5)
+                    .stroke(Color.appPrimary.opacity(Opacity.strong), lineWidth: Line.hairline)
             )
         }
     }
@@ -122,15 +122,15 @@ struct OnboardingFirstStepView: View {
     private var privacyNote: some View {
         HStack(alignment: .top, spacing: Spacing.sm) {
             Image(systemName: "info.circle")
-                .font(.system(size: 18))
-                .foregroundColor(.white.opacity(0.35))
+                .font(.system(size: IconSize.lg))
+                .foregroundColor(.white.opacity(Opacity.mutedStrong))
             Text("onboarding.step1.privacy_note")
                 .font(.noteStyle)
-                .foregroundColor(.white.opacity(0.35))
+                .foregroundColor(.white.opacity(Opacity.mutedStrong))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.md)
-        .background(Color.white.opacity(0.05))
+        .background(Color.white.opacity(Opacity.surface))
         .cornerRadius(Radius.xl)
     }
 
@@ -143,7 +143,7 @@ struct OnboardingFirstStepView: View {
                     Text("common.continue_btn")
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: IconSize.md, weight: .medium))
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

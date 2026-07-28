@@ -75,7 +75,7 @@ struct OnboardingFourthStepView: View {
     private func currencyCard(_ currency: Currency) -> some View {
         let isSelected = vm.selectedCurrency == currency
         return Button {
-            withAnimation(.easeInOut(duration: 0.15)) {
+            withAnimation(.easeInOut(duration: AppDuration.fast)) {
                 vm.selectedCurrency = currency
             }
         } label: {
@@ -85,7 +85,7 @@ struct OnboardingFourthStepView: View {
                         .fill(Color.surfaceContainer)
                         .frame(width: 40, height: 40)
                     Text(verbatim: currency.flag)
-                        .font(.system(size: 22))
+                        .font(.system(size: IconSize.xl))
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: currency.name)
@@ -101,19 +101,19 @@ struct OnboardingFourthStepView: View {
             .padding(Spacing.md)
             .background(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .fill(isSelected ? Color.accent.opacity(0.15) : Color.white.opacity(0.04))
+                    .fill(isSelected ? Color.accent.opacity(Opacity.tintFill) : Color.white.opacity(Opacity.surfaceLow))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .stroke(
-                        isSelected ? Color.accent : Color.white.opacity(0.08),
-                        lineWidth: 0.5
+                        isSelected ? Color.accent : Color.white.opacity(Opacity.fill),
+                        lineWidth: Line.hairline
                     )
             )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .animation(.easeInOut(duration: AppDuration.fast), value: isSelected)
     }
 
     private func selectionIndicator(isSelected: Bool) -> some View {
@@ -123,11 +123,11 @@ struct OnboardingFourthStepView: View {
                     .fill(Color.appPrimary)
                     .frame(width: 24, height: 24)
                 Image(systemName: "checkmark")
-                    .font(.system(size: 11, weight: .bold))
+                    .font(.system(size: IconSize.xs, weight: .bold))
                     .foregroundColor(.onPrimary)
             } else {
                 Circle()
-                    .stroke(Color.outlineVariant, lineWidth: 0.5)
+                    .stroke(Color.outlineVariant, lineWidth: Line.hairline)
                     .frame(width: 24, height: 24)
             }
         }
@@ -143,7 +143,7 @@ struct OnboardingFourthStepView: View {
                     Text("common.continue_btn")
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: IconSize.md, weight: .medium))
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -156,7 +156,7 @@ struct OnboardingFourthStepView: View {
                     )
                 )
                 .cornerRadius(Radius.xl)
-                .shadow(color: Color(hex: "#534AB7").opacity(0.3), radius: 15, x: 0, y: 8)
+                .shadow(color: Color(hex: "#534AB7").opacity(Opacity.shadow), radius: 15, x: 0, y: 8)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

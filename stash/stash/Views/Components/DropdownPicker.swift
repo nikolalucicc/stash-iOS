@@ -19,12 +19,12 @@ struct DropdownPicker: View {
             Text(label)
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
                 .padding(.leading, 4)
 
             VStack(spacing: 0) {
                 Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
+                    withAnimation(.easeInOut(duration: AppDuration.standard)) {
                         isExpanded.toggle()
                     }
                 } label: {
@@ -34,9 +34,9 @@ struct DropdownPicker: View {
                             .foregroundColor(.white)
                         Spacer()
                         Image(systemName: "chevron.down")
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(.white.opacity(Opacity.muted))
                             .rotationEffect(.degrees(isExpanded ? 180 : 0))
-                            .animation(.easeInOut(duration: 0.2), value: isExpanded)
+                            .animation(.easeInOut(duration: AppDuration.standard), value: isExpanded)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(Spacing.md)
@@ -46,13 +46,13 @@ struct DropdownPicker: View {
 
                 if isExpanded {
                     Divider()
-                        .background(Color.white.opacity(0.08))
+                        .background(Color.white.opacity(Opacity.fill))
                         .padding(.horizontal, Spacing.md)
 
                     VStack(spacing: 0) {
                         ForEach(options, id: \.self) { option in
                             Button {
-                                withAnimation(.easeInOut(duration: 0.2)) {
+                                withAnimation(.easeInOut(duration: AppDuration.standard)) {
                                     selection = option
                                     isExpanded = false
                                 }
@@ -64,7 +64,7 @@ struct DropdownPicker: View {
                                     Spacer()
                                     if option == selection {
                                         Image(systemName: "checkmark")
-                                            .font(.system(size: 13, weight: .medium))
+                                            .font(.system(size: IconSize.sm, weight: .medium))
                                             .foregroundColor(.accent)
                                     }
                                 }
@@ -84,15 +84,17 @@ struct DropdownPicker: View {
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
-            .background(Color.white.opacity(0.03))
+            .background(Color.white.opacity(Opacity.surfaceSubtle))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .stroke(
-                        isExpanded ? Color.appPrimary.opacity(0.4) : Color.white.opacity(0.12),
-                        lineWidth: 0.5
+                        isExpanded
+                            ? Color.appPrimary.opacity(Opacity.muted)
+                            : Color.white.opacity(Opacity.borderStrong),
+                        lineWidth: Line.hairline
                     )
-                    .animation(.easeInOut(duration: 0.2), value: isExpanded)
+                    .animation(.easeInOut(duration: AppDuration.standard), value: isExpanded)
             )
         }
     }

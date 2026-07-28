@@ -71,7 +71,7 @@ struct OnboardingSecondStepView: View {
                 .foregroundColor(.onSurface)
             Text("onboarding.step2.subtitle")
                 .font(.secondaryStyle)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
         }
     }
 
@@ -94,14 +94,14 @@ struct OnboardingSecondStepView: View {
             Text("onboarding.step2.method_label")
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
                 .padding(.leading, 4)
 
             HStack(spacing: Spacing.gutter) {
                 ForEach(SavingMethod.allCases, id: \.self) { method in
                     let isSelected = vm.savingMethod == method
                     Button {
-                        withAnimation(.easeInOut(duration: 0.2)) {
+                        withAnimation(.easeInOut(duration: AppDuration.standard)) {
                             vm.savingMethod = method
                         }
                     } label: {
@@ -112,27 +112,27 @@ struct OnboardingSecondStepView: View {
                             .padding(.vertical, Spacing.sm + 4)
                             .background(
                                 RoundedRectangle(cornerRadius: Radius.lg)
-                                    .fill(isSelected ? Color.accent : Color.white.opacity(0.05))
+                                    .fill(isSelected ? Color.accent : Color.white.opacity(Opacity.surface))
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: Radius.lg)
                                     .stroke(
-                                        isSelected ? Color.clear : Color.white.opacity(0.1),
-                                        lineWidth: 0.5
+                                        isSelected ? Color.clear : Color.white.opacity(Opacity.border),
+                                        lineWidth: Line.hairline
                                     )
                             )
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .animation(.easeInOut(duration: 0.2), value: isSelected)
+                    .animation(.easeInOut(duration: AppDuration.standard), value: isSelected)
                 }
             }
             .padding(4)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
             )
         }
     }
@@ -145,7 +145,7 @@ struct OnboardingSecondStepView: View {
             Text(verbatim: vm.savingMethod.inputLabel)
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
                 .padding(.leading, 4)
 
             HStack {
@@ -164,22 +164,22 @@ struct OnboardingSecondStepView: View {
                 Spacer()
                 Text(verbatim: vm.savingMethod == .percentage ? "%" : currencyCode)
                     .font(.inputValStyle)
-                    .foregroundColor(.white.opacity(0.35))
+                    .foregroundColor(.white.opacity(Opacity.mutedStrong))
             }
             .padding(Spacing.md)
-            .background(Color.white.opacity(0.03))
+            .background(Color.white.opacity(Opacity.surfaceSubtle))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .stroke(
-                        vm.savingExceedsSalary ? Color.appError : Color.appPrimary.opacity(0.5),
-                        lineWidth: 1
+                        vm.savingExceedsSalary ? Color.appError : Color.appPrimary.opacity(Opacity.half),
+                        lineWidth: Line.regular
                     )
             )
             if vm.savingExceedsSalary {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .font(.system(size: 11))
+                        .font(.system(size: IconSize.xs))
                     Text("common.saving_exceeds_salary")
                         .font(.noteStyle)
                 }
@@ -194,7 +194,7 @@ struct OnboardingSecondStepView: View {
     private var previewCard: some View {
         ZStack(alignment: .topTrailing) {
             Circle()
-                .fill(Color.appPrimary.opacity(0.1))
+                .fill(Color.appPrimary.opacity(Opacity.border))
                 .frame(width: 128, height: 128)
                 .blur(radius: 24)
                 .offset(x: 10, y: -10)
@@ -209,17 +209,17 @@ struct OnboardingSecondStepView: View {
                         .foregroundColor(Color(hex: "#AFA9EC"))
                     Text(verbatim: currencyCode)
                         .font(.inputValStyle)
-                        .foregroundColor(.white.opacity(0.35))
+                        .foregroundColor(.white.opacity(Opacity.mutedStrong))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(Spacing.lg)
-        .background(Color.appPrimary.opacity(0.05))
-        .cornerRadius(20)
+        .background(Color.appPrimary.opacity(Opacity.surface))
+        .cornerRadius(Radius.card)
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.appPrimary.opacity(0.2), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
         .clipped()
     }
@@ -233,7 +233,7 @@ struct OnboardingSecondStepView: View {
                     Text("common.continue_btn")
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: IconSize.md, weight: .medium))
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -249,12 +249,12 @@ struct OnboardingSecondStepView: View {
 
             HStack(spacing: Spacing.md) {
                 Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
+                    .fill(Color.outlineVariant.opacity(Opacity.half))
                     .frame(height: 0.5)
                 Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.left")
-                            .font(.system(size: 13))
+                            .font(.system(size: IconSize.sm))
                         Text("common.back_btn")
                             .font(.secondaryStyle)
                     }
@@ -262,7 +262,7 @@ struct OnboardingSecondStepView: View {
                 }
                 .buttonStyle(.plain)
                 Rectangle()
-                    .fill(Color.outlineVariant.opacity(0.5))
+                    .fill(Color.outlineVariant.opacity(Opacity.half))
                     .frame(height: 0.5)
             }
         }

@@ -25,7 +25,7 @@ struct ProgressTrack: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
-                Capsule().fill(Color.white.opacity(0.1))
+                Capsule().fill(Color.white.opacity(Opacity.border))
                 Capsule()
                     .fill(tint)
                     .frame(width: proxy.size.width * min(max(progress, 0), 1))
@@ -49,7 +49,7 @@ struct SegmentedBreakdownBar: View {
                     .fill(Color(hex: "#3C3489"))
                     .frame(width: proxy.size.width * breakdown.fixedRatio)
                 Capsule()
-                    .fill(Color.white.opacity(0.1))
+                    .fill(Color.white.opacity(Opacity.border))
                     .frame(width: proxy.size.width * breakdown.freeRatio)
             }
         }

@@ -23,14 +23,14 @@ struct ProgressIndicator: View {
             HStack(spacing: Spacing.xs) {
                 ForEach(1...4, id: \.self) { step in
                     Capsule()
-                        .fill(step <= currentStep ? Color.accent : Color.white.opacity(0.1))
+                        .fill(step <= currentStep ? Color.accent : Color.white.opacity(Opacity.border))
                         .frame(height: 4)
                 }
             }
             Text(verbatim: stepLabel)
                 .font(.labelCapsStyle)
                 .tracking(0.6)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.white.opacity(Opacity.muted))
         }
     }
 }

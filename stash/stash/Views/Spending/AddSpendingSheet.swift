@@ -42,7 +42,7 @@ struct AddSpendingSheet: View {
     private var header: some View {
         HStack(spacing: Spacing.sm) {
             Image(systemName: category.icon)
-                .font(.system(size: 16))
+                .font(.system(size: IconSize.md))
                 .foregroundColor(.appPrimary)
             Text(verbatim: category.name)
                 .font(.sectionHeaderStyle)
@@ -62,13 +62,13 @@ struct AddSpendingSheet: View {
                 .font(.labelCapsStyle)
                 .foregroundColor(.appPrimary)
         }
-        .frame(height: 56)
+        .frame(height: Size.field)
         .padding(.horizontal, Spacing.md)
-        .background(Color.white.opacity(0.05))
+        .background(Color.white.opacity(Opacity.surface))
         .cornerRadius(Radius.xl)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
         )
     }
 
@@ -77,13 +77,13 @@ struct AddSpendingSheet: View {
         return TextField("spending.note_placeholder", text: bindable.note)
             .font(.bodyStyle)
             .foregroundColor(.onSurface)
-            .frame(height: 48)
+            .frame(height: Size.controlMd)
             .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(0.04))
+            .background(Color.white.opacity(Opacity.surfaceLow))
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
             )
     }
 
@@ -95,7 +95,7 @@ struct AddSpendingSheet: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 56)
+                .frame(height: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())
@@ -111,7 +111,7 @@ struct AddSpendingSheet: View {
                 .font(.bodyStyle)
                 .foregroundColor(.appError)
                 .frame(maxWidth: .infinity)
-                .frame(height: 44)
+                .frame(height: Size.controlSm)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
