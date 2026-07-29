@@ -12,7 +12,8 @@ enum GoalPriority: String, CaseIterable {
     case low, medium, high
 
     /// Relative weight used when the monthly budget can't cover every goal.
-    var weight: Int {
+    /// `nonisolated` — pure value math, used by the (nonisolated) sort comparator.
+    nonisolated var weight: Int {
         switch self {
         case .high:   return 3
         case .medium: return 2

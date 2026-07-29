@@ -12,7 +12,9 @@ import SwiftData
 @MainActor
 final class AddGoalVMTests: XCTestCase {
 
-    private var container: ModelContainer!
+    // ModelContainer is Sendable and set up serially before the @MainActor tests
+    // run, so nonisolated access is safe (XCTest's setUp is nonisolated).
+    nonisolated(unsafe) private var container: ModelContainer!
 
     override func setUpWithError() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
