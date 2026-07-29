@@ -8,6 +8,7 @@
 import XCTest
 @testable import stash
 
+@MainActor
 final class GoalAllocatorTests: XCTestCase {
 
     func testEmptyGoalsReturnsEmpty() {

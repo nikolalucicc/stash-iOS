@@ -26,7 +26,8 @@ enum PayPeriod: String, CaseIterable {
     }
 
     /// Day of the month the salary is expected, for the month containing `date`.
-    func day(in date: Date, calendar: Calendar = .current) -> Int {
+    /// `nonisolated` — pure date math, called from `UserProfile`'s helpers.
+    nonisolated func day(in date: Date, calendar: Calendar = .current) -> Int {
         switch self {
         case .beginning: return 1
         case .middle:    return 15
