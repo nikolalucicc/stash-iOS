@@ -247,3 +247,15 @@
 "spending.delete_category_cta"     = "Delete category";
 "spending.delete_category_title"   = "Delete category?";
 "spending.delete_category_message" = "This also deletes its spends. This can't be undone.";
+
+// MARK: - Fixed expenses (CRUD screen)
+
+"expenses.title"          = "Fixed expenses";
+"expenses.subtitle"       = "Recurring costs taken out of your salary each month.";
+"expenses.add_title"      = "Add expense";
+"expenses.edit_title"     = "Edit expense";
+"expenses.save_cta"       = "Save changes";
+"expenses.empty"          = "No fixed expenses yet. Add rent, subscriptions, installments…";
+"expenses.delete_title"   = "Delete expense?";
+"expenses.delete_message" = "It will no longer count toward your monthly costs.";
+"expenses.delete_cta"     = "Delete";

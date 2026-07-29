@@ -35,7 +35,7 @@ class OnboardingThirdStepVM {
             name: trimmedName,
             note: String(localized: "onboarding.step3.default_note"),
             amount: amount,
-            icon: icon(for: trimmedName)
+            icon: ExpenseIcon.suggested(for: trimmedName)
         ))
         resetForm()
     }
@@ -54,24 +54,4 @@ class OnboardingThirdStepVM {
         showAddSheet = false
     }
 
-    private func icon(for name: String) -> String {
-        let lowercased = name.lowercased()
-        if lowercased.contains("rent") || lowercased.contains("apartment") ||
-           lowercased.contains("lease") || lowercased.contains("housing") { return "house.fill" }
-        if lowercased.contains("gym") || lowercased.contains("fitness") ||
-           lowercased.contains("sport") || lowercased.contains("workout") { return "dumbbell.fill" }
-        if lowercased.contains("netflix") || lowercased.contains("hbo") ||
-           lowercased.contains("streaming") || lowercased.contains("prime") ||
-           lowercased.contains("disney") { return "play.rectangle.fill" }
-        if lowercased.contains("electricity") || lowercased.contains("electric") ||
-           lowercased.contains("power") || lowercased.contains("utility") { return "bolt.fill" }
-        if lowercased.contains("internet") || lowercased.contains("wifi") ||
-           lowercased.contains("broadband") { return "wifi" }
-        if lowercased.contains("phone") || lowercased.contains("mobile") ||
-           lowercased.contains("cellular") { return "phone.fill" }
-        if lowercased.contains("installment") || lowercased.contains("loan") ||
-           lowercased.contains("credit") || lowercased.contains("mortgage") { return "banknote" }
-        if lowercased.contains("insurance") { return "shield.fill" }
-        return "tag.fill"
-    }
 }
