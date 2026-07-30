@@ -30,7 +30,10 @@ struct DashboardView: View {
                         currentMonthCard(for: profile)
                         statsGrid(for: profile)
                         if !profile.expenses.isEmpty {
-                            expensesSection(for: profile)
+                            NavigationLink(destination: FixedExpensesView()) {
+                                expensesSection(for: profile)
+                            }
+                            .buttonStyle(.plain)
                         }
                     } else {
                         emptyState
@@ -248,12 +251,15 @@ private extension DashboardView {
 
     func statsGrid(for profile: UserProfile) -> some View {
         HStack(spacing: Spacing.gutter) {
-            statTile(
-                icon: "list.bullet.rectangle",
-                iconColor: Color(hex: "#5DCAA5"),
-                value: "\(profile.expenses.count)",
-                label: String(localized: "dashboard.expenses_label")
-            )
+            NavigationLink(destination: FixedExpensesView()) {
+                statTile(
+                    icon: "list.bullet.rectangle",
+                    iconColor: Color(hex: "#5DCAA5"),
+                    value: "\(profile.expenses.count)",
+                    label: String(localized: "dashboard.expenses_label")
+                )
+            }
+            .buttonStyle(.plain)
             statTile(
                 icon: "calendar",
                 iconColor: .white.opacity(Opacity.muted),
@@ -294,11 +300,17 @@ private extension DashboardView {
 
     private func expensesSection(for profile: UserProfile) -> some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
-            Text("dashboard.expenses_label")
-                .font(.labelCapsStyle)
-                .tracking(0.6)
-                .foregroundColor(.onSurfaceVariant)
-                .padding(.leading, 4)
+            HStack {
+                Text("dashboard.expenses_label")
+                    .font(.labelCapsStyle)
+                    .tracking(0.6)
+                    .foregroundColor(.onSurfaceVariant)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: IconSize.sm, weight: .medium))
+                    .foregroundColor(.onSurfaceVariant)
+            }
+            .padding(.leading, 4)
 
             VStack(spacing: Spacing.gutter) {
                 ForEach(profile.expenses.sorted { $0.createdAt < $1.createdAt }) { expense in
