@@ -125,7 +125,7 @@ struct GoalDetailView: View {
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
                 Spacer()
-                Text(verbatim: String(format: String(localized: "goals.remaining"), goal.remaining.serbianFormatted))
+                Text(verbatim: remainingText)
                     .font(.noteStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
@@ -169,8 +169,7 @@ struct GoalDetailView: View {
             Button {
                 Task { await vm.applyMonthly(to: goal, in: modelContext) }
             } label: {
-                Text(verbatim: String(format: String(localized: "goals.deposit_month_cta"),
-                                       goal.desiredMonthly.serbianFormatted))
+                Text(verbatim: depositMonthText)
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -204,6 +203,18 @@ struct GoalDetailView: View {
                 .padding(.vertical, Spacing.sm)
         }
         .buttonStyle(.plain)
+    }
+
+    /// e.g. "12.000 EUR left" — the currency follows the user's selection.
+    private var remainingText: String {
+        let amount = "\(goal.remaining.serbianFormatted) \(currencyCode)"
+        return String(format: String(localized: "goals.remaining"), amount)
+    }
+
+    /// e.g. "I saved this month (+5.000 EUR)".
+    private var depositMonthText: String {
+        let amount = "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)"
+        return String(format: String(localized: "goals.deposit_month_cta"), amount)
     }
 
     private var etaText: String {

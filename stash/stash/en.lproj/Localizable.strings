@@ -8,7 +8,6 @@
 "common.continue_btn"          = "Continue";
 "common.back_btn"              = "Back";
 "common.skip_btn"              = "Skip this step";
-"common.rsd"                   = "RSD";
 "common.add_btn"               = "Add";
 "common.cancel_btn"            = "Cancel";
 
@@ -141,14 +140,14 @@
 "goals.edit_title"           = "Edit goal";
 "goals.save_cta"             = "Save changes";
 "goals.saved_label"          = "Already saved (optional)";
-/* %@ = remaining amount */
-"goals.remaining"            = "%@ RSD left";
+/* %@ = remaining amount with currency, e.g. "12.000 EUR" */
+"goals.remaining"            = "%@ left";
 "goals.planned_monthly"      = "Planned monthly";
 /* %d = months left to reach the goal */
 "goals.eta"                  = "≈ %d months to goal";
 "goals.eta_done"             = "Goal reached 🎉";
 "goals.eta_set_monthly"      = "Set a monthly amount";
-/* %@ = the planned monthly amount */
+/* %@ = planned monthly amount with currency, e.g. "5.000 EUR" */
 "goals.deposit_month_cta"    = "I saved this month (+%@)";
 "goals.deposit_custom_cta"   = "Add a custom amount";
 "goals.delete_cta"           = "Delete goal";
