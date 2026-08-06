@@ -15,11 +15,9 @@ final class AddGoalVM {
     var name: String = ""
     var emoji: String = "🎯"
     var amountText: String = ""
-    var savedText: String = ""
     var priority: GoalPriority = .medium
     var hasDeadline: Bool = false
     var deadline: Date = .now
-    var monthlyText: String = ""
 
     private let sortOrder: Int
     private let editingGoal: SavingsGoal?
@@ -37,16 +35,14 @@ final class AddGoalVM {
         name = goal.name
         emoji = goal.emoji
         amountText = goal.targetAmount.serbianFormatted
-        savedText = goal.savedAmount > 0 ? goal.savedAmount.serbianFormatted : ""
         priority = goal.priority
         hasDeadline = goal.deadline != nil
         deadline = goal.deadline ?? .now
-        monthlyText = goal.desiredMonthly > 0 ? goal.desiredMonthly.serbianFormatted : ""
     }
 
     var isEditing: Bool { editingGoal != nil }
     var targetAmount: Double { amountText.parsedSerbianNumber }
-    var savedAmount: Double { min(savedText.parsedSerbianNumber, targetAmount) }
+
     /// Whole calendar months from this month until the deadline (at least 1).
     var monthsUntilDeadline: Int {
         let calendar = Calendar.current
@@ -56,15 +52,12 @@ final class AddGoalVM {
         return max(1, months)
     }
 
-    /// Monthly amount needed to reach the target by the deadline (price / months).
+    /// What this goal would need each month to land on the deadline — shown as
+    /// guidance while adding, since the actual monthly amount comes from the
+    /// shared goals budget.
     var deadlineMonthly: Double {
         guard hasDeadline, targetAmount > 0 else { return 0 }
         return (targetAmount / Double(monthsUntilDeadline)).rounded(.up)
-    }
-
-    /// With a deadline the monthly amount is derived; otherwise it's user-entered.
-    var desiredMonthly: Double {
-        hasDeadline ? deadlineMonthly : monthlyText.parsedSerbianNumber
     }
 
     var canSave: Bool {
@@ -90,19 +83,17 @@ final class AddGoalVM {
             goal.name = trimmedName
             goal.emoji = resolvedEmoji
             goal.targetAmount = targetAmount
-            goal.savedAmount = savedAmount
+            // Keep whatever has been saved so far, but never above the new target.
+            goal.savedAmount = min(goal.savedAmount, targetAmount)
             goal.priority = priority
             goal.deadline = hasDeadline ? deadline : nil
-            goal.desiredMonthly = desiredMonthly
         } else {
             context.insert(SavingsGoal(
                 name: trimmedName,
                 emoji: resolvedEmoji,
                 targetAmount: targetAmount,
-                savedAmount: savedAmount,
                 priority: priority,
                 deadline: hasDeadline ? deadline : nil,
-                desiredMonthly: desiredMonthly,
                 sortOrder: sortOrder
             ))
         }

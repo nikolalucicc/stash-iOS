@@ -34,6 +34,8 @@ final class UserProfile {
     var walkthroughCompleted: Bool = false
     /// "yyyy-MM" of the month the payday saving was last confirmed into the stash.
     var lastSavingConfirmedMonth: String = ""
+    /// "yyyy-MM" of the month the goals budget was last distributed across goals.
+    var lastGoalsDistributionMonth: String = ""
     var createdAt: Date
 
     @Relationship(deleteRule: .cascade, inverse: \FixedExpenseEntity.profile)
@@ -50,7 +52,8 @@ final class UserProfile {
         goalsMonthlyBudget: Double = 0,
         stashBalance: Double = 0,
         walkthroughCompleted: Bool = false,
-        lastSavingConfirmedMonth: String = ""
+        lastSavingConfirmedMonth: String = "",
+        lastGoalsDistributionMonth: String = ""
     ) {
         self.monthlySalary = monthlySalary
         self.payPeriodRaw = payPeriodRaw
@@ -63,6 +66,7 @@ final class UserProfile {
         self.stashBalance = stashBalance
         self.walkthroughCompleted = walkthroughCompleted
         self.lastSavingConfirmedMonth = lastSavingConfirmedMonth
+        self.lastGoalsDistributionMonth = lastGoalsDistributionMonth
         self.createdAt = .now
     }
 }

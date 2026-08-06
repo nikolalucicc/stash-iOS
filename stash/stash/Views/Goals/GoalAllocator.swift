@@ -2,9 +2,8 @@
 //  GoalAllocator.swift
 //  stash
 //
-//  Splits a monthly budget across goals: everyone gets their desired amount
-//  when it fits, otherwise the budget is shared proportionally to each goal's
-//  priority weight × desired amount.
+//  Splits the monthly goals budget across goals: higher priorities are funded
+//  first, and no goal gets more than it needs, so leftover budget flows down.
 //
 
 import Foundation
@@ -13,26 +12,47 @@ enum GoalAllocator {
 
     struct Item {
         let weight: Int
-        let desired: Double
+        /// What the goal wants this month (see `SavingsGoal.monthlyNeed`).
+        let need: Double
     }
 
     /// Monthly amount allocated to each item, in the same order as the input.
+    ///
+    /// Priorities are funded as tiers: the highest tier takes what it needs and
+    /// the rest passes down. When a tier can't be covered in full, its share is
+    /// split proportionally to each goal's need.
     static func allocate(budget: Double, items: [Item]) -> [Double] {
-        guard budget > 0, !items.isEmpty else { return items.map { _ in 0 } }
+        var allocations = [Double](repeating: 0, count: items.count)
+        guard budget > 0 else { return allocations }
 
-        let desired = items.map { max(0, $0.desired) }
-        let totalDesired = desired.reduce(0, +)
+        var available = budget
+        let tiers = Set(items.map(\.weight)).sorted(by: >)
 
-        // Everything fits — fund each goal fully.
-        if totalDesired <= budget {
-            return desired
+        for tier in tiers {
+            guard available > 0 else { break }
+            let indices = items.indices.filter { items[$0].weight == tier && items[$0].need > 0 }
+            let tierNeed = indices.reduce(0) { $0 + items[$1].need }
+            guard tierNeed > 0 else { continue }
+
+            if tierNeed <= available {
+                for index in indices { allocations[index] = items[index].need }
+                available -= tierNeed
+            } else {
+                for index in indices {
+                    allocations[index] = available * items[index].need / tierNeed
+                }
+                available = 0
+            }
         }
+        return allocations
+    }
 
-        // Over budget — share by priority weight × desired amount.
-        let weighted = zip(items, desired).map { Double($0.weight) * $1 }
-        let weightedSum = weighted.reduce(0, +)
-        guard weightedSum > 0 else { return items.map { _ in 0 } }
-        return weighted.map { budget * $0 / weightedSum }
+    /// Allocations for real goals, ordered the same as `goals`.
+    static func allocate(budget: Double, goals: [SavingsGoal], reference: Date = .now) -> [Double] {
+        allocate(
+            budget: budget,
+            items: goals.map { .init(weight: $0.priority.weight, need: $0.monthlyNeed(reference: reference)) }
+        )
     }
 
     /// Whole months needed to reach `remaining` at `monthly` (nil if `monthly <= 0`).

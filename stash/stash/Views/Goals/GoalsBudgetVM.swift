@@ -14,12 +14,18 @@ import SwiftData
 final class GoalsBudgetVM {
 
     var budgetText: String = ""
+    /// What the user actually sets aside each month, for the over-budget warning.
+    private(set) var monthlySaving: Double = 0
 
     var budget: Double { budgetText.parsedSerbianNumber }
+
+    /// `true` when the goals budget promises more than the monthly saving covers.
+    var exceedsMonthlySaving: Bool { monthlySaving > 0 && budget > monthlySaving }
 
     func load(from context: ModelContext) async {
         guard let profile = UserProfile.existing(in: context) else { return }
         budgetText = profile.goalsMonthlyBudget.serbianFormatted
+        monthlySaving = profile.monthlySaving
     }
 
     func save(to context: ModelContext) async {
@@ -30,10 +36,7 @@ final class GoalsBudgetVM {
 
     /// Monthly amount allocated to each goal, in the same order as `goals`.
     func allocations(for goals: [SavingsGoal]) -> [Double] {
-        GoalAllocator.allocate(
-            budget: budget,
-            items: goals.map { .init(weight: $0.priority.weight, desired: $0.desiredMonthly) }
-        )
+        GoalAllocator.allocate(budget: budget, goals: goals)
     }
 
     /// Budget left after every goal is funded (0 when over budget).

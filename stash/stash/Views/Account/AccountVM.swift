@@ -51,7 +51,6 @@ final class AccountVM {
         for goal in goals {
             goal.targetAmount *= rate
             goal.savedAmount *= rate
-            goal.desiredMonthly *= rate
         }
     }
 

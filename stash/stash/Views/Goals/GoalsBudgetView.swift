@@ -84,6 +84,13 @@ struct GoalsBudgetView: View {
             Text("goals.budget_info")
                 .font(.noteStyle)
                 .foregroundColor(.onSurfaceVariant)
+            if vm.exceedsMonthlySaving {
+                Text(verbatim: String(format: String(localized: "goals.budget_over_saving"),
+                                      "\(vm.monthlySaving.serbianFormatted) \(currencyCode)"))
+                    .font(.noteStyle)
+                    .foregroundColor(.appError)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.md)

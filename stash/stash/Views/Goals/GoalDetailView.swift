@@ -15,6 +15,7 @@ struct GoalDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
+    @Query(sort: \SavingsGoal.sortOrder) private var goals: [SavingsGoal]
     @State private var vm = GoalDetailVM()
     @State private var showEdit = false
     @State private var showDeleteConfirm = false
@@ -52,7 +53,10 @@ struct GoalDetailView: View {
         .alert("goals.delete_confirm_title", isPresented: $showDeleteConfirm) {
             Button("common.cancel_btn", role: .cancel) {}
             Button("goals.delete_cta", role: .destructive) {
-                Task { await vm.delete(goal, in: modelContext); dismiss() }
+                // Leave the screen first: rendering this view against a deleted
+                // model is what makes SwiftData blow up.
+                dismiss()
+                Task { await vm.delete(goal, in: modelContext) }
             }
         } message: {
             Text("goals.delete_confirm_message")
@@ -146,7 +150,7 @@ struct GoalDetailView: View {
                     .font(.labelCapsStyle)
                     .tracking(0.6)
                     .foregroundColor(.onSurfaceVariant)
-                Text(verbatim: "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)")
+                Text(verbatim: "\(allocatedMonthly.serbianFormatted) \(currencyCode)")
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
             }
@@ -167,7 +171,7 @@ struct GoalDetailView: View {
     private var actions: some View {
         VStack(spacing: Spacing.sm) {
             Button {
-                Task { await vm.applyMonthly(to: goal, in: modelContext) }
+                Task { await vm.deposit(allocatedMonthly, to: goal, in: modelContext) }
             } label: {
                 Text(verbatim: depositMonthText)
                     .font(.navTitleStyle)
@@ -205,6 +209,17 @@ struct GoalDetailView: View {
         .buttonStyle(.plain)
     }
 
+    /// This goal's share of the monthly goals budget.
+    private var allocatedMonthly: Double {
+        let ordered = goals.sortedByPriority
+        let amounts = GoalAllocator.allocate(
+            budget: profiles.first?.goalsMonthlyBudget ?? 0,
+            goals: ordered
+        )
+        guard let index = ordered.firstIndex(where: { $0 === goal }) else { return 0 }
+        return amounts[index]
+    }
+
     /// e.g. "12.000 EUR left" — the currency follows the user's selection.
     private var remainingText: String {
         let amount = "\(goal.remaining.serbianFormatted) \(currencyCode)"
@@ -213,7 +228,7 @@ struct GoalDetailView: View {
 
     /// e.g. "I saved this month (+5.000 EUR)".
     private var depositMonthText: String {
-        let amount = "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)"
+        let amount = "\(allocatedMonthly.serbianFormatted) \(currencyCode)"
         return String(format: String(localized: "goals.deposit_month_cta"), amount)
     }
 
@@ -221,7 +236,7 @@ struct GoalDetailView: View {
         if goal.remaining <= 0 {
             return String(localized: "goals.eta_done")
         }
-        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: goal.desiredMonthly) else {
+        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: allocatedMonthly) else {
             return String(localized: "goals.eta_set_monthly")
         }
         return String(format: String(localized: "goals.eta"), months)

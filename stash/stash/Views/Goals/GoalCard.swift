@@ -10,11 +10,14 @@ import SwiftUI
 struct GoalCard: View {
     let goal: SavingsGoal
     var currencyCode: String = Currency.rsd.code
+    /// This goal's share of the monthly budget.
+    var monthlyAmount: Double = 0
 
     var body: some View {
         VStack(spacing: Spacing.md) {
             header
             progress
+            monthlyRow
         }
         .padding(Spacing.lg)
         .background(Color.white.opacity(Opacity.surfaceSubtle))
@@ -23,6 +26,36 @@ struct GoalCard: View {
             RoundedRectangle(cornerRadius: Radius.xl)
                 .stroke(Color.white.opacity(Opacity.fill), lineWidth: Line.hairline)
         )
+    }
+
+    /// Monthly share, plus a warning when it won't hit the deadline in time.
+    @ViewBuilder
+    private var monthlyRow: some View {
+        if goal.remaining > 0 {
+            HStack(spacing: Spacing.xs) {
+                Text("goals.per_month_label")
+                    .font(.noteStyle)
+                    .foregroundColor(.onSurfaceVariant)
+                Text(verbatim: "\(monthlyAmount.serbianFormatted) \(currencyCode)")
+                    .font(.noteStyle)
+                    .foregroundColor(.appPrimary)
+                Spacer()
+                if underfunded {
+                    HStack(spacing: 2) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: IconSize.xs))
+                        Text("goals.deadline_at_risk")
+                            .font(.noteStyle)
+                    }
+                    .foregroundColor(.appError)
+                }
+            }
+        }
+    }
+
+    /// A deadline goal getting less than it needs won't make it in time.
+    private var underfunded: Bool {
+        goal.deadline != nil && monthlyAmount < goal.monthlyNeed()
     }
 
     private var header: some View {

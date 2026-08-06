@@ -127,7 +127,7 @@
 "goals.contribution_label"  = "Monthly contribution";
 /* %d = number of months until the deadline */
 "goals.months_count"        = "%d months";
-"goals.deadline_auto_note"  = "Calculated from your deadline to reach the goal in time.";
+"goals.deadline_need_note"  = "What you'd need each month to make this deadline. The actual amount comes from your goals budget.";
 "goals.add_cta"             = "Add to list";
 
 /* %@ = amount left in the stash after buying, e.g. "12.000 RSD" */
@@ -166,6 +166,15 @@
 "goals.budget_empty"        = "Add goals to see how the budget splits.";
 "goals.unallocated"         = "Unallocated";
 "goals.budget_save_cta"     = "Save settings";
+/* %@ = the monthly saving amount, e.g. "15.000 EUR" */
+"goals.budget_over_saving"  = "That's more than the %@ you set aside each month.";
+
+// MARK: - Goals · monthly distribution
+
+"goals.per_month_label"     = "This month";
+"goals.distribute_cta"      = "Distribute this month";
+"goals.distributed_done"    = "Distributed for this month";
+"goals.deadline_at_risk"    = "Behind deadline";
 
 
 // MARK: - Goals · summary

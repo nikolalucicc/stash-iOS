@@ -28,11 +28,16 @@ final class GoalsVMTests: XCTestCase {
 
     // MARK: - AddGoalVM
 
-    func testInitialSavedAmountCapsAtTarget() {
-        let vm = AddGoalVM(sortOrder: 0)
-        vm.amountText = "10.000"
-        vm.savedText = "15.000"
-        XCTAssertEqual(vm.savedAmount, 10_000)
+    func testEditingKeepsSavedAmountButNeverAboveTheNewTarget() async {
+        let goal = SavingsGoal(name: "Laptop", targetAmount: 100_000, savedAmount: 40_000)
+        context.insert(goal)
+        let vm = AddGoalVM(editing: goal)
+        vm.amountText = "30.000"
+
+        await vm.save(to: context)
+
+        XCTAssertEqual(goal.targetAmount, 30_000)
+        XCTAssertEqual(goal.savedAmount, 30_000, "Saved is clamped to the smaller target")
     }
 
     func testCannotSaveWithoutNameOrAmount() {
@@ -43,16 +48,15 @@ final class GoalsVMTests: XCTestCase {
         XCTAssertTrue(vm.canSave)
     }
 
-    func testCreateInsertsGoalWithInitialSaved() async {
+    func testCreateInsertsGoalStartingFromZero() async {
         let vm = AddGoalVM(sortOrder: 0)
         vm.name = "Laptop"
         vm.amountText = "100.000"
-        vm.savedText = "20.000"
         await vm.save(to: context)
 
         let goals = (try? context.fetch(FetchDescriptor<SavingsGoal>())) ?? []
         XCTAssertEqual(goals.count, 1)
-        XCTAssertEqual(goals.first?.savedAmount, 20_000)
+        XCTAssertEqual(goals.first?.savedAmount, 0)
     }
 
     func testEditUpdatesExistingGoal() async {
@@ -70,11 +74,11 @@ final class GoalsVMTests: XCTestCase {
 
     // MARK: - GoalDetailVM
 
-    func testApplyMonthlyAddsPlannedAmount() async {
-        let goal = SavingsGoal(name: "Trip", targetAmount: 100_000, desiredMonthly: 5_000)
+    func testDepositAddsTheAllocatedAmount() async {
+        let goal = SavingsGoal(name: "Trip", targetAmount: 100_000)
         context.insert(goal)
         let vm = GoalDetailVM()
-        await vm.applyMonthly(to: goal, in: context)
+        await vm.deposit(5_000, to: goal, in: context)
         XCTAssertEqual(goal.savedAmount, 5_000)
     }
 
@@ -108,12 +112,23 @@ final class GoalsVMTests: XCTestCase {
 
     // MARK: - GoalsBudgetVM
 
-    func testBudgetAllocationsWithinBudget() {
+    func testBudgetGoesToTheHighestPriorityFirst() {
         let vm = GoalsBudgetVM()
         vm.budgetText = "20.000"
-        let first = SavingsGoal(name: "A", targetAmount: 100_000, priority: .high, desiredMonthly: 5_000)
-        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low, desiredMonthly: 4_000)
-        XCTAssertEqual(vm.allocations(for: [first, second]), [5_000, 4_000])
+        // Neither has a deadline, so both want everything that's left — the
+        // high-priority goal takes the whole budget.
+        let first = SavingsGoal(name: "A", targetAmount: 100_000, priority: .high)
+        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low)
+        XCTAssertEqual(vm.allocations(for: [first, second]), [20_000, 0])
+    }
+
+    func testBudgetFlowsDownOnceHigherPrioritiesAreCovered() {
+        let vm = GoalsBudgetVM()
+        vm.budgetText = "20.000"
+        // A only needs 5.000 to finish, so 15.000 is left for B.
+        let first = SavingsGoal(name: "A", targetAmount: 100_000, savedAmount: 95_000, priority: .high)
+        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low)
+        XCTAssertEqual(vm.allocations(for: [first, second]), [5_000, 15_000])
     }
 
     func testBudgetSaveLoadRoundTrip() async {

@@ -42,7 +42,7 @@ struct AddGoalView: View {
                         }
                         prioritySelector
                         deadlineField
-                        contributionField
+                        deadlineNeedNote
                     }
                     .padding(.horizontal, Spacing.containerPadding)
                     .padding(.top, Spacing.lg)
@@ -222,71 +222,35 @@ struct AddGoalView: View {
         .padding(.horizontal, 4)
     }
 
+    /// Guidance only — the actual monthly amount comes from the goals budget.
     @ViewBuilder
-    private var contributionField: some View {
-        if vm.hasDeadline {
-            deadlineMonthlyField
-        } else {
-            manualContributionField
-        }
-    }
-
-    private var manualContributionField: some View {
-        let bindable = Bindable(vm)
-        return VStack(alignment: .leading, spacing: Spacing.xs) {
-            fieldLabel("goals.contribution_label")
-            HStack {
-                TextField("0", text: bindable.monthlyText)
-                    .font(.inputValStyle)
-                    .foregroundColor(.onSurface)
-                    .keyboardType(.numberPad)
-                    .thousandsGrouped(bindable.monthlyText)
-                Text(verbatim: currencyCode)
-                    .font(.labelCapsStyle)
-                    .foregroundColor(.appPrimary)
-            }
-            .frame(height: Size.field)
-            .padding(.horizontal, Spacing.md)
-            .background(Color.white.opacity(Opacity.surfaceLow))
-            .cornerRadius(Radius.xl)
-            .overlay(
-                RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(Opacity.borderStrong), lineWidth: Line.hairline)
-            )
-        }
-    }
-
-    private var deadlineMonthsNote: String {
-        String(format: String(localized: "goals.months_count"), vm.monthsUntilDeadline)
-    }
-
-    private var deadlineMonthlyField: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
-            fieldLabel("goals.contribution_label")
-            HStack(alignment: .lastTextBaseline) {
-                Text(verbatim: vm.deadlineMonthly.serbianFormatted)
-                    .font(.inputValStyle)
-                    .foregroundColor(.appPrimary)
-                Text(verbatim: currencyCode)
-                    .font(.labelCapsStyle)
-                    .foregroundColor(.appPrimary)
-                Spacer()
-                Text(verbatim: deadlineMonthsNote)
+    private var deadlineNeedNote: some View {
+        if vm.hasDeadline && vm.deadlineMonthly > 0 {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                HStack(alignment: .lastTextBaseline) {
+                    Text(verbatim: "\(vm.deadlineMonthly.serbianFormatted) \(currencyCode)")
+                        .font(.inputValStyle)
+                        .foregroundColor(.appPrimary)
+                    Spacer()
+                    Text(verbatim: String(format: String(localized: "goals.months_count"),
+                                          vm.monthsUntilDeadline))
+                        .font(.noteStyle)
+                        .foregroundColor(.onSurfaceVariant)
+                }
+                .frame(height: Size.field)
+                .padding(.horizontal, Spacing.md)
+                .background(Color.appPrimary.opacity(Opacity.tintSubtle))
+                .cornerRadius(Radius.xl)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.xl)
+                        .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
+                )
+                Text("goals.deadline_need_note")
                     .font(.noteStyle)
                     .foregroundColor(.onSurfaceVariant)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.leading, 4)
             }
-            .frame(height: Size.field)
-            .padding(.horizontal, Spacing.md)
-            .background(Color.appPrimary.opacity(Opacity.tintSubtle))
-            .cornerRadius(Radius.xl)
-            .overlay(
-                RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
-            )
-            Text("goals.deadline_auto_note")
-                .font(.noteStyle)
-                .foregroundColor(.onSurfaceVariant)
-                .padding(.leading, 4)
         }
     }
 

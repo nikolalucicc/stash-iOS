@@ -57,7 +57,6 @@ final class AddGoalVMTests: XCTestCase {
 
         XCTAssertEqual(vm.monthsUntilDeadline, 13)
         XCTAssertEqual(vm.deadlineMonthly, 1_000)
-        XCTAssertEqual(vm.desiredMonthly, 1_000)
     }
 
     func testDeadlineMonthlyRoundsUp() {
@@ -70,12 +69,11 @@ final class AddGoalVMTests: XCTestCase {
         XCTAssertEqual(vm.deadlineMonthly, 3_334)
     }
 
-    func testWithoutDeadlineUsesManualMonthly() {
+    func testNoDeadlineMeansNoDeadlineGuidance() {
         let vm = AddGoalVM(sortOrder: 0)
         vm.amountText = "13000"
         vm.hasDeadline = false
-        vm.monthlyText = "500"
 
-        XCTAssertEqual(vm.desiredMonthly, 500)
+        XCTAssertEqual(vm.deadlineMonthly, 0)
     }
 }
