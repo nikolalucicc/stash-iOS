@@ -74,21 +74,39 @@ final class GoalsVMTests: XCTestCase {
 
     // MARK: - GoalDetailVM
 
-    func testDepositAddsTheAllocatedAmount() async {
+    func testDepositMovesMoneyOutOfTheStash() async {
+        let profile = UserProfile.current(in: context)
+        profile.stashBalance = 20_000
         let goal = SavingsGoal(name: "Trip", targetAmount: 100_000)
         context.insert(goal)
-        let vm = GoalDetailVM()
-        await vm.deposit(5_000, to: goal, in: context)
+
+        await GoalDetailVM().deposit(5_000, to: goal, in: context)
+
         XCTAssertEqual(goal.savedAmount, 5_000)
+        XCTAssertEqual(profile.stashBalance, 15_000)
+    }
+
+    func testDepositIsCappedByTheStash() async {
+        let profile = UserProfile.current(in: context)
+        profile.stashBalance = 2_000
+        let goal = SavingsGoal(name: "Trip", targetAmount: 100_000)
+        context.insert(goal)
+
+        await GoalDetailVM().deposit(5_000, to: goal, in: context)
+
+        XCTAssertEqual(goal.savedAmount, 2_000, "You can't put in more than you have")
+        XCTAssertEqual(profile.stashBalance, 0)
     }
 
     func testDepositCapsAtTarget() async {
+        UserProfile.current(in: context).stashBalance = 20_000
         let goal = SavingsGoal(name: "Phone", targetAmount: 10_000, savedAmount: 9_000)
         context.insert(goal)
         let vm = GoalDetailVM()
         vm.depositText = "5.000"
         await vm.applyCustomDeposit(to: goal, in: context)
         XCTAssertEqual(goal.savedAmount, 10_000)
+        XCTAssertEqual(UserProfile.existing(in: context)?.stashBalance, 19_000, "Only 1.000 was needed")
     }
 
     func testDeleteRemovesGoal() async {
@@ -110,33 +128,7 @@ final class GoalsVMTests: XCTestCase {
         XCTAssertEqual(sorted.map(\.name), ["High", "Medium", "Low"])
     }
 
-    // MARK: - GoalsBudgetVM
 
-    func testBudgetGoesToTheHighestPriorityFirst() {
-        let vm = GoalsBudgetVM()
-        vm.budgetText = "20.000"
-        // Neither has a deadline, so both want everything that's left — the
-        // high-priority goal takes the whole budget.
-        let first = SavingsGoal(name: "A", targetAmount: 100_000, priority: .high)
-        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low)
-        XCTAssertEqual(vm.allocations(for: [first, second]), [20_000, 0])
-    }
 
-    func testBudgetFlowsDownOnceHigherPrioritiesAreCovered() {
-        let vm = GoalsBudgetVM()
-        vm.budgetText = "20.000"
-        // A only needs 5.000 to finish, so 15.000 is left for B.
-        let first = SavingsGoal(name: "A", targetAmount: 100_000, savedAmount: 95_000, priority: .high)
-        let second = SavingsGoal(name: "B", targetAmount: 100_000, priority: .low)
-        XCTAssertEqual(vm.allocations(for: [first, second]), [5_000, 15_000])
-    }
 
-    func testBudgetSaveLoadRoundTrip() async {
-        let vm = GoalsBudgetVM()
-        vm.budgetText = "30.000"
-        await vm.save(to: context)
-        let reloaded = GoalsBudgetVM()
-        await reloaded.load(from: context)
-        XCTAssertEqual(reloaded.budget, 30_000)
-    }
 }

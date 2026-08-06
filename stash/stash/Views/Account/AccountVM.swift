@@ -42,7 +42,6 @@ final class AccountVM {
         let profile = UserProfile.current(in: context)
         profile.monthlySalary *= rate
         profile.savingFixedAmount *= rate
-        profile.goalsMonthlyBudget *= rate
         profile.stashBalance *= rate
         for expense in profile.expenses {
             expense.amount *= rate

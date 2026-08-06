@@ -15,9 +15,9 @@ struct WishlistView: View {
     @Query private var profiles: [UserProfile]
     @State private var vm = WishlistVM()
     @State private var showAddGoal = false
-    @State private var showBudget = false
 
-    private var monthlyBudget: Double { profiles.first?.goalsMonthlyBudget ?? 0 }
+    /// Goals are funded from the stash, so that's what there is to share out.
+    private var availableToShare: Double { profiles.first?.stashBalance ?? 0 }
     private var currencyCode: String { (profiles.first?.currency ?? .rsd).code }
 
     var body: some View {
@@ -46,12 +46,6 @@ struct WishlistView: View {
             AddGoalView(nextSortOrder: goals.count)
                 .presentationBackground(Color.surfaceContainerLow)
         }
-        .sheet(isPresented: $showBudget) {
-            GoalsBudgetView()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationBackground(Color.surfaceContainerLow)
-        }
     }
 
     private var header: some View {
@@ -66,7 +60,7 @@ struct WishlistView: View {
     }
 
     private var summary: VaultSummary {
-        VaultSummary(goals: goals, budget: monthlyBudget)
+        VaultSummary(goals: goals, available: availableToShare)
     }
 
     private var summaryCard: some View {
@@ -105,7 +99,7 @@ struct WishlistView: View {
             Rectangle()
                 .fill(Color.white.opacity(Opacity.fill))
                 .frame(height: 0.5)
-            budgetRow
+            availableRow
             distributeRow
         }
         .padding(Spacing.lg)
@@ -117,25 +111,21 @@ struct WishlistView: View {
         )
     }
 
-    private var budgetRow: some View {
-        Button { showBudget = true } label: {
-            HStack(spacing: Spacing.sm) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("goals.summary_budget_label")
-                        .font(.labelSmStyle)
-                        .foregroundColor(.onSurfaceVariant)
-                    Text(verbatim: "\(monthlyBudget.serbianFormatted) \(currencyCode)")
-                        .font(.secondaryStyle)
-                        .foregroundColor(.onSurface)
-                }
-                Spacer()
-                Image(systemName: "slider.horizontal.3")
-                    .font(.system(size: IconSize.md))
-                    .foregroundColor(.appPrimary)
+    private var availableRow: some View {
+        HStack(spacing: Spacing.sm) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("goals.available_label")
+                    .font(.labelSmStyle)
+                    .foregroundColor(.onSurfaceVariant)
+                Text(verbatim: "\(availableToShare.serbianFormatted) \(currencyCode)")
+                    .font(.secondaryStyle)
+                    .foregroundColor(.onSurface)
             }
-            .contentShape(Rectangle())
+            Spacer()
+            Image(systemName: "tray.and.arrow.down.fill")
+                .font(.system(size: IconSize.md))
+                .foregroundColor(.appPrimary)
         }
-        .buttonStyle(.plain)
     }
 
     /// Pays out the budget for the month, or says it's already done.
@@ -177,7 +167,7 @@ struct WishlistView: View {
     /// go out of step (indexing a parallel array crashes while a goal is deleted).
     private var fundedGoals: [(goal: SavingsGoal, monthly: Double)] {
         let ordered = orderedGoals
-        return zip(ordered, vm.allocations(for: ordered, budget: monthlyBudget))
+        return zip(ordered, vm.allocations(for: ordered, available: availableToShare))
             .map { (goal: $0, monthly: $1) }
     }
 

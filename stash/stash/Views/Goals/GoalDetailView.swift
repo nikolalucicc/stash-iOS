@@ -209,11 +209,11 @@ struct GoalDetailView: View {
         .buttonStyle(.plain)
     }
 
-    /// This goal's share of the monthly goals budget.
+    /// This goal's share of what's currently in the stash.
     private var allocatedMonthly: Double {
         let ordered = goals.sortedByPriority
         let amounts = GoalAllocator.allocate(
-            budget: profiles.first?.goalsMonthlyBudget ?? 0,
+            budget: profiles.first?.stashBalance ?? 0,
             goals: ordered
         )
         guard let index = ordered.firstIndex(where: { $0 === goal }) else { return 0 }

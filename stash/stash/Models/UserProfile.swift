@@ -25,9 +25,6 @@ final class UserProfile {
     var savingFixedAmount: Double = 0
     var currencyRaw: String = Currency.rsd.rawValue
     var onboardingCompleted: Bool = false
-    /// Max total the user is willing to put toward wishlist goals each month.
-    /// Starts at 0 — the user sets it from the goals budget sheet.
-    var goalsMonthlyBudget: Double = 0
     /// Accumulated general savings the user has set aside (not tied to goals).
     var stashBalance: Double = 0
     /// Whether the first-run feature tour has been shown.
@@ -49,7 +46,6 @@ final class UserProfile {
         savingFixedAmount: Double = 0,
         currencyRaw: String = Currency.rsd.rawValue,
         onboardingCompleted: Bool = false,
-        goalsMonthlyBudget: Double = 0,
         stashBalance: Double = 0,
         walkthroughCompleted: Bool = false,
         lastSavingConfirmedMonth: String = "",
@@ -62,7 +58,6 @@ final class UserProfile {
         self.savingFixedAmount = savingFixedAmount
         self.currencyRaw = currencyRaw
         self.onboardingCompleted = onboardingCompleted
-        self.goalsMonthlyBudget = goalsMonthlyBudget
         self.stashBalance = stashBalance
         self.walkthroughCompleted = walkthroughCompleted
         self.lastSavingConfirmedMonth = lastSavingConfirmedMonth
@@ -108,6 +103,14 @@ extension UserProfile {
     /// Money left to spend each month after saving and fixed expenses.
     var freeMoney: Double {
         max(0, monthlySalary - monthlySaving - fixedExpensesTotal)
+    }
+
+    /// Moves up to `amount` out of the stash, returning what was actually taken.
+    /// Goals are funded from the stash, so nothing can be spent twice.
+    func takeFromStash(_ amount: Double) -> Double {
+        let taken = min(max(0, amount), stashBalance)
+        stashBalance -= taken
+        return taken
     }
 
     /// Adds this month's planned saving to the stash balance.

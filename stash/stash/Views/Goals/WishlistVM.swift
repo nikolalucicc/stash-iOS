@@ -2,8 +2,8 @@
 //  WishlistVM.swift
 //  stash
 //
-//  Backs the Goals tab: splits the monthly budget across goals and pays it out
-//  in one go, once per month.
+//  Backs the Goals tab: splits what's in the stash across goals and moves it
+//  over in one go, once per month.
 //
 
 import Foundation
@@ -13,32 +13,33 @@ import SwiftData
 @MainActor
 final class WishlistVM {
 
-    /// Monthly amount each goal gets from the budget, ordered like `goals`.
-    func allocations(for goals: [SavingsGoal], budget: Double) -> [Double] {
-        GoalAllocator.allocate(budget: budget, goals: goals)
+    /// Amount each goal would get from `available`, ordered like `goals`.
+    func allocations(for goals: [SavingsGoal], available: Double) -> [Double] {
+        GoalAllocator.allocate(budget: available, goals: goals)
     }
 
-    /// Whether this month's budget has already been paid into the goals.
+    /// Whether the stash has already been shared out this month.
     func isDistributed(_ profile: UserProfile?, reference: Date = .now) -> Bool {
         guard let profile else { return false }
         return profile.lastGoalsDistributionMonth == UserProfile.monthKey(reference)
     }
 
-    /// Whether there is anything to distribute (a budget and a goal that needs it).
+    /// Whether there is money in the stash and a goal that still needs it.
     func canDistribute(_ profile: UserProfile?, goals: [SavingsGoal]) -> Bool {
-        guard let profile, profile.goalsMonthlyBudget > 0, !isDistributed(profile) else { return false }
+        guard let profile, profile.stashBalance > 0, !isDistributed(profile) else { return false }
         return goals.contains { $0.remaining > 0 }
     }
 
-    /// Pays each goal its allocated share and stamps the month so it only
-    /// happens once per month.
+    /// Moves each goal's share out of the stash and into the goal, then stamps
+    /// the month so it only happens once per month.
     func distribute(to goals: [SavingsGoal], in context: ModelContext, reference: Date = .now) async {
         let profile = UserProfile.current(in: context)
         guard canDistribute(profile, goals: goals) else { return }
 
-        for (goal, amount) in zip(goals, allocations(for: goals, budget: profile.goalsMonthlyBudget))
-        where amount > 0 {
-            goal.savedAmount = min(goal.savedAmount + amount, goal.targetAmount)
+        for (goal, share) in zip(goals, allocations(for: goals, available: profile.stashBalance))
+        where share > 0 {
+            let moved = profile.takeFromStash(min(share, goal.remaining))
+            goal.savedAmount += moved
         }
         profile.lastGoalsDistributionMonth = UserProfile.monthKey(reference)
         try? context.save()

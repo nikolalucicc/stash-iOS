@@ -2,7 +2,7 @@
 //  WishlistVMTests.swift
 //  stashTests
 //
-//  Unit tests for the goal monthly need and the monthly budget distribution.
+//  Unit tests for the goal monthly need and moving the stash into goals.
 //
 
 import XCTest
@@ -60,7 +60,7 @@ final class WishlistVMTests: XCTestCase {
 
     func testDistributePaysEachGoalItsShare() async {
         let profile = UserProfile.current(in: context)
-        profile.goalsMonthlyBudget = 8_000
+        profile.stashBalance = 8_000
         let high = SavingsGoal(name: "A", targetAmount: 50_000, priority: .high, deadline: months(10))
         let low = SavingsGoal(name: "B", targetAmount: 50_000, priority: .low)
         context.insert(high)
@@ -70,22 +70,24 @@ final class WishlistVMTests: XCTestCase {
 
         XCTAssertEqual(high.savedAmount, 5_000, "High priority takes its 50.000/10 first")
         XCTAssertEqual(low.savedAmount, 3_000, "The rest flows to the lower priority")
+        XCTAssertEqual(profile.stashBalance, 0, "The money came out of the stash")
     }
 
     func testDistributeNeverOverfillsAGoal() async {
         let profile = UserProfile.current(in: context)
-        profile.goalsMonthlyBudget = 10_000
+        profile.stashBalance = 10_000
         let goal = SavingsGoal(name: "A", targetAmount: 5_000, savedAmount: 4_000)
         context.insert(goal)
 
         await WishlistVM().distribute(to: [goal], in: context)
 
         XCTAssertEqual(goal.savedAmount, 5_000)
+        XCTAssertEqual(profile.stashBalance, 9_000, "Only what the goal needed left the stash")
     }
 
     func testDistributeOnlyRunsOncePerMonth() async {
         let profile = UserProfile.current(in: context)
-        profile.goalsMonthlyBudget = 3_000
+        profile.stashBalance = 3_000
         let goal = SavingsGoal(name: "A", targetAmount: 50_000)
         context.insert(goal)
         let vm = WishlistVM()
@@ -97,9 +99,9 @@ final class WishlistVMTests: XCTestCase {
         XCTAssertTrue(vm.isDistributed(profile))
     }
 
-    func testCannotDistributeWithoutABudget() async {
+    func testCannotDistributeWithAnEmptyStash() async {
         let profile = UserProfile.current(in: context)
-        profile.goalsMonthlyBudget = 0
+        profile.stashBalance = 0
         let goal = SavingsGoal(name: "A", targetAmount: 50_000)
         context.insert(goal)
 
@@ -110,7 +112,7 @@ final class WishlistVMTests: XCTestCase {
 
     func testCannotDistributeWhenEveryGoalIsDone() {
         let profile = UserProfile.current(in: context)
-        profile.goalsMonthlyBudget = 5_000
+        profile.stashBalance = 5_000
         let goal = SavingsGoal(name: "A", targetAmount: 5_000, savedAmount: 5_000)
         context.insert(goal)
 

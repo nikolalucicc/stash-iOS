@@ -14,10 +14,10 @@ struct VaultSummary {
     let goalCount: Int
     let completedCount: Int
 
-    init(goals: [SavingsGoal], budget: Double) {
+    init(goals: [SavingsGoal], available: Double) {
         totalSaved = goals.reduce(0) { $0 + $1.savedAmount }
         totalTarget = goals.reduce(0) { $0 + $1.targetAmount }
-        let allocations = GoalAllocator.allocate(budget: budget, goals: goals)
+        let allocations = GoalAllocator.allocate(budget: available, goals: goals)
         monthlyAllocated = allocations.reduce(0, +)
         goalCount = goals.count
         completedCount = goals.filter { $0.targetAmount > 0 && $0.remaining <= 0 }.count
