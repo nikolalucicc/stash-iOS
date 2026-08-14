@@ -46,7 +46,8 @@ struct GoalDetailView: View {
                 .presentationBackground(Color.surfaceContainerLow)
         }
         .sheet(isPresented: Bindable(vm).showDepositSheet) {
-            DepositSheet(vm: vm, goal: goal, currencyCode: currencyCode)
+            DepositSheet(vm: vm, goal: goal, currencyCode: currencyCode,
+                         availableInStash: profiles.first?.stashBalance ?? 0)
                 .presentationDetents([.height(280)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
@@ -183,6 +184,8 @@ struct GoalDetailView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(allocatedMonthly <= 0)
+            .opacity(allocatedMonthly > 0 ? 1 : Opacity.muted)
 
             Button { vm.showDepositSheet = true } label: {
                 Text("goals.deposit_custom_cta")
@@ -249,13 +252,22 @@ private struct DepositSheet: View {
     @Bindable var vm: GoalDetailVM
     let goal: SavingsGoal
     let currencyCode: String
+    let availableInStash: Double
     @Environment(\.modelContext) private var modelContext
+
+    private var canDeposit: Bool { availableInStash > 0 && vm.depositText.parsedSerbianNumber > 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
-            Text("goals.deposit_title")
-                .font(.sectionHeaderStyle)
-                .foregroundColor(.onSurface)
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                Text("goals.deposit_title")
+                    .font(.sectionHeaderStyle)
+                    .foregroundColor(.onSurface)
+                Text(verbatim: String(format: String(localized: "goals.deposit_available"),
+                                      "\(availableInStash.serbianFormatted) \(currencyCode)"))
+                    .font(.noteStyle)
+                    .foregroundColor(availableInStash > 0 ? .onSurfaceVariant : .appError)
+            }
             HStack {
                 TextField("0", text: $vm.depositText)
                     .font(.inputValStyle)
@@ -284,6 +296,8 @@ private struct DepositSheet: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(!canDeposit)
+            .opacity(canDeposit ? 1 : Opacity.muted)
             Spacer()
         }
         .padding(Spacing.containerPadding)

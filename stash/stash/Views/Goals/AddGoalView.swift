@@ -172,6 +172,11 @@ struct AddGoalView: View {
         )
     }
 
+    /// Deadlines start next month, so there's always at least one month to save.
+    private var earliestDeadline: Date {
+        Calendar.current.date(byAdding: .month, value: 1, to: .now) ?? .now
+    }
+
     private var prioritySelector: some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
             fieldLabel("goals.priority_label")
@@ -213,7 +218,10 @@ struct AddGoalView: View {
             }
             .tint(.accent)
             if vm.hasDeadline {
-                DatePicker("", selection: bindable.deadline, displayedComponents: .date)
+                // Next month onwards — a deadline of today would demand the
+                // whole amount at once.
+                DatePicker("", selection: bindable.deadline, in: earliestDeadline...,
+                           displayedComponents: .date)
                     .labelsHidden()
                     .datePickerStyle(.compact)
                     .tint(.appPrimary)
