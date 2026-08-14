@@ -38,6 +38,8 @@ final class SavingsGoal {
     var savedAmount: Double
     var priorityRaw: String
     var deadline: Date?
+    /// Monthly amount the user picked for a goal without a deadline (0 = unset).
+    var customMonthly: Double = 0
     var sortOrder: Int
     var createdAt: Date
 
@@ -48,6 +50,7 @@ final class SavingsGoal {
         savedAmount: Double = 0,
         priority: GoalPriority = .medium,
         deadline: Date? = nil,
+        customMonthly: Double = 0,
         sortOrder: Int = 0
     ) {
         self.name = name
@@ -56,6 +59,7 @@ final class SavingsGoal {
         self.savedAmount = savedAmount
         self.priorityRaw = priority.rawValue
         self.deadline = deadline
+        self.customMonthly = customMonthly
         self.sortOrder = sortOrder
         self.createdAt = .now
     }
@@ -91,12 +95,12 @@ extension SavingsGoal {
     ///
     /// With a deadline it's what's left spread over the months that remain —
     /// recomputed every month, so a missed month raises the next one. Without a
-    /// deadline the goal simply wants everything that's left, so it soaks up
-    /// whatever budget the higher-priority goals didn't use.
+    /// deadline the user sets the pace; if they haven't, the goal takes whatever
+    /// is left over.
     func monthlyNeed(reference: Date = .now, calendar: Calendar = .current) -> Double {
         guard remaining > 0 else { return 0 }
         guard let months = monthsUntilDeadline(reference: reference, calendar: calendar) else {
-            return remaining
+            return customMonthly > 0 ? min(customMonthly, remaining) : remaining
         }
         return (remaining / Double(months)).rounded(.up)
     }

@@ -127,6 +127,7 @@
 "goals.contribution_label"  = "Monthly contribution";
 /* %d = number of months until the deadline */
 "goals.months_count"        = "%d months";
+"goals.contribution_note"   = "How much to put in each month, taken from your stash. Leave blank to use whatever is spare.";
 "goals.deadline_need_note"  = "What you'd need each month to make this deadline. The actual amount comes from your stash.";
 "goals.add_cta"             = "Add to list";
 

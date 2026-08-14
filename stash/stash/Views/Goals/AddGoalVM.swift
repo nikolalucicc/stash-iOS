@@ -18,6 +18,8 @@ final class AddGoalVM {
     var priority: GoalPriority = .medium
     var hasDeadline: Bool = false
     var deadline: Date = .now
+    /// Monthly pace for a goal without a deadline (blank = take what's spare).
+    var monthlyText: String = ""
 
     private let sortOrder: Int
     private let editingGoal: SavingsGoal?
@@ -38,10 +40,13 @@ final class AddGoalVM {
         priority = goal.priority
         hasDeadline = goal.deadline != nil
         deadline = goal.deadline ?? .now
+        monthlyText = goal.customMonthly > 0 ? goal.customMonthly.serbianFormatted : ""
     }
 
     var isEditing: Bool { editingGoal != nil }
     var targetAmount: Double { amountText.parsedSerbianNumber }
+    /// Only a deadline-free goal carries a hand-picked monthly amount.
+    var customMonthly: Double { hasDeadline ? 0 : monthlyText.parsedSerbianNumber }
 
     /// Whole calendar months from this month until the deadline (at least 1).
     var monthsUntilDeadline: Int {
@@ -87,6 +92,7 @@ final class AddGoalVM {
             goal.savedAmount = min(goal.savedAmount, targetAmount)
             goal.priority = priority
             goal.deadline = hasDeadline ? deadline : nil
+            goal.customMonthly = customMonthly
         } else {
             context.insert(SavingsGoal(
                 name: trimmedName,
@@ -94,6 +100,7 @@ final class AddGoalVM {
                 targetAmount: targetAmount,
                 priority: priority,
                 deadline: hasDeadline ? deadline : nil,
+                customMonthly: customMonthly,
                 sortOrder: sortOrder
             ))
         }

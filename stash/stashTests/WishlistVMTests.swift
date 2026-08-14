@@ -45,7 +45,18 @@ final class WishlistVMTests: XCTestCase {
         XCTAssertEqual(goal.monthlyNeed(), 6_000)
     }
 
-    func testGoalWithoutDeadlineWantsEverythingLeft() {
+    func testGoalWithoutDeadlineUsesTheUsersMonthlyAmount() {
+        let goal = SavingsGoal(name: "Car", targetAmount: 9_000, customMonthly: 500)
+        XCTAssertNil(goal.monthsUntilDeadline())
+        XCTAssertEqual(goal.monthlyNeed(), 500, "The user set the pace")
+    }
+
+    func testCustomMonthlyNeverExceedsWhatIsLeft() {
+        let goal = SavingsGoal(name: "Car", targetAmount: 9_000, savedAmount: 8_800, customMonthly: 500)
+        XCTAssertEqual(goal.monthlyNeed(), 200, "Only 200 left to save")
+    }
+
+    func testGoalWithoutDeadlineOrCustomWantsEverythingLeft() {
         let goal = SavingsGoal(name: "Car", targetAmount: 9_000, savedAmount: 1_000)
         XCTAssertNil(goal.monthsUntilDeadline())
         XCTAssertEqual(goal.monthlyNeed(), 8_000)
@@ -57,6 +68,22 @@ final class WishlistVMTests: XCTestCase {
     }
 
     // MARK: - Distribution
+
+    func testACustomPaceLeavesRoomForOtherGoals() async {
+        let profile = UserProfile.current(in: context)
+        profile.stashBalance = 10_000
+        // Without a pace the high-priority goal would swallow the whole stash.
+        let high = SavingsGoal(name: "A", targetAmount: 50_000, priority: .high, customMonthly: 4_000)
+        let low = SavingsGoal(name: "B", targetAmount: 50_000, priority: .low, customMonthly: 3_000)
+        context.insert(high)
+        context.insert(low)
+
+        await WishlistVM().distribute(to: [high, low], in: context)
+
+        XCTAssertEqual(high.savedAmount, 4_000)
+        XCTAssertEqual(low.savedAmount, 3_000)
+        XCTAssertEqual(profile.stashBalance, 3_000, "What nobody asked for stays in the stash")
+    }
 
     func testDistributePaysEachGoalItsShare() async {
         let profile = UserProfile.current(in: context)
