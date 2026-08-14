@@ -127,7 +127,8 @@
 "goals.contribution_label"  = "Monthly contribution";
 /* %d = number of months until the deadline */
 "goals.months_count"        = "%d months";
-"goals.deadline_auto_note"  = "Calculated from your deadline to reach the goal in time.";
+"goals.contribution_note"   = "How much to put in each month. Set a deadline instead and this is worked out for you.";
+"goals.deadline_need_note"  = "What you'd need each month to make this deadline. The actual amount comes from your stash.";
 "goals.add_cta"             = "Add to list";
 
 /* %@ = amount left in the stash after buying, e.g. "12.000 RSD" */
@@ -146,7 +147,7 @@
 /* %d = months left to reach the goal */
 "goals.eta"                  = "≈ %d months to goal";
 "goals.eta_done"             = "Goal reached 🎉";
-"goals.eta_set_monthly"      = "Set a monthly amount";
+"goals.eta_set_monthly"      = "Add to your stash";
 /* %@ = planned monthly amount with currency, e.g. "5.000 EUR" */
 "goals.deposit_month_cta"    = "I saved this month (+%@)";
 "goals.deposit_custom_cta"   = "Add a custom amount";
@@ -156,22 +157,19 @@
 "goals.deposit_title"        = "Add to savings";
 "goals.deposit_cta"          = "Add";
 
-// MARK: - Goals · budget sheet
 
-"goals.budget_title"        = "Goals budget";
-"goals.budget_intro"        = "Set the most you'll set aside each month for all your goals.";
-"goals.budget_input_label"  = "Max monthly budget";
-"goals.budget_info"         = "This amount is split across your goals by priority.";
-"goals.allocation_header"   = "Distribution preview";
-"goals.budget_empty"        = "Add goals to see how the budget splits.";
-"goals.unallocated"         = "Unallocated";
-"goals.budget_save_cta"     = "Save settings";
+// MARK: - Goals · monthly distribution
+
+"goals.available_label"     = "Available in stash";
+"goals.per_month_label"     = "This month";
+"goals.distribute_cta"      = "Move stash into goals";
+"goals.distributed_done"    = "Shared out for this month";
+"goals.deadline_at_risk"    = "Behind deadline";
 
 
 // MARK: - Goals · summary
 
 "goals.summary_saved_label"  = "Total saved";
-"goals.summary_budget_label" = "Monthly budget";
 /* %d = number of completed goals */
 "goals.completed"            = "%d completed";
 

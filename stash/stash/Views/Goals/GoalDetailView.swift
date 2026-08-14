@@ -15,6 +15,7 @@ struct GoalDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
+    @Query(sort: \SavingsGoal.sortOrder) private var goals: [SavingsGoal]
     @State private var vm = GoalDetailVM()
     @State private var showEdit = false
     @State private var showDeleteConfirm = false
@@ -52,7 +53,10 @@ struct GoalDetailView: View {
         .alert("goals.delete_confirm_title", isPresented: $showDeleteConfirm) {
             Button("common.cancel_btn", role: .cancel) {}
             Button("goals.delete_cta", role: .destructive) {
-                Task { await vm.delete(goal, in: modelContext); dismiss() }
+                // Leave the screen first: rendering this view against a deleted
+                // model is what makes SwiftData blow up.
+                dismiss()
+                Task { await vm.delete(goal, in: modelContext) }
             }
         } message: {
             Text("goals.delete_confirm_message")
@@ -146,7 +150,7 @@ struct GoalDetailView: View {
                     .font(.labelCapsStyle)
                     .tracking(0.6)
                     .foregroundColor(.onSurfaceVariant)
-                Text(verbatim: "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)")
+                Text(verbatim: "\(plannedMonthly.serbianFormatted) \(currencyCode)")
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
             }
@@ -167,7 +171,7 @@ struct GoalDetailView: View {
     private var actions: some View {
         VStack(spacing: Spacing.sm) {
             Button {
-                Task { await vm.applyMonthly(to: goal, in: modelContext) }
+                Task { await vm.deposit(plannedMonthly, to: goal, in: modelContext) }
             } label: {
                 Text(verbatim: depositMonthText)
                     .font(.navTitleStyle)
@@ -179,6 +183,8 @@ struct GoalDetailView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(plannedMonthly <= 0)
+            .opacity(plannedMonthly > 0 ? 1 : Opacity.muted)
 
             Button { vm.showDepositSheet = true } label: {
                 Text("goals.deposit_custom_cta")
@@ -205,6 +211,24 @@ struct GoalDetailView: View {
         .buttonStyle(.plain)
     }
 
+    /// What this goal plans to take each month — its deadline pace, the amount
+    /// the user picked, or its share of the stash as a fallback.
+    private var plannedMonthly: Double {
+        let need = goal.monthlyNeed()
+        return goal.deadline != nil || goal.customMonthly > 0 ? need : allocatedMonthly
+    }
+
+    /// This goal's share of what's currently in the stash.
+    private var allocatedMonthly: Double {
+        let ordered = goals.sortedByPriority
+        let amounts = GoalAllocator.allocate(
+            budget: profiles.first?.stashBalance ?? 0,
+            goals: ordered
+        )
+        guard let index = ordered.firstIndex(where: { $0 === goal }) else { return 0 }
+        return amounts[index]
+    }
+
     /// e.g. "12.000 EUR left" — the currency follows the user's selection.
     private var remainingText: String {
         let amount = "\(goal.remaining.serbianFormatted) \(currencyCode)"
@@ -213,7 +237,7 @@ struct GoalDetailView: View {
 
     /// e.g. "I saved this month (+5.000 EUR)".
     private var depositMonthText: String {
-        let amount = "\(goal.desiredMonthly.serbianFormatted) \(currencyCode)"
+        let amount = "\(plannedMonthly.serbianFormatted) \(currencyCode)"
         return String(format: String(localized: "goals.deposit_month_cta"), amount)
     }
 
@@ -221,7 +245,7 @@ struct GoalDetailView: View {
         if goal.remaining <= 0 {
             return String(localized: "goals.eta_done")
         }
-        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: goal.desiredMonthly) else {
+        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: plannedMonthly) else {
             return String(localized: "goals.eta_set_monthly")
         }
         return String(format: String(localized: "goals.eta"), months)
@@ -235,6 +259,8 @@ private struct DepositSheet: View {
     let goal: SavingsGoal
     let currencyCode: String
     @Environment(\.modelContext) private var modelContext
+
+    private var canDeposit: Bool { vm.depositText.parsedSerbianNumber > 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
@@ -269,6 +295,8 @@ private struct DepositSheet: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(!canDeposit)
+            .opacity(canDeposit ? 1 : Opacity.muted)
             Spacer()
         }
         .padding(Spacing.containerPadding)

@@ -38,7 +38,8 @@ final class SavingsGoal {
     var savedAmount: Double
     var priorityRaw: String
     var deadline: Date?
-    var desiredMonthly: Double
+    /// Monthly amount the user picked for a goal without a deadline (0 = unset).
+    var customMonthly: Double = 0
     var sortOrder: Int
     var createdAt: Date
 
@@ -49,7 +50,7 @@ final class SavingsGoal {
         savedAmount: Double = 0,
         priority: GoalPriority = .medium,
         deadline: Date? = nil,
-        desiredMonthly: Double = 5_000,
+        customMonthly: Double = 0,
         sortOrder: Int = 0
     ) {
         self.name = name
@@ -58,7 +59,7 @@ final class SavingsGoal {
         self.savedAmount = savedAmount
         self.priorityRaw = priority.rawValue
         self.deadline = deadline
-        self.desiredMonthly = desiredMonthly
+        self.customMonthly = customMonthly
         self.sortOrder = sortOrder
         self.createdAt = .now
     }
@@ -79,6 +80,30 @@ extension SavingsGoal {
     }
 
     var remaining: Double { max(0, targetAmount - savedAmount) }
+
+    /// Whole calendar months from this month until the deadline (at least 1),
+    /// or `nil` when the goal has no deadline.
+    func monthsUntilDeadline(reference: Date = .now, calendar: Calendar = .current) -> Int? {
+        guard let deadline else { return nil }
+        let now = calendar.dateComponents([.year, .month], from: reference)
+        let end = calendar.dateComponents([.year, .month], from: deadline)
+        let months = ((end.year ?? 0) - (now.year ?? 0)) * 12 + ((end.month ?? 0) - (now.month ?? 0))
+        return max(1, months)
+    }
+
+    /// How much this goal wants each month.
+    ///
+    /// With a deadline it's what's left spread over the months that remain —
+    /// recomputed every month, so a missed month raises the next one. Without a
+    /// deadline the user sets the pace; if they haven't, the goal takes whatever
+    /// is left over.
+    func monthlyNeed(reference: Date = .now, calendar: Calendar = .current) -> Double {
+        guard remaining > 0 else { return 0 }
+        guard let months = monthsUntilDeadline(reference: reference, calendar: calendar) else {
+            return customMonthly > 0 ? min(customMonthly, remaining) : remaining
+        }
+        return (remaining / Double(months)).rounded(.up)
+    }
 }
 
 // MARK: - Ordering

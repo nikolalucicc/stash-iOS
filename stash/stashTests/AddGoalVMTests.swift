@@ -57,7 +57,6 @@ final class AddGoalVMTests: XCTestCase {
 
         XCTAssertEqual(vm.monthsUntilDeadline, 13)
         XCTAssertEqual(vm.deadlineMonthly, 1_000)
-        XCTAssertEqual(vm.desiredMonthly, 1_000)
     }
 
     func testDeadlineMonthlyRoundsUp() {
@@ -70,12 +69,44 @@ final class AddGoalVMTests: XCTestCase {
         XCTAssertEqual(vm.deadlineMonthly, 3_334)
     }
 
-    func testWithoutDeadlineUsesManualMonthly() {
+    func testCannotSaveWithoutAPace() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.name = "Bike"
+        vm.amountText = "10.000"
+        XCTAssertFalse(vm.canSave, "No deadline and no monthly amount")
+
+        vm.monthlyText = "200"
+        XCTAssertTrue(vm.canSave)
+    }
+
+    func testADeadlineIsEnoughOfAPace() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.name = "Bike"
+        vm.amountText = "10.000"
+        vm.hasDeadline = true
+        vm.deadline = Calendar.current.date(byAdding: .month, value: 6, to: .now) ?? .now
+        XCTAssertTrue(vm.canSave, "The deadline works out the monthly amount")
+    }
+
+    func testCannotSaveWithoutANameOrAmount() {
+        let vm = AddGoalVM(sortOrder: 0)
+        vm.monthlyText = "200"
+        vm.amountText = "10.000"
+        XCTAssertFalse(vm.canSave, "No name")
+
+        vm.name = "   "
+        XCTAssertFalse(vm.canSave, "Whitespace is not a name")
+
+        vm.name = "Bike"
+        vm.amountText = ""
+        XCTAssertFalse(vm.canSave, "No target amount")
+    }
+
+    func testNoDeadlineMeansNoDeadlineGuidance() {
         let vm = AddGoalVM(sortOrder: 0)
         vm.amountText = "13000"
         vm.hasDeadline = false
-        vm.monthlyText = "500"
 
-        XCTAssertEqual(vm.desiredMonthly, 500)
+        XCTAssertEqual(vm.deadlineMonthly, 0)
     }
 }

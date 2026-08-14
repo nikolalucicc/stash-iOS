@@ -15,10 +15,10 @@ final class AddGoalVM {
     var name: String = ""
     var emoji: String = "🎯"
     var amountText: String = ""
-    var savedText: String = ""
     var priority: GoalPriority = .medium
     var hasDeadline: Bool = false
     var deadline: Date = .now
+    /// Monthly pace for a goal without a deadline.
     var monthlyText: String = ""
 
     private let sortOrder: Int
@@ -37,16 +37,17 @@ final class AddGoalVM {
         name = goal.name
         emoji = goal.emoji
         amountText = goal.targetAmount.serbianFormatted
-        savedText = goal.savedAmount > 0 ? goal.savedAmount.serbianFormatted : ""
         priority = goal.priority
         hasDeadline = goal.deadline != nil
         deadline = goal.deadline ?? .now
-        monthlyText = goal.desiredMonthly > 0 ? goal.desiredMonthly.serbianFormatted : ""
+        monthlyText = goal.customMonthly > 0 ? goal.customMonthly.serbianFormatted : ""
     }
 
     var isEditing: Bool { editingGoal != nil }
     var targetAmount: Double { amountText.parsedSerbianNumber }
-    var savedAmount: Double { min(savedText.parsedSerbianNumber, targetAmount) }
+    /// Only a deadline-free goal carries a hand-picked monthly amount.
+    var customMonthly: Double { hasDeadline ? 0 : monthlyText.parsedSerbianNumber }
+
     /// Whole calendar months from this month until the deadline (at least 1).
     var monthsUntilDeadline: Int {
         let calendar = Calendar.current
@@ -56,19 +57,19 @@ final class AddGoalVM {
         return max(1, months)
     }
 
-    /// Monthly amount needed to reach the target by the deadline (price / months).
+    /// What this goal would need each month to land on the deadline — shown as
+    /// guidance while adding, since the actual monthly amount comes from the
+    /// shared goals budget.
     var deadlineMonthly: Double {
         guard hasDeadline, targetAmount > 0 else { return 0 }
         return (targetAmount / Double(monthsUntilDeadline)).rounded(.up)
     }
 
-    /// With a deadline the monthly amount is derived; otherwise it's user-entered.
-    var desiredMonthly: Double {
-        hasDeadline ? deadlineMonthly : monthlyText.parsedSerbianNumber
-    }
-
+    /// Everything the goal needs: a name, a price, and a pace — either from a
+    /// deadline or a monthly amount. The deadline itself stays optional.
     var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && targetAmount > 0
+        guard !name.trimmingCharacters(in: .whitespaces).isEmpty, targetAmount > 0 else { return false }
+        return hasDeadline || customMonthly > 0
     }
 
     /// Spends the goal's price straight from the stash (no goal is created).
@@ -90,19 +91,19 @@ final class AddGoalVM {
             goal.name = trimmedName
             goal.emoji = resolvedEmoji
             goal.targetAmount = targetAmount
-            goal.savedAmount = savedAmount
+            // Keep whatever has been saved so far, but never above the new target.
+            goal.savedAmount = min(goal.savedAmount, targetAmount)
             goal.priority = priority
             goal.deadline = hasDeadline ? deadline : nil
-            goal.desiredMonthly = desiredMonthly
+            goal.customMonthly = customMonthly
         } else {
             context.insert(SavingsGoal(
                 name: trimmedName,
                 emoji: resolvedEmoji,
                 targetAmount: targetAmount,
-                savedAmount: savedAmount,
                 priority: priority,
                 deadline: hasDeadline ? deadline : nil,
-                desiredMonthly: desiredMonthly,
+                customMonthly: customMonthly,
                 sortOrder: sortOrder
             ))
         }
