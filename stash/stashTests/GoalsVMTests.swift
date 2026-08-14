@@ -86,7 +86,19 @@ final class GoalsVMTests: XCTestCase {
         XCTAssertEqual(profile.stashBalance, 15_000)
     }
 
-    func testDepositIsCappedByTheStash() async {
+    func testDepositWorksEvenWithAnEmptyStash() async {
+        let profile = UserProfile.current(in: context)
+        profile.stashBalance = 0
+        let goal = SavingsGoal(name: "Trip", targetAmount: 100_000)
+        context.insert(goal)
+
+        await GoalDetailVM().deposit(5_000, to: goal, in: context)
+
+        XCTAssertEqual(goal.savedAmount, 5_000, "Money added directly still counts")
+        XCTAssertEqual(profile.stashBalance, 0)
+    }
+
+    func testDepositDrainsTheStashFirst() async {
         let profile = UserProfile.current(in: context)
         profile.stashBalance = 2_000
         let goal = SavingsGoal(name: "Trip", targetAmount: 100_000)
@@ -94,8 +106,8 @@ final class GoalsVMTests: XCTestCase {
 
         await GoalDetailVM().deposit(5_000, to: goal, in: context)
 
-        XCTAssertEqual(goal.savedAmount, 2_000, "You can't put in more than you have")
-        XCTAssertEqual(profile.stashBalance, 0)
+        XCTAssertEqual(goal.savedAmount, 5_000)
+        XCTAssertEqual(profile.stashBalance, 0, "The stash covers what it can")
     }
 
     func testDepositCapsAtTarget() async {

@@ -34,14 +34,16 @@ final class GoalDetailVM {
         try? context.save()
     }
 
-    /// Moves money out of the stash into the goal. Capped by what the goal still
-    /// needs and by what's actually in the stash, so nothing is created twice.
+    /// Puts money straight into the goal, capped at what it still needs. If the
+    /// stash happens to hold money, it's drawn from there first so the same
+    /// savings aren't counted twice; anything beyond that is money the user is
+    /// adding directly.
     private func apply(_ amount: Double, to goal: SavingsGoal, in context: ModelContext) {
-        guard amount > 0 else { return }
+        let added = min(amount, goal.remaining)
+        guard added > 0 else { return }
         let profile = UserProfile.current(in: context)
-        let moved = profile.takeFromStash(min(amount, goal.remaining))
-        guard moved > 0 else { return }
-        goal.savedAmount += moved
+        _ = profile.takeFromStash(added)
+        goal.savedAmount += added
         try? context.save()
     }
 }

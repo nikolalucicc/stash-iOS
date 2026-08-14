@@ -151,7 +151,7 @@ struct GoalDetailView: View {
                     .font(.labelCapsStyle)
                     .tracking(0.6)
                     .foregroundColor(.onSurfaceVariant)
-                Text(verbatim: "\(allocatedMonthly.serbianFormatted) \(currencyCode)")
+                Text(verbatim: "\(plannedMonthly.serbianFormatted) \(currencyCode)")
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
             }
@@ -172,7 +172,7 @@ struct GoalDetailView: View {
     private var actions: some View {
         VStack(spacing: Spacing.sm) {
             Button {
-                Task { await vm.deposit(allocatedMonthly, to: goal, in: modelContext) }
+                Task { await vm.deposit(plannedMonthly, to: goal, in: modelContext) }
             } label: {
                 Text(verbatim: depositMonthText)
                     .font(.navTitleStyle)
@@ -184,8 +184,8 @@ struct GoalDetailView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .disabled(allocatedMonthly <= 0)
-            .opacity(allocatedMonthly > 0 ? 1 : Opacity.muted)
+            .disabled(plannedMonthly <= 0)
+            .opacity(plannedMonthly > 0 ? 1 : Opacity.muted)
 
             Button { vm.showDepositSheet = true } label: {
                 Text("goals.deposit_custom_cta")
@@ -212,6 +212,13 @@ struct GoalDetailView: View {
         .buttonStyle(.plain)
     }
 
+    /// What this goal plans to take each month — its deadline pace, the amount
+    /// the user picked, or its share of the stash as a fallback.
+    private var plannedMonthly: Double {
+        let need = goal.monthlyNeed()
+        return goal.deadline != nil || goal.customMonthly > 0 ? need : allocatedMonthly
+    }
+
     /// This goal's share of what's currently in the stash.
     private var allocatedMonthly: Double {
         let ordered = goals.sortedByPriority
@@ -231,7 +238,7 @@ struct GoalDetailView: View {
 
     /// e.g. "I saved this month (+5.000 EUR)".
     private var depositMonthText: String {
-        let amount = "\(allocatedMonthly.serbianFormatted) \(currencyCode)"
+        let amount = "\(plannedMonthly.serbianFormatted) \(currencyCode)"
         return String(format: String(localized: "goals.deposit_month_cta"), amount)
     }
 
@@ -239,7 +246,7 @@ struct GoalDetailView: View {
         if goal.remaining <= 0 {
             return String(localized: "goals.eta_done")
         }
-        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: allocatedMonthly) else {
+        guard let months = GoalAllocator.monthsToGoal(remaining: goal.remaining, monthly: plannedMonthly) else {
             return String(localized: "goals.eta_set_monthly")
         }
         return String(format: String(localized: "goals.eta"), months)
@@ -255,7 +262,7 @@ private struct DepositSheet: View {
     let availableInStash: Double
     @Environment(\.modelContext) private var modelContext
 
-    private var canDeposit: Bool { availableInStash > 0 && vm.depositText.parsedSerbianNumber > 0 }
+    private var canDeposit: Bool { vm.depositText.parsedSerbianNumber > 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
