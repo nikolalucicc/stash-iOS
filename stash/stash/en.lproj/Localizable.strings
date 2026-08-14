@@ -127,7 +127,7 @@
 "goals.contribution_label"  = "Monthly contribution";
 /* %d = number of months until the deadline */
 "goals.months_count"        = "%d months";
-"goals.contribution_note"   = "How much to put in each month, taken from your stash. Leave blank to use whatever is spare.";
+"goals.contribution_note"   = "How much to put in each month. Set a deadline instead and this is worked out for you.";
 "goals.deadline_need_note"  = "What you'd need each month to make this deadline. The actual amount comes from your stash.";
 "goals.add_cta"             = "Add to list";
 
@@ -156,8 +156,6 @@
 "goals.delete_confirm_message" = "This can't be undone.";
 "goals.deposit_title"        = "Add to savings";
 "goals.deposit_cta"          = "Add";
-/* %@ = what's in the stash, e.g. "100 EUR" */
-"goals.deposit_available"    = "Available in stash: %@";
 
 
 // MARK: - Goals · monthly distribution

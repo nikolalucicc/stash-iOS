@@ -18,7 +18,7 @@ final class AddGoalVM {
     var priority: GoalPriority = .medium
     var hasDeadline: Bool = false
     var deadline: Date = .now
-    /// Monthly pace for a goal without a deadline (blank = take what's spare).
+    /// Monthly pace for a goal without a deadline.
     var monthlyText: String = ""
 
     private let sortOrder: Int
@@ -65,8 +65,11 @@ final class AddGoalVM {
         return (targetAmount / Double(monthsUntilDeadline)).rounded(.up)
     }
 
+    /// Everything the goal needs: a name, a price, and a pace — either from a
+    /// deadline or a monthly amount. The deadline itself stays optional.
     var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && targetAmount > 0
+        guard !name.trimmingCharacters(in: .whitespaces).isEmpty, targetAmount > 0 else { return false }
+        return hasDeadline || customMonthly > 0
     }
 
     /// Spends the goal's price straight from the stash (no goal is created).

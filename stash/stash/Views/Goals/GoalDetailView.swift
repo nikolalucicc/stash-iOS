@@ -46,8 +46,7 @@ struct GoalDetailView: View {
                 .presentationBackground(Color.surfaceContainerLow)
         }
         .sheet(isPresented: Bindable(vm).showDepositSheet) {
-            DepositSheet(vm: vm, goal: goal, currencyCode: currencyCode,
-                         availableInStash: profiles.first?.stashBalance ?? 0)
+            DepositSheet(vm: vm, goal: goal, currencyCode: currencyCode)
                 .presentationDetents([.height(280)])
                 .presentationBackground(Color.surfaceContainerLow)
         }
@@ -259,22 +258,15 @@ private struct DepositSheet: View {
     @Bindable var vm: GoalDetailVM
     let goal: SavingsGoal
     let currencyCode: String
-    let availableInStash: Double
     @Environment(\.modelContext) private var modelContext
 
     private var canDeposit: Bool { vm.depositText.parsedSerbianNumber > 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
-            VStack(alignment: .leading, spacing: Spacing.xs) {
-                Text("goals.deposit_title")
-                    .font(.sectionHeaderStyle)
-                    .foregroundColor(.onSurface)
-                Text(verbatim: String(format: String(localized: "goals.deposit_available"),
-                                      "\(availableInStash.serbianFormatted) \(currencyCode)"))
-                    .font(.noteStyle)
-                    .foregroundColor(availableInStash > 0 ? .onSurfaceVariant : .appError)
-            }
+            Text("goals.deposit_title")
+                .font(.sectionHeaderStyle)
+                .foregroundColor(.onSurface)
             HStack {
                 TextField("0", text: $vm.depositText)
                     .font(.inputValStyle)

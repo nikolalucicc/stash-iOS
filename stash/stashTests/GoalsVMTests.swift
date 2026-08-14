@@ -33,6 +33,7 @@ final class GoalsVMTests: XCTestCase {
         context.insert(goal)
         let vm = AddGoalVM(editing: goal)
         vm.amountText = "30.000"
+        vm.monthlyText = "1.000"
 
         await vm.save(to: context)
 
@@ -43,6 +44,7 @@ final class GoalsVMTests: XCTestCase {
     func testCannotSaveWithoutNameOrAmount() {
         let vm = AddGoalVM(sortOrder: 0)
         vm.amountText = "10.000"
+        vm.monthlyText = "500"
         XCTAssertFalse(vm.canSave)
         vm.name = "Bike"
         XCTAssertTrue(vm.canSave)
@@ -52,6 +54,7 @@ final class GoalsVMTests: XCTestCase {
         let vm = AddGoalVM(sortOrder: 0)
         vm.name = "Laptop"
         vm.amountText = "100.000"
+        vm.monthlyText = "5.000"
         await vm.save(to: context)
 
         let goals = (try? context.fetch(FetchDescriptor<SavingsGoal>())) ?? []
@@ -60,7 +63,7 @@ final class GoalsVMTests: XCTestCase {
     }
 
     func testEditUpdatesExistingGoal() async {
-        let goal = SavingsGoal(name: "Old", targetAmount: 50_000)
+        let goal = SavingsGoal(name: "Old", targetAmount: 50_000, customMonthly: 2_000)
         context.insert(goal)
         let vm = AddGoalVM(editing: goal)
         vm.name = "New name"
