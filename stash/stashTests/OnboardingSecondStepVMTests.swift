@@ -65,6 +65,26 @@ final class OnboardingSecondStepVMTests: XCTestCase {
         XCTAssertTrue(vm.canContinue)
     }
 
+    func testCannotContinueWithAnEmptyAmount() {
+        let vm = OnboardingSecondStepVM(monthlySalary: 100_000)
+        vm.savingMethod = .percentage
+        XCTAssertTrue(vm.savingIsMissing)
+        XCTAssertFalse(vm.canContinue, "Nothing entered is not a valid answer")
+
+        vm.savingMethod = .fixed
+        XCTAssertFalse(vm.canContinue)
+    }
+
+    func testCannotContinueWithAZeroAmount() {
+        let vm = OnboardingSecondStepVM(monthlySalary: 100_000)
+        vm.savingMethod = .percentage
+        vm.percentageText = "0"
+        XCTAssertFalse(vm.canContinue, "Saving nothing is the same as skipping the step")
+
+        vm.percentageText = "1"
+        XCTAssertTrue(vm.canContinue)
+    }
+
     func testZeroSalaryCannotContinue() {
         let vm = OnboardingSecondStepVM(monthlySalary: 0)
         XCTAssertFalse(vm.canContinue)

@@ -40,6 +40,8 @@
 "onboarding.step2.percentage_label"  = "Savings percentage";
 "onboarding.step2.fixed_label"       = "Fixed savings amount";
 "onboarding.step2.preview_label"     = "You'll set aside monthly";
+"onboarding.step2.percentage_required" = "Enter what share of your salary you want to save.";
+"onboarding.step2.amount_required"     = "Enter how much you want to save each month.";
 
 // MARK: - Onboarding · Step 3
 
