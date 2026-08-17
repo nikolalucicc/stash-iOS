@@ -207,13 +207,19 @@ struct OnboardingThirdStepView: View {
     }
 
     /// Warns as soon as the expenses entered outgrow what the salary leaves.
+    /// Spells out the sum so the shortfall doesn't read as a number out of nowhere.
     @ViewBuilder
     private var overCommittedNote: some View {
-        if roomForExpenses > 0 && vm.total > roomForExpenses {
+        if let profile = UserProfile.existing(in: modelContext),
+           roomForExpenses > 0, vm.total > roomForExpenses {
+            let saving = profile.monthlySaving
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: IconSize.sm))
                 Text(verbatim: String(format: String(localized: "onboarding.step3.over_committed"),
+                                      saving.serbianFormatted,
+                                      vm.total.serbianFormatted,
+                                      "\((saving + vm.total).serbianFormatted) \(currencyCode)",
                                       "\((vm.total - roomForExpenses).serbianFormatted) \(currencyCode)"))
                     .font(.noteStyle)
                     .fixedSize(horizontal: false, vertical: true)

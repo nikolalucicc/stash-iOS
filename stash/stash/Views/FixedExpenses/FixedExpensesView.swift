@@ -141,14 +141,19 @@ private extension FixedExpensesView {
         )
     }
 
-    /// Saving plus these expenses promise more than the salary covers.
+    /// Saving plus these expenses promise more than the salary covers. Spells out
+    /// the sum so the shortfall doesn't read as a number out of nowhere.
     @ViewBuilder
     var overCommittedNote: some View {
         if let profile {
+            let saving = profile.monthlySaving
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: IconSize.sm))
                 Text(verbatim: String(format: String(localized: "expenses.over_committed"),
+                                      saving.serbianFormatted,
+                                      total.serbianFormatted,
+                                      "\((saving + total).serbianFormatted) \(currencyCode)",
                                       "\(abs(profile.uncommittedMoney).serbianFormatted) \(currencyCode)"))
                     .font(.noteStyle)
                     .fixedSize(horizontal: false, vertical: true)

@@ -55,6 +55,16 @@ final class OverCommitmentTests: XCTestCase {
         XCTAssertEqual(profile.uncommittedMoney, 0)
     }
 
+    /// The shortfall is measured against what the salary leaves after saving, so
+    /// it can be larger than the salary itself — 390 + 2.000 is 1.390 over 1.000.
+    func testShortfallCanExceedTheSalary() {
+        let profile = profile(salary: 1_000, saving: 390, expense: 2_000)
+        XCTAssertTrue(profile.isOverCommitted)
+        XCTAssertEqual(profile.uncommittedMoney, -1_390)
+        XCTAssertEqual(profile.monthlySaving + profile.fixedExpensesTotal, 2_390,
+                       "What the message shows adding up")
+    }
+
     func testNoSalaryIsNotFlaggedAsOverCommitted() {
         let profile = profile(salary: 0, saving: 0, expense: 0)
         XCTAssertFalse(profile.isOverCommitted, "Nothing entered yet is not an error")
