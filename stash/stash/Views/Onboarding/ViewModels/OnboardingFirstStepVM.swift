@@ -13,4 +13,9 @@ class OnboardingFirstStepVM {
     var salaryText: String = ""
     var selectedPeriod: String = PayPeriod.beginning.label
     let paydayOptions: [String] = PayPeriod.allCases.map { $0.label }
+
+    var salary: Double { salaryText.parsedSerbianNumber }
+
+    /// Everything downstream is a share of the salary, so it has to be entered.
+    var canContinue: Bool { salary > 0 }
 }

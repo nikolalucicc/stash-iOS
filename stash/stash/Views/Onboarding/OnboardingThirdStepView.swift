@@ -31,6 +31,7 @@ struct OnboardingThirdStepView: View {
                         if !vm.expenses.isEmpty {
                             summaryRow
                         }
+                        overCommittedNote
                     }
                     .padding(.horizontal, Spacing.containerPadding)
                     .padding(.top, Spacing.lg)
@@ -197,6 +198,29 @@ struct OnboardingThirdStepView: View {
                 .frame(height: 0.5),
             alignment: .top
         )
+    }
+
+    /// Salary minus saving, i.e. what the fixed expenses have to fit into.
+    private var roomForExpenses: Double {
+        guard let profile = UserProfile.existing(in: modelContext) else { return 0 }
+        return profile.monthlySalary - profile.monthlySaving
+    }
+
+    /// Warns as soon as the expenses entered outgrow what the salary leaves.
+    @ViewBuilder
+    private var overCommittedNote: some View {
+        if roomForExpenses > 0 && vm.total > roomForExpenses {
+            HStack(alignment: .top, spacing: Spacing.sm) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: IconSize.sm))
+                Text(verbatim: String(format: String(localized: "onboarding.step3.over_committed"),
+                                      "\((vm.total - roomForExpenses).serbianFormatted) \(currencyCode)"))
+                    .font(.noteStyle)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundColor(.appError)
+            .padding(.top, Spacing.sm)
+        }
     }
 
     // MARK: - Footer

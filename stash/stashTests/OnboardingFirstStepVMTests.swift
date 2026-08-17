@@ -16,6 +16,18 @@ final class OnboardingFirstStepVMTests: XCTestCase {
         XCTAssertEqual(vm.salaryText, "")
     }
 
+    func testCannotContinueWithoutASalary() {
+        let vm = OnboardingFirstStepVM()
+        XCTAssertFalse(vm.canContinue, "Everything downstream is a share of the salary")
+
+        vm.salaryText = "0"
+        XCTAssertFalse(vm.canContinue)
+
+        vm.salaryText = "85.000"
+        XCTAssertTrue(vm.canContinue)
+        XCTAssertEqual(vm.salary, 85_000)
+    }
+
     func testPaydayOptionsHasThreeChoices() {
         let vm = OnboardingFirstStepVM()
         XCTAssertEqual(vm.paydayOptions.count, 3)

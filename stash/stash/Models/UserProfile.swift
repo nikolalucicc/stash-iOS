@@ -100,10 +100,17 @@ extension UserProfile {
         expenses.reduce(0) { $0 + $1.amount }
     }
 
-    /// Money left to spend each month after saving and fixed expenses.
-    var freeMoney: Double {
-        max(0, monthlySalary - monthlySaving - fixedExpensesTotal)
+    /// Salary left after saving and fixed expenses. Goes negative when the two
+    /// together promise more than the salary covers.
+    var uncommittedMoney: Double {
+        monthlySalary - monthlySaving - fixedExpensesTotal
     }
+
+    /// Money left to spend each month after saving and fixed expenses.
+    var freeMoney: Double { max(0, uncommittedMoney) }
+
+    /// `true` when saving plus fixed expenses exceed the salary.
+    var isOverCommitted: Bool { monthlySalary > 0 && uncommittedMoney < 0 }
 
     /// Moves up to `amount` out of the stash, returning what was actually taken.
     /// Goals are funded from the stash, so nothing can be spent twice.

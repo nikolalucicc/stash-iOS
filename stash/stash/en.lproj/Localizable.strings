@@ -28,6 +28,7 @@
 "onboarding.step1.payday_beginning" = "Beginning of month";
 "onboarding.step1.payday_middle"    = "Mid month";
 "onboarding.step1.payday_end"       = "End of month";
+"onboarding.step1.salary_required"  = "Enter your salary to continue — everything else is worked out from it.";
 
 // MARK: - Onboarding · Step 2
 
@@ -52,6 +53,8 @@
 "onboarding.step3.name_placeholder" = "e.g. Rent, Netflix...";
 "onboarding.step3.amount_label"     = "Amount";
 "onboarding.step3.default_note"     = "Monthly payment";
+/* %@ = the amount over budget, e.g. "5.000 RSD" */
+"onboarding.step3.over_committed"   = "That's %@ more than your salary leaves after saving.";
 
 // MARK: - Onboarding · Step 4
 
@@ -248,6 +251,8 @@
 // MARK: - Fixed expenses (CRUD screen)
 
 "expenses.title"          = "Fixed expenses";
+/* %@ = the amount over budget, e.g. "5.000 RSD" */
+"expenses.over_committed" = "Saving and these expenses are %@ more than your salary.";
 "expenses.subtitle"       = "Recurring costs taken out of your salary each month.";
 "expenses.add_title"      = "Add expense";
 "expenses.edit_title"     = "Edit expense";
