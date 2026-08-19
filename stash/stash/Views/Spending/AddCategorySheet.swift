@@ -22,12 +22,30 @@ struct AddCategorySheet: View {
                 .font(.sectionHeaderStyle)
                 .foregroundColor(.onSurface)
             nameField
+            duplicateNote
             iconGrid
             saveButton
             Spacer()
         }
         .padding(Spacing.containerPadding)
         .padding(.top, Spacing.md)
+        .onAppear { vm.loadExistingNames(from: modelContext) }
+    }
+
+    /// Says why the button is dimmed instead of letting the name look accepted.
+    @ViewBuilder
+    private var duplicateNote: some View {
+        if vm.isDuplicate {
+            HStack(alignment: .top, spacing: Spacing.xs) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: IconSize.xs))
+                Text("spending.duplicate_category")
+                    .font(.noteStyle)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundColor(.appError)
+            .padding(.leading, 4)
+        }
     }
 
     private var nameField: some View {
@@ -41,7 +59,8 @@ struct AddCategorySheet: View {
             .cornerRadius(Radius.xl)
             .overlay(
                 RoundedRectangle(cornerRadius: Radius.xl)
-                    .stroke(Color.white.opacity(Opacity.border), lineWidth: Line.hairline)
+                    .stroke(vm.isDuplicate ? Color.appError : Color.white.opacity(Opacity.border),
+                            lineWidth: Line.hairline)
             )
     }
 
@@ -85,7 +104,7 @@ struct AddCategorySheet: View {
         }
         .buttonStyle(.plain)
         .disabled(!vm.canSave)
-        .opacity(vm.canSave ? 1 : 0.4)
+        .opacity(vm.canSave ? 1 : Opacity.muted)
     }
 }
 
