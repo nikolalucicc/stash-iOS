@@ -42,6 +42,7 @@ struct AddSpendingSheet: View {
     private var header: some View {
         HStack(spacing: Spacing.sm) {
             Image(systemName: category.icon)
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.md))
                 .foregroundColor(.appPrimary)
             Text(verbatim: category.name)

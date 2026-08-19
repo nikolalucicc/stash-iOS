@@ -92,6 +92,7 @@ struct AccountView: View {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
@@ -105,6 +106,7 @@ struct AccountView: View {
                     .foregroundColor(.onSurfaceVariant)
             }
             Image(systemName: "chevron.right")
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.sm, weight: .medium))
                 .foregroundColor(.onSurfaceVariant)
         }
@@ -189,6 +191,7 @@ private struct CurrencyPickerSheet: View {
                 Spacer()
                 if currency == selected {
                     Image(systemName: "checkmark")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.smd, weight: .bold))
                         .foregroundColor(.appPrimary)
                 }
@@ -199,6 +202,7 @@ private struct CurrencyPickerSheet: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(currency == selected ? [.isSelected] : [])
     }
 }
 

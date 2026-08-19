@@ -68,17 +68,21 @@ struct GoalDetailView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.lg, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("a11y.back"))
                 Spacer()
                 Button { showEdit = true } label: {
                     Image(systemName: "pencil")
+                        .accessibilityHidden(true)
                         .font(.system(size: 17, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("a11y.edit_goal"))
             }
         }
         .padding(.horizontal, Spacing.containerPadding)

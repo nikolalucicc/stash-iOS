@@ -38,6 +38,7 @@ struct AddCategorySheet: View {
         if vm.isDuplicate {
             HStack(alignment: .top, spacing: Spacing.xs) {
                 Image(systemName: "exclamationmark.triangle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.xs))
                 Text("spending.duplicate_category")
                     .font(.noteStyle)
@@ -75,6 +76,8 @@ struct AddCategorySheet: View {
     private func iconCell(_ choice: String) -> some View {
         let isSelected = vm.icon == choice
         return Button { vm.icon = choice } label: {
+            // Not hidden: the symbol's own name is the only thing that tells
+            // these fourteen cells apart out loud.
             Image(systemName: choice)
                 .font(.system(size: IconSize.lg))
                 .foregroundColor(isSelected ? .white : .appPrimary)
@@ -87,6 +90,7 @@ struct AddCategorySheet: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
     private var saveButton: some View {

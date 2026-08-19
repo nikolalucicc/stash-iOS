@@ -113,6 +113,7 @@ struct OnboardingThirdStepView: View {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: expense.icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
@@ -135,10 +136,12 @@ struct OnboardingThirdStepView: View {
             }
             Button { vm.delete(expense) } label: {
                 Image(systemName: "trash")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.lg))
                     .foregroundColor(.appError)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("a11y.delete_expense"))
         }
         .padding(Spacing.md)
         .background(Color.white.opacity(Opacity.surfaceSubtle))
@@ -153,6 +156,7 @@ struct OnboardingThirdStepView: View {
         Button { vm.showAddSheet = true } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.lg))
                     .foregroundColor(.onSurfaceVariant)
                 Text("onboarding.step3.add_expense_btn")
@@ -215,6 +219,7 @@ struct OnboardingThirdStepView: View {
             let saving = profile.monthlySaving
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.sm))
                 Text(verbatim: String(format: String(localized: "onboarding.step3.over_committed"),
                                       saving.serbianFormatted,

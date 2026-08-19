@@ -24,10 +24,12 @@ struct OnboardingAppBar: View {
                 HStack {
                     Button { onBack() } label: {
                         Image(systemName: "arrow.left")
+                            .accessibilityHidden(true)
                             .font(.system(size: IconSize.lg, weight: .medium))
                             .foregroundColor(.appPrimary)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(Text("a11y.back"))
                     Spacer()
                 }
             }
