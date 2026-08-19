@@ -127,6 +127,9 @@ private extension FixedExpensesView {
             Text("expenses.subtitle")
                 .font(.noteStyle)
                 .foregroundColor(.onSurfaceVariant)
+            if profile?.isOverCommitted == true {
+                overCommittedNote
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.lg)
@@ -136,6 +139,28 @@ private extension FixedExpensesView {
             RoundedRectangle(cornerRadius: Radius.card)
                 .stroke(Color.appPrimary.opacity(Opacity.tintBorder), lineWidth: Line.hairline)
         )
+    }
+
+    /// Saving plus these expenses promise more than the salary covers. Spells out
+    /// the sum so the shortfall doesn't read as a number out of nowhere.
+    @ViewBuilder
+    var overCommittedNote: some View {
+        if let profile {
+            let saving = profile.monthlySaving
+            HStack(alignment: .top, spacing: Spacing.sm) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: IconSize.sm))
+                Text(verbatim: String(format: String(localized: "expenses.over_committed"),
+                                      saving.serbianFormatted,
+                                      total.serbianFormatted,
+                                      "\((saving + total).serbianFormatted) \(currencyCode)",
+                                      "\(abs(profile.uncommittedMoney).serbianFormatted) \(currencyCode)"))
+                    .font(.noteStyle)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundColor(.appError)
+            .padding(.top, Spacing.xs)
+        }
     }
 
     var expensesList: some View {

@@ -75,6 +75,7 @@ struct OnboardingFirstStepView: View {
     private var formSection: some View {
         VStack(spacing: Spacing.md) {
             salaryField
+            salaryRequiredNote
             paydayField
             privacyNote
         }
@@ -119,6 +120,17 @@ struct OnboardingFirstStepView: View {
         )
     }
 
+    /// Says why Continue is dimmed instead of leaving the user guessing.
+    @ViewBuilder
+    private var salaryRequiredNote: some View {
+        if !vm.canContinue {
+            Text("onboarding.step1.salary_required")
+                .font(.noteStyle)
+                .foregroundColor(.onSurfaceVariant)
+                .padding(.leading, 4)
+        }
+    }
+
     private var privacyNote: some View {
         HStack(alignment: .top, spacing: Spacing.sm) {
             Image(systemName: "info.circle")
@@ -153,6 +165,8 @@ struct OnboardingFirstStepView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(!vm.canContinue)
+            .opacity(vm.canContinue ? 1 : Opacity.muted)
             .simultaneousGesture(TapGesture().onEnded { saveProfile() })
         }
         .padding(.horizontal, Spacing.containerPadding)

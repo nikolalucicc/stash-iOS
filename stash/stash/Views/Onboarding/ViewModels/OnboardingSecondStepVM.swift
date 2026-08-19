@@ -59,8 +59,11 @@ class OnboardingSecondStepVM {
         monthlySalary > 0 && monthlySaving > monthlySalary
     }
 
+    /// `true` while the amount is still empty — an unanswered step, not an error.
+    var savingIsMissing: Bool { monthlySaving <= 0 }
+
     /// Whether the user can proceed to the next step.
     var canContinue: Bool {
-        monthlySalary > 0 && monthlySaving <= monthlySalary
+        monthlySalary > 0 && !savingIsMissing && !savingExceedsSalary
     }
 }

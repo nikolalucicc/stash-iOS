@@ -185,6 +185,13 @@ struct OnboardingSecondStepView: View {
                 }
                 .foregroundColor(.appError)
                 .padding(.leading, 4)
+            } else if vm.savingIsMissing {
+                Text(vm.savingMethod == .percentage
+                     ? "onboarding.step2.percentage_required"
+                     : "onboarding.step2.amount_required")
+                    .font(.noteStyle)
+                    .foregroundColor(.onSurfaceVariant)
+                    .padding(.leading, 4)
             }
         }
     }
