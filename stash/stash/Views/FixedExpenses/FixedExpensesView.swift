@@ -99,10 +99,12 @@ private extension FixedExpensesView {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.lg, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("a11y.back"))
                 Spacer()
             }
         }
@@ -149,6 +151,7 @@ private extension FixedExpensesView {
             let saving = profile.monthlySaving
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.sm))
                 Text(verbatim: String(format: String(localized: "expenses.over_committed"),
                                       saving.serbianFormatted,
@@ -179,6 +182,7 @@ private extension FixedExpensesView {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: expense.icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }
@@ -191,10 +195,12 @@ private extension FixedExpensesView {
                 .foregroundColor(.onSurfaceVariant)
             Button { pendingDelete = expense } label: {
                 Image(systemName: "trash")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.smd))
                     .foregroundColor(.appError)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("a11y.delete_expense"))
         }
         .padding(Spacing.md)
         .background(Color.white.opacity(Opacity.surfaceSubtle))
@@ -218,6 +224,7 @@ private extension FixedExpensesView {
         Button { presentAdd() } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.smd, weight: .semibold))
                 Text("onboarding.step3.add_expense_btn")
                     .font(.navTitleStyle)

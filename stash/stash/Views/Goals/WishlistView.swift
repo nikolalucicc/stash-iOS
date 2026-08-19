@@ -123,6 +123,7 @@ struct WishlistView: View {
             }
             Spacer()
             Image(systemName: "tray.and.arrow.down.fill")
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.md))
                 .foregroundColor(.appPrimary)
         }
@@ -134,6 +135,7 @@ struct WishlistView: View {
         if vm.isDistributed(profiles.first) {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "checkmark.circle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.smd))
                 Text("goals.distributed_done")
                     .font(.noteStyle)
@@ -185,6 +187,7 @@ struct WishlistView: View {
     private var addButton: some View {
         Button { showAddGoal = true } label: {
             Image(systemName: "plus")
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.xxl, weight: .bold))
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
@@ -193,6 +196,7 @@ struct WishlistView: View {
                 .shadow(color: Color.accent.opacity(Opacity.shadow), radius: 12, x: 0, y: 6)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(Text("a11y.add_goal"))
         .padding(Spacing.lg)
     }
 
@@ -203,6 +207,7 @@ struct WishlistView: View {
                     .fill(Color.appPrimary.opacity(Opacity.border))
                     .frame(width: 88, height: 88)
                 Image(systemName: "star")
+                    .accessibilityHidden(true)
                     .font(.system(size: 36))
                     .foregroundColor(.appPrimary)
             }

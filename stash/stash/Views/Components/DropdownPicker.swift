@@ -34,6 +34,7 @@ struct DropdownPicker: View {
                             .foregroundColor(.white)
                         Spacer()
                         Image(systemName: "chevron.down")
+                            .accessibilityHidden(true)
                             .foregroundColor(.white.opacity(Opacity.muted))
                             .rotationEffect(.degrees(isExpanded ? 180 : 0))
                             .animation(.easeInOut(duration: AppDuration.standard), value: isExpanded)
@@ -64,6 +65,7 @@ struct DropdownPicker: View {
                                     Spacer()
                                     if option == selection {
                                         Image(systemName: "checkmark")
+                                            .accessibilityHidden(true)
                                             .font(.system(size: IconSize.sm, weight: .medium))
                                             .foregroundColor(.accent)
                                     }
@@ -72,6 +74,7 @@ struct DropdownPicker: View {
                                 .padding(.vertical, Spacing.sm + 2)
                             }
                             .buttonStyle(.plain)
+                            .accessibilityAddTraits(option == selection ? [.isSelected] : [])
 
                             if option != options.last {
                                 Divider()

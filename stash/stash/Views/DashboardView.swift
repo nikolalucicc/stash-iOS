@@ -66,6 +66,7 @@ struct DashboardView: View {
                         .foregroundColor(.onSurfaceVariant)
                     Spacer()
                     Image(systemName: "plus.circle.fill")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.lg))
                         .foregroundColor(.appPrimary)
                 }
@@ -276,6 +277,7 @@ private extension DashboardView {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 32, height: 32)
                 Image(systemName: icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(iconColor)
             }
@@ -307,6 +309,7 @@ private extension DashboardView {
                     .foregroundColor(.onSurfaceVariant)
                 Spacer()
                 Image(systemName: "chevron.right")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.sm, weight: .medium))
                     .foregroundColor(.onSurfaceVariant)
             }
@@ -327,6 +330,7 @@ private extension DashboardView {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: expense.icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
             }

@@ -123,6 +123,7 @@ struct OnboardingFourthStepView: View {
                     .fill(Color.appPrimary)
                     .frame(width: 24, height: 24)
                 Image(systemName: "checkmark")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.xs, weight: .bold))
                     .foregroundColor(.onPrimary)
             } else {
@@ -143,6 +144,7 @@ struct OnboardingFourthStepView: View {
                     Text("common.continue_btn")
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.md, weight: .medium))
                 }
                 .foregroundColor(.white)
