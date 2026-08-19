@@ -15,12 +15,35 @@ final class AddCategoryVM {
     var name: String = ""
     var icon: String = SpendingCategory.iconChoices.first ?? "tag.fill"
 
-    var canSave: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
+    /// Names already taken, folded for comparison. Loaded when the sheet opens.
+    private var takenNames: Set<String> = []
+
+    var trimmedName: String { name.trimmingCharacters(in: .whitespaces) }
+
+    /// Spends are matched to their category by name, so two categories sharing
+    /// one name would share their spends — and deleting either would take both.
+    var isDuplicate: Bool {
+        !trimmedName.isEmpty && takenNames.contains(Self.fold(trimmedName))
+    }
+
+    var canSave: Bool { !trimmedName.isEmpty && !isDuplicate }
+
+    func loadExistingNames(from context: ModelContext) {
+        let existing = (try? context.fetch(FetchDescriptor<SpendingCategory>())) ?? []
+        takenNames = Set(existing.map { Self.fold($0.name) })
+    }
 
     func save(in context: ModelContext) async {
         guard canSave else { return }
-        let trimmedName = name.trimmingCharacters(in: .whitespaces)
+        // The list was read when the sheet opened; check again before inserting.
+        loadExistingNames(from: context)
+        guard !isDuplicate else { return }
         context.insert(SpendingCategory(name: trimmedName, icon: icon))
         try? context.save()
+    }
+
+    /// Case- and diacritic-insensitive, so "Food" and "food" are the same name.
+    private static func fold(_ name: String) -> String {
+        name.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
     }
 }
