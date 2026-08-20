@@ -2,7 +2,7 @@
 //  AddSpendingSheet.swift
 //  stash
 //
-//  Logs a new spend into the chosen category, or deletes the category.
+//  Logs a new spend into the chosen category, renames it, or deletes it.
 //
 
 import SwiftUI
@@ -21,9 +21,14 @@ struct AddSpendingSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             header
-            amountField
-            noteField
-            saveButton
+            if vm.isRenaming {
+                renameField
+            } else {
+                amountField
+                noteField
+                saveButton
+            }
+            renameButton
             deleteButton
             Spacer()
         }
@@ -103,7 +108,76 @@ struct AddSpendingSheet: View {
         }
         .buttonStyle(.plain)
         .disabled(!vm.canSave)
-        .opacity(vm.canSave ? 1 : 0.4)
+        .opacity(vm.canSave ? 1 : Opacity.muted)
+    }
+
+    /// Renaming carries the category's spends with it — they are matched by
+    /// name, so the old name would strand every one of them.
+    private var renameField: some View {
+        let bindable = Bindable(vm)
+        return VStack(alignment: .leading, spacing: Spacing.xs) {
+            TextField("spending.category_name_placeholder", text: bindable.renameText)
+                .font(.inputValStyle)
+                .foregroundColor(.onSurface)
+                .frame(height: Size.field)
+                .padding(.horizontal, Spacing.md)
+                .background(Color.white.opacity(Opacity.surface))
+                .cornerRadius(Radius.xl)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.xl)
+                        .stroke(isDuplicate ? Color.appError : Color.white.opacity(Opacity.border),
+                                lineWidth: Line.hairline)
+                )
+            if isDuplicate {
+                HStack(alignment: .top, spacing: Spacing.xs) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .accessibilityHidden(true)
+                        .font(.system(size: IconSize.xs))
+                    Text("spending.duplicate_category")
+                        .font(.noteStyle)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(.appError)
+                .padding(.leading, 4)
+            }
+            Button {
+                Task { await vm.rename(category, in: modelContext); vm.isRenaming = false }
+            } label: {
+                Text("spending.rename_save_cta")
+                    .font(.navTitleStyle)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: Size.field)
+                    .background(Color.accent)
+                    .cornerRadius(Radius.xl)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(!canRename)
+            .opacity(canRename ? 1 : Opacity.muted)
+        }
+    }
+
+    private var isDuplicate: Bool { vm.renameIsDuplicate(category, in: modelContext) }
+    private var canRename: Bool { vm.canRename(category, in: modelContext) }
+
+    private var renameButton: some View {
+        Button {
+            if vm.isRenaming {
+                vm.isRenaming = false
+            } else {
+                vm.renameText = category.name
+                vm.isRenaming = true
+            }
+        } label: {
+            Text(vm.isRenaming ? "common.cancel_btn" : "spending.rename_category_cta")
+                .font(.bodyStyle)
+                .foregroundColor(.appPrimary)
+                .frame(maxWidth: .infinity)
+                .frame(height: Size.controlSm)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var deleteButton: some View {
