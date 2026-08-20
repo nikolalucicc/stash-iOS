@@ -85,7 +85,7 @@ struct OnboardingFourthStepView: View {
                         .fill(Color.surfaceContainer)
                         .frame(width: 40, height: 40)
                     Text(verbatim: currency.flag)
-                        .font(.system(size: IconSize.xl))
+                        .iconSize(IconSize.xl)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: currency.name)
@@ -124,7 +124,7 @@ struct OnboardingFourthStepView: View {
                     .frame(width: 24, height: 24)
                 Image(systemName: "checkmark")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.xs, weight: .bold))
+                    .iconSize(IconSize.xs, weight: .bold)
                     .foregroundColor(.onPrimary)
             } else {
                 Circle()
@@ -145,7 +145,7 @@ struct OnboardingFourthStepView: View {
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.md, weight: .medium))
+                        .iconSize(IconSize.md, weight: .medium)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

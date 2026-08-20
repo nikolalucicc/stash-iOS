@@ -73,7 +73,7 @@ struct WalkthroughView: View {
                     .frame(width: 132, height: 132)
                 Image(systemName: step.icon)
                     .accessibilityHidden(true)
-                    .font(.system(size: 54, weight: .medium))
+                    .iconSize(54, weight: .medium)
                     .foregroundColor(.appPrimary)
             }
             VStack(spacing: Spacing.sm) {

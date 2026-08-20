@@ -66,7 +66,7 @@ struct DropdownPicker: View {
                                     if option == selection {
                                         Image(systemName: "checkmark")
                                             .accessibilityHidden(true)
-                                            .font(.system(size: IconSize.sm, weight: .medium))
+                                            .iconSize(IconSize.sm, weight: .medium)
                                             .foregroundColor(.accent)
                                     }
                                 }

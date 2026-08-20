@@ -25,7 +25,7 @@ struct OnboardingAppBar: View {
                     Button { onBack() } label: {
                         Image(systemName: "arrow.left")
                             .accessibilityHidden(true)
-                            .font(.system(size: IconSize.lg, weight: .medium))
+                            .iconSize(IconSize.lg, weight: .medium)
                             .foregroundColor(.appPrimary)
                     }
                     .buttonStyle(.plain)

@@ -39,7 +39,7 @@ struct AddCategorySheet: View {
             HStack(alignment: .top, spacing: Spacing.xs) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.xs))
+                    .iconSize(IconSize.xs)
                 Text("spending.duplicate_category")
                     .font(.noteStyle)
                     .fixedSize(horizontal: false, vertical: true)
@@ -54,7 +54,7 @@ struct AddCategorySheet: View {
         return TextField("spending.category_name_placeholder", text: bindable.name)
             .font(.inputValStyle)
             .foregroundColor(.onSurface)
-            .frame(height: Size.field)
+            .frame(minHeight: Size.field)
             .padding(.horizontal, Spacing.md)
             .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
@@ -79,10 +79,10 @@ struct AddCategorySheet: View {
             // Not hidden: the symbol's own name is the only thing that tells
             // these fourteen cells apart out loud.
             Image(systemName: choice)
-                .font(.system(size: IconSize.lg))
+                .iconSize(IconSize.lg)
                 .foregroundColor(isSelected ? .white : .appPrimary)
                 .frame(maxWidth: .infinity)
-                .frame(height: Size.controlMd)
+                .frame(minHeight: Size.controlMd)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.lg)
                         .fill(isSelected ? Color.accent : Color.white.opacity(Opacity.surface))
@@ -101,7 +101,7 @@ struct AddCategorySheet: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: Size.field)
+                .frame(minHeight: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())

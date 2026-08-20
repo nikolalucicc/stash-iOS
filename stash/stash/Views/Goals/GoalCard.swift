@@ -44,7 +44,7 @@ struct GoalCard: View {
                     HStack(spacing: 2) {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .accessibilityHidden(true)
-                            .font(.system(size: IconSize.xs))
+                            .iconSize(IconSize.xs)
                         Text("goals.deadline_at_risk")
                             .font(.noteStyle)
                     }
@@ -66,7 +66,7 @@ struct GoalCard: View {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 48, height: 48)
                 Text(verbatim: goal.emoji)
-                    .font(.system(size: IconSize.xxl))
+                    .iconSize(IconSize.xxl)
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(verbatim: goal.name)
