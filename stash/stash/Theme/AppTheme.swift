@@ -82,19 +82,22 @@ extension Color {
 
 // MARK: - Typography
 
+/// Every style is anchored to a system text style with `relativeTo:`, so the
+/// sizes below are the ones at the default Dynamic Type setting and grow or
+/// shrink with the reader's. Plain `Font.custom(_:size:)` stays put instead.
 extension Font {
-    static let noteStyle          = Font.custom("Inter", size: 12).weight(.regular)
-    static let labelCapsStyle     = Font.custom("Inter", size: 11).weight(.medium)
-    static let sectionHeaderStyle = Font.custom("Inter", size: 18).weight(.medium)
-    static let displayValStyle    = Font.custom("Inter", size: 24).weight(.medium)
-    static let inputValStyle      = Font.custom("Inter", size: 15).weight(.regular)
-    static let screenTitleStyle   = Font.custom("Inter", size: 22).weight(.medium)
-    static let displayLgStyle     = Font.custom("Inter", size: 36).weight(.medium)
-    static let bodyStyle          = Font.custom("Inter", size: 14).weight(.regular)
-    static let labelSmStyle       = Font.custom("Inter", size: 10).weight(.regular)
-    static let heroNumStyle       = Font.custom("Inter", size: 48).weight(.medium)
-    static let navTitleStyle      = Font.custom("Inter", size: 16).weight(.medium)
-    static let secondaryStyle     = Font.custom("Inter", size: 13).weight(.regular)
+    static let noteStyle          = Font.custom("Inter", size: 12, relativeTo: .caption).weight(.regular)
+    static let labelCapsStyle     = Font.custom("Inter", size: 11, relativeTo: .caption2).weight(.medium)
+    static let sectionHeaderStyle = Font.custom("Inter", size: 18, relativeTo: .headline).weight(.medium)
+    static let displayValStyle    = Font.custom("Inter", size: 24, relativeTo: .title2).weight(.medium)
+    static let inputValStyle      = Font.custom("Inter", size: 15, relativeTo: .subheadline).weight(.regular)
+    static let screenTitleStyle   = Font.custom("Inter", size: 22, relativeTo: .title2).weight(.medium)
+    static let displayLgStyle     = Font.custom("Inter", size: 36, relativeTo: .largeTitle).weight(.medium)
+    static let bodyStyle          = Font.custom("Inter", size: 14, relativeTo: .footnote).weight(.regular)
+    static let labelSmStyle       = Font.custom("Inter", size: 10, relativeTo: .caption2).weight(.regular)
+    static let heroNumStyle       = Font.custom("Inter", size: 48, relativeTo: .largeTitle).weight(.medium)
+    static let navTitleStyle      = Font.custom("Inter", size: 16, relativeTo: .callout).weight(.medium)
+    static let secondaryStyle     = Font.custom("Inter", size: 13, relativeTo: .footnote).weight(.regular)
 }
 
 // MARK: - Spacing
