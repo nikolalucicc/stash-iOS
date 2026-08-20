@@ -53,7 +53,7 @@ struct ChangeSalaryView: View {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.lg, weight: .medium))
+                        .iconSize(IconSize.lg, weight: .medium)
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -144,7 +144,7 @@ struct ChangeSalaryView: View {
                 .font(.secondaryStyle)
                 .foregroundColor(isSelected ? .appPrimary : .onSurfaceVariant)
                 .frame(maxWidth: .infinity)
-                .frame(height: Size.controlMd)
+                .frame(minHeight: Size.controlMd)
                 .background(
                     RoundedRectangle(cornerRadius: Radius.xl)
                         .fill(isSelected
@@ -207,7 +207,7 @@ struct ChangeSalaryView: View {
         HStack(spacing: Spacing.xs) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.xs))
+                .iconSize(IconSize.xs)
             Text("common.saving_exceeds_salary")
                 .font(.noteStyle)
         }
@@ -228,7 +228,7 @@ private extension ChangeSalaryView {
                     .frame(width: 32, height: 32)
                 Image(systemName: "info.circle")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.lg))
+                    .iconSize(IconSize.lg)
                     .foregroundColor(.appPrimary)
             }
             Text("settings.info")
@@ -294,7 +294,7 @@ private extension ChangeSalaryView {
                 Spacer()
                 Image(systemName: "creditcard")
                     .accessibilityHidden(true)
-                    .font(.system(size: 120, weight: .ultraLight))
+                    .iconSize(120, weight: .ultraLight)
                     .foregroundColor(.appPrimary.opacity(Opacity.border))
                     .offset(x: 24, y: 28)
             }
@@ -318,7 +318,7 @@ private extension ChangeSalaryView {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: Size.field)
+                .frame(minHeight: Size.field)
                 .background(Color.accent)
                 .cornerRadius(Radius.xl)
                 .contentShape(Rectangle())

@@ -90,10 +90,10 @@ struct AccountView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
                     .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: Size.iconBadge, height: Size.iconBadge)
+                    .scaledSquare(Size.iconBadge)
                 Image(systemName: icon)
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(.appPrimary)
             }
             Text(title)
@@ -107,7 +107,7 @@ struct AccountView: View {
             }
             Image(systemName: "chevron.right")
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.sm, weight: .medium))
+                .iconSize(IconSize.sm, weight: .medium)
                 .foregroundColor(.onSurfaceVariant)
         }
         .padding(Spacing.md)
@@ -184,7 +184,7 @@ private struct CurrencyPickerSheet: View {
             }
         } label: {
             HStack(spacing: Spacing.md) {
-                Text(verbatim: currency.flag).font(.system(size: IconSize.xl))
+                Text(verbatim: currency.flag).iconSize(IconSize.xl)
                 Text(verbatim: currency.name)
                     .font(.navTitleStyle)
                     .foregroundColor(.onSurface)
@@ -192,7 +192,7 @@ private struct CurrencyPickerSheet: View {
                 if currency == selected {
                     Image(systemName: "checkmark")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.smd, weight: .bold))
+                        .iconSize(IconSize.smd, weight: .bold)
                         .foregroundColor(.appPrimary)
                 }
             }

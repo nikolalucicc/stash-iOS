@@ -135,7 +135,7 @@ struct OnboardingFirstStepView: View {
         HStack(alignment: .top, spacing: Spacing.sm) {
             Image(systemName: "info.circle")
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.lg))
+                .iconSize(IconSize.lg)
                 .foregroundColor(.white.opacity(Opacity.mutedStrong))
             Text("onboarding.step1.privacy_note")
                 .font(.noteStyle)
@@ -157,7 +157,7 @@ struct OnboardingFirstStepView: View {
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.md, weight: .medium))
+                        .iconSize(IconSize.md, weight: .medium)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

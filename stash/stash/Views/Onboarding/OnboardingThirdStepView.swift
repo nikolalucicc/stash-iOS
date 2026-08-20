@@ -111,10 +111,10 @@ struct OnboardingThirdStepView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
                     .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: Size.iconBadge, height: Size.iconBadge)
+                    .scaledSquare(Size.iconBadge)
                 Image(systemName: expense.icon)
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(.appPrimary)
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -137,7 +137,7 @@ struct OnboardingThirdStepView: View {
             Button { vm.delete(expense) } label: {
                 Image(systemName: "trash")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.lg))
+                    .iconSize(IconSize.lg)
                     .foregroundColor(.appError)
             }
             .buttonStyle(.plain)
@@ -157,14 +157,14 @@ struct OnboardingThirdStepView: View {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.lg))
+                    .iconSize(IconSize.lg)
                     .foregroundColor(.onSurfaceVariant)
                 Text("onboarding.step3.add_expense_btn")
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: Size.field)
+            .frame(minHeight: Size.field)
             .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
             .overlay(
@@ -188,6 +188,7 @@ struct OnboardingThirdStepView: View {
             HStack(alignment: .lastTextBaseline, spacing: 4) {
                 Text(verbatim: vm.totalFormatted)
                     .font(.displayLgStyle)
+                    .amountLine()
                     .foregroundColor(.appPrimary)
                 Text(verbatim: currencyCode)
                     .font(.bodyStyle)
@@ -220,7 +221,7 @@ struct OnboardingThirdStepView: View {
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.sm))
+                    .iconSize(IconSize.sm)
                 Text(verbatim: String(format: String(localized: "onboarding.step3.over_committed"),
                                       saving.serbianFormatted,
                                       vm.total.serbianFormatted,
@@ -306,7 +307,7 @@ struct AddExpenseSheetView: View {
                         .font(.navTitleStyle)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .frame(height: Size.field)
+                        .frame(minHeight: Size.field)
                         .background(Color.accent)
                         .cornerRadius(Radius.xl)
                         .contentShape(Rectangle())
@@ -318,7 +319,7 @@ struct AddExpenseSheetView: View {
                         .font(.bodyStyle)
                         .foregroundColor(.onSurfaceVariant)
                         .frame(maxWidth: .infinity)
-                        .frame(height: Size.field)
+                        .frame(minHeight: Size.field)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -338,7 +339,7 @@ struct AddExpenseSheetView: View {
             TextField("onboarding.step3.name_placeholder", text: $vm.newName)
                 .font(.inputValStyle)
                 .foregroundColor(.onSurface)
-                .frame(height: Size.field)
+                .frame(minHeight: Size.field)
                 .padding(.horizontal, Spacing.md)
                 .background(Color.white.opacity(Opacity.surface))
                 .cornerRadius(Radius.xl)
@@ -367,7 +368,7 @@ struct AddExpenseSheetView: View {
                     .font(.bodyStyle)
                     .foregroundColor(.onSurfaceVariant)
             }
-            .frame(height: Size.field)
+            .frame(minHeight: Size.field)
             .padding(.horizontal, Spacing.md)
             .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)

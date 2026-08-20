@@ -11,6 +11,7 @@ import Foundation
 
 struct DashboardView: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query private var profiles: [UserProfile]
     @State private var showStash = false
 
@@ -67,12 +68,13 @@ struct DashboardView: View {
                     Spacer()
                     Image(systemName: "plus.circle.fill")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.lg))
+                        .iconSize(IconSize.lg)
                         .foregroundColor(.appPrimary)
                 }
                 HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                     Text(verbatim: profile.stashBalance.serbianFormatted)
                         .font(.heroNumStyle)
+                        .amountLine()
                         .foregroundColor(.onSurface)
                     Text(verbatim: currencyCode)
                         .font(.displayValStyle)
@@ -135,6 +137,7 @@ struct DashboardView: View {
                 HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                     Text(verbatim: profile.monthlySaving.serbianFormatted)
                         .font(.displayLgStyle)
+                        .amountLine()
                         .foregroundColor(.white)
                     Text(verbatim: profile.currency.code)
                         .font(.sectionHeaderStyle)
@@ -211,25 +214,27 @@ struct DashboardView: View {
         }
     }
 
+    /// Three columns fit side by side at ordinary sizes; at accessibility sizes
+    /// there isn't the width, and they break words mid-syllable. Stack instead.
     private func currentMonthStats(for profile: UserProfile) -> some View {
-        HStack {
-            statColumn(
-                label: String(localized: "dashboard.savings_stat"),
-                amount: profile.monthlySaving,
-                tint: Color(hex: "#AFA9EC")
-            )
-            Spacer()
-            statColumn(
-                label: String(localized: "dashboard.fixed_stat"),
-                amount: fixedTotal(for: profile),
-                tint: .onSurfaceVariant
-            )
-            Spacer()
-            statColumn(
-                label: String(localized: "dashboard.free_stat"),
-                amount: freeAmount(for: profile),
-                tint: .onSurface
-            )
+        let columns = [
+            (String(localized: "dashboard.savings_stat"), profile.monthlySaving, Color(hex: "#AFA9EC")),
+            (String(localized: "dashboard.fixed_stat"), fixedTotal(for: profile), Color.onSurfaceVariant),
+            (String(localized: "dashboard.free_stat"), freeAmount(for: profile), Color.onSurface)
+        ]
+        return Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    ForEach(columns, id: \.0) { statColumn(label: $0.0, amount: $0.1, tint: $0.2) }
+                }
+            } else {
+                HStack {
+                    ForEach(Array(columns.enumerated()), id: \.element.0) { index, column in
+                        if index > 0 { Spacer() }
+                        statColumn(label: column.0, amount: column.1, tint: column.2)
+                    }
+                }
+            }
         }
     }
 
@@ -250,8 +255,13 @@ struct DashboardView: View {
 
 private extension DashboardView {
 
+    /// Side by side the two tiles are too narrow for enlarged labels — "Fixed
+    /// expenses" breaks mid-word. Give each the full width instead.
     func statsGrid(for profile: UserProfile) -> some View {
-        HStack(spacing: Spacing.gutter) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: Spacing.gutter))
+            : AnyLayout(HStackLayout(spacing: Spacing.gutter))
+        return layout {
             NavigationLink(destination: FixedExpensesView()) {
                 statTile(
                     icon: "list.bullet.rectangle",
@@ -275,18 +285,22 @@ private extension DashboardView {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
                     .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: 32, height: 32)
+                    .scaledSquare(32)
                 Image(systemName: icon)
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(iconColor)
             }
             Text(verbatim: value)
                 .font(.displayValStyle)
                 .foregroundColor(.onSurface)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             Text(verbatim: label)
                 .font(.labelSmStyle)
                 .foregroundColor(.white.opacity(Opacity.muted))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity)
         .padding(Spacing.md)
@@ -310,7 +324,7 @@ private extension DashboardView {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.sm, weight: .medium))
+                    .iconSize(IconSize.sm, weight: .medium)
                     .foregroundColor(.onSurfaceVariant)
             }
             .padding(.leading, 4)
@@ -328,10 +342,10 @@ private extension DashboardView {
             ZStack {
                 RoundedRectangle(cornerRadius: Radius.lg)
                     .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: Size.iconBadge, height: Size.iconBadge)
+                    .scaledSquare(Size.iconBadge)
                 Image(systemName: expense.icon)
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(.appPrimary)
             }
             VStack(alignment: .leading, spacing: 2) {

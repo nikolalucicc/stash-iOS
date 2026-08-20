@@ -40,7 +40,7 @@ struct PaydayReminderCard: View {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "banknote.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(.appPrimary)
                 Text("payday.title")
                     .font(.sectionHeaderStyle)
@@ -67,7 +67,7 @@ struct PaydayReminderCard: View {
                 .font(.navTitleStyle)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: Size.controlMd)
+                .frame(minHeight: Size.controlMd)
                 .background(Color.accent)
                 .cornerRadius(Radius.lg)
                 .contentShape(Rectangle())

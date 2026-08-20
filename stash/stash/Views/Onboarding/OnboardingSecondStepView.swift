@@ -180,7 +180,7 @@ struct OnboardingSecondStepView: View {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.xs))
+                        .iconSize(IconSize.xs)
                     Text("common.saving_exceeds_salary")
                         .font(.noteStyle)
                 }
@@ -242,7 +242,7 @@ struct OnboardingSecondStepView: View {
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.md, weight: .medium))
+                        .iconSize(IconSize.md, weight: .medium)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -264,7 +264,7 @@ struct OnboardingSecondStepView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.left")
                             .accessibilityHidden(true)
-                            .font(.system(size: IconSize.sm))
+                            .iconSize(IconSize.sm)
                         Text("common.back_btn")
                             .font(.secondaryStyle)
                     }

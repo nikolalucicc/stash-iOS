@@ -13,6 +13,7 @@ struct FixedExpensesView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query private var profiles: [UserProfile]
     @State private var vm = FixedExpensesVM()
     @State private var showSheet = false
@@ -100,7 +101,7 @@ private extension FixedExpensesView {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.lg, weight: .medium))
+                        .iconSize(IconSize.lg, weight: .medium)
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -121,6 +122,7 @@ private extension FixedExpensesView {
             HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                 Text(verbatim: total.serbianFormatted)
                     .font(.heroNumStyle)
+                    .amountLine()
                     .foregroundColor(.onSurface)
                 Text(verbatim: currencyCode)
                     .font(.displayValStyle)
@@ -152,7 +154,7 @@ private extension FixedExpensesView {
             HStack(alignment: .top, spacing: Spacing.sm) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.sm))
+                    .iconSize(IconSize.sm)
                 Text(verbatim: String(format: String(localized: "expenses.over_committed"),
                                       saving.serbianFormatted,
                                       total.serbianFormatted,
@@ -175,32 +177,48 @@ private extension FixedExpensesView {
         }
     }
 
+    /// Two lines at accessibility sizes; one line otherwise. Kept on one line
+    /// the name is squeezed down to a letter per row.
     func expenseRow(_ expense: FixedExpenseEntity) -> some View {
-        HStack(spacing: Spacing.md) {
-            ZStack {
-                RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: Size.iconBadge, height: Size.iconBadge)
-                Image(systemName: expense.icon)
-                    .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
-                    .foregroundColor(.appPrimary)
+        let badge = ZStack {
+            RoundedRectangle(cornerRadius: Radius.lg)
+                .fill(Color.white.opacity(Opacity.surface))
+                .scaledSquare(Size.iconBadge)
+            Image(systemName: expense.icon)
+                .accessibilityHidden(true)
+                .iconSize(IconSize.md)
+                .foregroundColor(.appPrimary)
+        }
+        let name = Text(verbatim: expense.name)
+            .font(.navTitleStyle)
+            .foregroundColor(.onSurface)
+        let amount = Text(verbatim: "\(expense.amount.serbianFormatted) \(currencyCode)")
+            .font(.secondaryStyle)
+            .foregroundColor(.onSurfaceVariant)
+        let remove = Button { pendingDelete = expense } label: {
+            Image(systemName: "trash")
+                .accessibilityHidden(true)
+                .iconSize(IconSize.smd)
+                .foregroundColor(.appError)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("a11y.delete_expense"))
+
+        return Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    HStack(spacing: Spacing.md) { badge; name }
+                    HStack(spacing: Spacing.md) { amount; Spacer(minLength: Spacing.sm); remove }
+                }
+            } else {
+                HStack(spacing: Spacing.md) {
+                    badge
+                    name.layoutPriority(1)
+                    Spacer(minLength: Spacing.sm)
+                    amount.amountLine()
+                    remove
+                }
             }
-            Text(verbatim: expense.name)
-                .font(.navTitleStyle)
-                .foregroundColor(.onSurface)
-            Spacer()
-            Text(verbatim: "\(expense.amount.serbianFormatted) \(currencyCode)")
-                .font(.secondaryStyle)
-                .foregroundColor(.onSurfaceVariant)
-            Button { pendingDelete = expense } label: {
-                Image(systemName: "trash")
-                    .accessibilityHidden(true)
-                    .font(.system(size: IconSize.smd))
-                    .foregroundColor(.appError)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Text("a11y.delete_expense"))
         }
         .padding(Spacing.md)
         .background(Color.white.opacity(Opacity.surfaceSubtle))
@@ -225,13 +243,13 @@ private extension FixedExpensesView {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.smd, weight: .semibold))
+                    .iconSize(IconSize.smd, weight: .semibold)
                 Text("onboarding.step3.add_expense_btn")
                     .font(.navTitleStyle)
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: Size.field)
+            .frame(minHeight: Size.field)
             .background(Color.accent)
             .cornerRadius(Radius.xl)
             .contentShape(Rectangle())

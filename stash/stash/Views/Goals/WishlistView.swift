@@ -72,6 +72,7 @@ struct WishlistView: View {
             HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                 Text(verbatim: summary.totalSaved.serbianFormatted)
                     .font(.displayLgStyle)
+                    .amountLine()
                     .foregroundColor(.onSurface)
                 Text(verbatim: "/ \(summary.totalTarget.serbianFormatted) \(currencyCode)")
                     .font(.bodyStyle)
@@ -124,7 +125,7 @@ struct WishlistView: View {
             Spacer()
             Image(systemName: "tray.and.arrow.down.fill")
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.md))
+                .iconSize(IconSize.md)
                 .foregroundColor(.appPrimary)
         }
     }
@@ -136,13 +137,13 @@ struct WishlistView: View {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "checkmark.circle.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.smd))
+                    .iconSize(IconSize.smd)
                 Text("goals.distributed_done")
                     .font(.noteStyle)
             }
             .foregroundColor(.appPrimary)
             .frame(maxWidth: .infinity)
-            .frame(height: Size.controlMd)
+            .frame(minHeight: Size.controlMd)
         } else {
             Button {
                 Task { await vm.distribute(to: orderedGoals, in: modelContext) }
@@ -151,7 +152,7 @@ struct WishlistView: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: Size.controlMd)
+                    .frame(minHeight: Size.controlMd)
                     .background(Color.accent)
                     .cornerRadius(Radius.lg)
                     .contentShape(Rectangle())
@@ -188,7 +189,7 @@ struct WishlistView: View {
         Button { showAddGoal = true } label: {
             Image(systemName: "plus")
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.xxl, weight: .bold))
+                .iconSize(IconSize.xxl, weight: .bold)
                 .foregroundColor(.white)
                 .frame(width: 56, height: 56)
                 .background(Color.accent)
@@ -208,7 +209,7 @@ struct WishlistView: View {
                     .frame(width: 88, height: 88)
                 Image(systemName: "star")
                     .accessibilityHidden(true)
-                    .font(.system(size: 36))
+                    .iconSize(36)
                     .foregroundColor(.appPrimary)
             }
             Text("goals.empty_title")

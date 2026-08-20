@@ -69,7 +69,7 @@ struct GoalDetailView: View {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
                         .accessibilityHidden(true)
-                        .font(.system(size: IconSize.lg, weight: .medium))
+                        .iconSize(IconSize.lg, weight: .medium)
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -78,7 +78,7 @@ struct GoalDetailView: View {
                 Button { showEdit = true } label: {
                     Image(systemName: "pencil")
                         .accessibilityHidden(true)
-                        .font(.system(size: 17, weight: .medium))
+                        .iconSize(17, weight: .medium)
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
@@ -96,7 +96,7 @@ struct GoalDetailView: View {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 56, height: 56)
                 Text(verbatim: goal.emoji)
-                    .font(.system(size: 28))
+                    .iconSize(28)
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(verbatim: goal.name)
@@ -115,6 +115,7 @@ struct GoalDetailView: View {
             HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                 Text(verbatim: goal.savedAmount.serbianFormatted)
                     .font(.displayLgStyle)
+                    .amountLine()
                     .foregroundColor(.onSurface)
                 Text(verbatim: "/ \(goal.targetAmount.serbianFormatted) \(currencyCode)")
                     .font(.bodyStyle)
@@ -181,7 +182,7 @@ struct GoalDetailView: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: Size.field)
+                    .frame(minHeight: Size.field)
                     .background(Color.accent)
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())
@@ -195,7 +196,7 @@ struct GoalDetailView: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.appPrimary)
                     .frame(maxWidth: .infinity)
-                    .frame(height: Size.field)
+                    .frame(minHeight: Size.field)
                     .background(Color.white.opacity(Opacity.surface))
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())
@@ -281,7 +282,7 @@ private struct DepositSheet: View {
                     .font(.labelCapsStyle)
                     .foregroundColor(.appPrimary)
             }
-            .frame(height: Size.field)
+            .frame(minHeight: Size.field)
             .padding(.horizontal, Spacing.md)
             .background(Color.white.opacity(Opacity.surface))
             .cornerRadius(Radius.xl)
@@ -293,7 +294,7 @@ private struct DepositSheet: View {
                     .font(.navTitleStyle)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: Size.field)
+                    .frame(minHeight: Size.field)
                     .background(Color.accent)
                     .cornerRadius(Radius.xl)
                     .contentShape(Rectangle())

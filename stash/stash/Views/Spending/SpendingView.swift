@@ -13,6 +13,7 @@ import SwiftData
 struct SpendingView: View {
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query private var profiles: [UserProfile]
     @Query(sort: \SpendingCategory.createdAt) private var categories: [SpendingCategory]
     @Query(sort: \SpendingEntry.createdAt, order: .reverse) private var entries: [SpendingEntry]
@@ -103,6 +104,7 @@ private extension SpendingView {
             HStack(alignment: .lastTextBaseline, spacing: Spacing.xs) {
                 Text(verbatim: remaining.serbianFormatted)
                     .font(.heroNumStyle)
+                    .amountLine()
                     .foregroundColor(remaining < 0 ? .appError : .onSurface)
                 Text(verbatim: currencyCode)
                     .font(.displayValStyle)
@@ -138,28 +140,45 @@ private extension SpendingView {
         }
     }
 
+    /// Icon, name, amount and the add button fit on one line at ordinary sizes.
+    /// At accessibility sizes they don't, and squeezing them turns "Shopping"
+    /// into one letter per line — so the row becomes two lines instead.
     func categoryRow(_ category: SpendingCategory) -> some View {
-        HStack(spacing: Spacing.md) {
-            ZStack {
-                RoundedRectangle(cornerRadius: Radius.lg)
-                    .fill(Color.white.opacity(Opacity.surface))
-                    .frame(width: Size.iconBadge, height: Size.iconBadge)
-                Image(systemName: category.icon)
-                    .accessibilityHidden(true)
-                    .font(.system(size: 15))
-                    .foregroundColor(.appPrimary)
-            }
-            Text(verbatim: category.name)
-                .font(.navTitleStyle)
-                .foregroundColor(.onSurface)
-            Spacer()
-            Text(verbatim: "\(spent(for: category).serbianFormatted) \(currencyCode)")
-                .font(.secondaryStyle)
-                .foregroundColor(.onSurfaceVariant)
-            Image(systemName: "plus.circle.fill")
+        let badge = ZStack {
+            RoundedRectangle(cornerRadius: Radius.lg)
+                .fill(Color.white.opacity(Opacity.surface))
+                .scaledSquare(Size.iconBadge)
+            Image(systemName: category.icon)
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.lg))
+                .iconSize(15)
                 .foregroundColor(.appPrimary)
+        }
+        let name = Text(verbatim: category.name)
+            .font(.navTitleStyle)
+            .foregroundColor(.onSurface)
+        let amount = Text(verbatim: "\(spent(for: category).serbianFormatted) \(currencyCode)")
+            .font(.secondaryStyle)
+            .foregroundColor(.onSurfaceVariant)
+        let add = Image(systemName: "plus.circle.fill")
+            .accessibilityHidden(true)
+            .iconSize(IconSize.lg)
+            .foregroundColor(.appPrimary)
+
+        return Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    HStack(spacing: Spacing.md) { badge; name }
+                    HStack(spacing: Spacing.md) { amount; Spacer(minLength: Spacing.sm); add }
+                }
+            } else {
+                HStack(spacing: Spacing.md) {
+                    badge
+                    name.layoutPriority(1)
+                    Spacer(minLength: Spacing.sm)
+                    amount.amountLine()
+                    add
+                }
+            }
         }
         .padding(Spacing.md)
         .background(Color.white.opacity(Opacity.surfaceSubtle))
@@ -176,13 +195,13 @@ private extension SpendingView {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.smd, weight: .semibold))
+                    .iconSize(IconSize.smd, weight: .semibold)
                 Text("spending.add_category")
                     .font(.secondaryStyle)
             }
             .foregroundColor(.appPrimary)
             .frame(maxWidth: .infinity)
-            .frame(height: Size.controlMd)
+            .frame(minHeight: Size.controlMd)
             .background(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .fill(Color.appPrimary.opacity(Opacity.fill))
@@ -208,7 +227,7 @@ private extension SpendingView {
         HStack(spacing: Spacing.md) {
             Image(systemName: entry.categoryIcon)
                 .accessibilityHidden(true)
-                .font(.system(size: IconSize.smd))
+                .iconSize(IconSize.smd)
                 .foregroundColor(.onSurfaceVariant)
                 .frame(width: 24)
             Text(verbatim: entry.note.isEmpty ? entry.categoryName : entry.note)
@@ -221,7 +240,7 @@ private extension SpendingView {
             Button { delete(entry) } label: {
                 Image(systemName: "xmark.circle.fill")
                     .accessibilityHidden(true)
-                    .font(.system(size: IconSize.md))
+                    .iconSize(IconSize.md)
                     .foregroundColor(.onSurfaceVariant)
             }
             .buttonStyle(.plain)
