@@ -63,10 +63,12 @@ struct AddGoalView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "xmark")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.md, weight: .medium))
                         .foregroundColor(.onSurfaceVariant)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("a11y.close"))
                 Spacer()
             }
         }
@@ -134,6 +136,7 @@ struct AddGoalView: View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.xs) {
                 Image(systemName: "checkmark.circle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: 15))
                     .foregroundColor(.appPrimary)
                 Text("goals.affordable_title")

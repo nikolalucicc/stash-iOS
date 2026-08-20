@@ -145,6 +145,7 @@ private extension SpendingView {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: Size.iconBadge, height: Size.iconBadge)
                 Image(systemName: category.icon)
+                    .accessibilityHidden(true)
                     .font(.system(size: 15))
                     .foregroundColor(.appPrimary)
             }
@@ -156,6 +157,7 @@ private extension SpendingView {
                 .font(.secondaryStyle)
                 .foregroundColor(.onSurfaceVariant)
             Image(systemName: "plus.circle.fill")
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.lg))
                 .foregroundColor(.appPrimary)
         }
@@ -173,6 +175,7 @@ private extension SpendingView {
         Button { showAddCategory = true } label: {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "plus")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.smd, weight: .semibold))
                 Text("spending.add_category")
                     .font(.secondaryStyle)
@@ -204,6 +207,7 @@ private extension SpendingView {
     func entryRow(_ entry: SpendingEntry) -> some View {
         HStack(spacing: Spacing.md) {
             Image(systemName: entry.categoryIcon)
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.smd))
                 .foregroundColor(.onSurfaceVariant)
                 .frame(width: 24)
@@ -216,10 +220,12 @@ private extension SpendingView {
                 .foregroundColor(.onSurface)
             Button { delete(entry) } label: {
                 Image(systemName: "xmark.circle.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.onSurfaceVariant)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("a11y.delete_spend"))
         }
         .padding(.vertical, Spacing.sm)
         .padding(.horizontal, Spacing.md)

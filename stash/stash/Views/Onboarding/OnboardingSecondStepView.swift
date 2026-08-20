@@ -179,6 +179,7 @@ struct OnboardingSecondStepView: View {
             if vm.savingExceedsSalary {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "exclamationmark.triangle.fill")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.xs))
                     Text("common.saving_exceeds_salary")
                         .font(.noteStyle)
@@ -240,6 +241,7 @@ struct OnboardingSecondStepView: View {
                     Text("common.continue_btn")
                         .font(.navTitleStyle)
                     Image(systemName: "arrow.right")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.md, weight: .medium))
                 }
                 .foregroundColor(.white)
@@ -261,6 +263,7 @@ struct OnboardingSecondStepView: View {
                 Button { dismiss() } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "arrow.left")
+                            .accessibilityHidden(true)
                             .font(.system(size: IconSize.sm))
                         Text("common.back_btn")
                             .font(.secondaryStyle)

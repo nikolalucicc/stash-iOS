@@ -43,6 +43,7 @@ struct GoalCard: View {
                 if underfunded {
                     HStack(spacing: 2) {
                         Image(systemName: "exclamationmark.triangle.fill")
+                            .accessibilityHidden(true)
                             .font(.system(size: IconSize.xs))
                         Text("goals.deadline_at_risk")
                             .font(.noteStyle)

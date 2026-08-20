@@ -52,10 +52,12 @@ struct ChangeSalaryView: View {
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
+                        .accessibilityHidden(true)
                         .font(.system(size: IconSize.lg, weight: .medium))
                         .foregroundColor(.appPrimary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text("a11y.back"))
                 Spacer()
             }
         }
@@ -204,6 +206,7 @@ struct ChangeSalaryView: View {
     private var validationError: some View {
         HStack(spacing: Spacing.xs) {
             Image(systemName: "exclamationmark.triangle.fill")
+                .accessibilityHidden(true)
                 .font(.system(size: IconSize.xs))
             Text("common.saving_exceeds_salary")
                 .font(.noteStyle)
@@ -224,6 +227,7 @@ private extension ChangeSalaryView {
                     .fill(Color.white.opacity(Opacity.surface))
                     .frame(width: 32, height: 32)
                 Image(systemName: "info.circle")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.lg))
                     .foregroundColor(.appPrimary)
             }
@@ -289,6 +293,7 @@ private extension ChangeSalaryView {
             HStack {
                 Spacer()
                 Image(systemName: "creditcard")
+                    .accessibilityHidden(true)
                     .font(.system(size: 120, weight: .ultraLight))
                     .foregroundColor(.appPrimary.opacity(Opacity.border))
                     .offset(x: 24, y: 28)

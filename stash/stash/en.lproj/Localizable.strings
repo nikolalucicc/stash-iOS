@@ -266,3 +266,19 @@
 "expenses.delete_title"   = "Delete expense?";
 "expenses.delete_message" = "It will no longer count toward your monthly costs.";
 "expenses.delete_cta"     = "Delete";
+
+// MARK: - Accessibility
+//
+// Spoken labels for controls that show only an icon. VoiceOver has nothing to
+// read on those otherwise — it just announces "button".
+
+"a11y.back"             = "Back";
+"a11y.close"            = "Close";
+"a11y.add_goal"         = "Add a goal";
+"a11y.edit_goal"        = "Edit goal";
+"a11y.delete_expense"   = "Delete expense";
+"a11y.delete_spend"     = "Delete spend";
+"a11y.add_to_stash"     = "Add to your stash";
+"a11y.add_category"     = "Add category";
+/* %@ = the category name, e.g. "Food" */
+"a11y.log_spend"        = "Log a spend in %@";

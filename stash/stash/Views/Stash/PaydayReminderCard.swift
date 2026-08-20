@@ -39,6 +39,7 @@ struct PaydayReminderCard: View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "banknote.fill")
+                    .accessibilityHidden(true)
                     .font(.system(size: IconSize.md))
                     .foregroundColor(.appPrimary)
                 Text("payday.title")
