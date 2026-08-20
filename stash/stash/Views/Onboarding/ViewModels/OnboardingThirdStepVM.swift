@@ -27,10 +27,16 @@ class OnboardingThirdStepVM {
     var total: Double { expenses.reduce(0) { $0 + $1.amount } }
     var totalFormatted: String { total.serbianFormatted }
 
+    var newExpenseName: String { newName.trimmingCharacters(in: .whitespaces) }
+    var newExpenseAmount: Double { newAmountText.parsedSerbianNumber }
+
+    /// An expense needs both halves; without them Add has nothing to add.
+    var canAddExpense: Bool { !newExpenseName.isEmpty && newExpenseAmount > 0 }
+
     func addExpense() {
-        let trimmedName = newName.trimmingCharacters(in: .whitespaces)
-        let amount = newAmountText.parsedSerbianNumber
-        guard !trimmedName.isEmpty, amount > 0 else { return }
+        let trimmedName = newExpenseName
+        let amount = newExpenseAmount
+        guard canAddExpense else { return }
         expenses.append(FixedExpense(
             name: trimmedName,
             note: String(localized: "onboarding.step3.default_note"),
