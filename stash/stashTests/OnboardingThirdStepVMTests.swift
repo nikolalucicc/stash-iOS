@@ -88,6 +88,34 @@ final class OnboardingThirdStepVMTests: XCTestCase {
         XCTAssertEqual(icon(for: "Something else", in: OnboardingThirdStepVM()), "tag.fill")
     }
 
+    // MARK: - Add validation
+
+    func testAddNeedsBothANameAndAnAmount() {
+        let vm = OnboardingThirdStepVM()
+        XCTAssertFalse(vm.canAddExpense, "Nothing entered yet")
+
+        vm.newName = "Rent"
+        XCTAssertFalse(vm.canAddExpense, "An expense without an amount is not an expense")
+
+        vm.newName = "  "
+        vm.newAmountText = "950"
+        XCTAssertFalse(vm.canAddExpense, "Whitespace is not a name")
+
+        vm.newName = "Rent"
+        XCTAssertTrue(vm.canAddExpense)
+    }
+
+    func testAddDoesNothingWhileTheFormIsIncomplete() {
+        let vm = OnboardingThirdStepVM()
+        vm.newName = "Rent"
+        vm.addExpense()
+        XCTAssertTrue(vm.expenses.isEmpty, "No amount, nothing added")
+
+        vm.newAmountText = "950"
+        vm.addExpense()
+        XCTAssertEqual(vm.expenses.count, 1)
+    }
+
     /// Drives the private icon mapping through `addExpense` and returns the icon.
     private func icon(for name: String, in vm: OnboardingThirdStepVM) -> String? {
         vm.newName = name
