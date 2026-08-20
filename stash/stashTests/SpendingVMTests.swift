@@ -103,4 +103,64 @@ final class SpendingVMTests: XCTestCase {
 
         XCTAssertEqual(profile.freeMoney, 50_000)
     }
+
+    // MARK: - Renaming a category
+
+    private func category(_ name: String, icon: String = "tag.fill") -> SpendingCategory {
+        let category = SpendingCategory(name: name, icon: icon)
+        context.insert(category)
+        try? context.save()
+        return category
+    }
+
+    func testRenameCarriesTheSpendsAcross() async {
+        let food = category("Food", icon: "fork.knife")
+        let vm = SpendingVM()
+        vm.amountText = "1.200"
+        await vm.save(food, in: context)
+
+        vm.renameText = "Groceries"
+        XCTAssertTrue(vm.canRename(food, in: context))
+        await vm.rename(food, in: context)
+
+        XCTAssertEqual(food.name, "Groceries")
+        XCTAssertEqual(allEntries.count, 1)
+        XCTAssertEqual(allEntries.first?.categoryName, "Groceries",
+                       "A spend left under the old name would be orphaned")
+    }
+
+    func testRenameRefusesANameAnotherCategoryHolds() async {
+        let food = category("Food")
+        _ = category("Transport")
+        let vm = SpendingVM()
+
+        vm.renameText = " transport "
+        XCTAssertTrue(vm.renameIsDuplicate(food, in: context), "Casing and spacing don't make it new")
+        XCTAssertFalse(vm.canRename(food, in: context))
+
+        await vm.rename(food, in: context)
+        XCTAssertEqual(food.name, "Food", "Nothing changed")
+    }
+
+    func testRenameAllowsRecasingItsOwnName() async {
+        let food = category("food")
+        let vm = SpendingVM()
+        vm.renameText = "Food"
+
+        XCTAssertFalse(vm.renameIsDuplicate(food, in: context), "It is its own name")
+        XCTAssertTrue(vm.canRename(food, in: context))
+        await vm.rename(food, in: context)
+        XCTAssertEqual(food.name, "Food")
+    }
+
+    func testRenameRefusesAnEmptyOrUnchangedName() {
+        let food = category("Food")
+        let vm = SpendingVM()
+
+        vm.renameText = "   "
+        XCTAssertFalse(vm.canRename(food, in: context))
+
+        vm.renameText = "Food"
+        XCTAssertFalse(vm.canRename(food, in: context), "Nothing to save")
+    }
 }
