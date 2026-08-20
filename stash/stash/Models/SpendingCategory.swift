@@ -21,6 +21,13 @@ final class SpendingCategory {
         self.createdAt = .now
     }
 
+    /// Case- and diacritic-insensitive form used to compare names: spends are
+    /// matched to their category by name, so "Food" and "food" must not coexist.
+    static func folded(_ name: String) -> String {
+        name.trimmingCharacters(in: .whitespaces)
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+    }
+
     /// Inserts the default categories once, if none exist yet.
     static func seedDefaultsIfNeeded(in context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<SpendingCategory>())) ?? []

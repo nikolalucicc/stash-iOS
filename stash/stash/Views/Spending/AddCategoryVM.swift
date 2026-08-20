@@ -23,14 +23,14 @@ final class AddCategoryVM {
     /// Spends are matched to their category by name, so two categories sharing
     /// one name would share their spends — and deleting either would take both.
     var isDuplicate: Bool {
-        !trimmedName.isEmpty && takenNames.contains(Self.fold(trimmedName))
+        !trimmedName.isEmpty && takenNames.contains(SpendingCategory.folded(trimmedName))
     }
 
     var canSave: Bool { !trimmedName.isEmpty && !isDuplicate }
 
     func loadExistingNames(from context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<SpendingCategory>())) ?? []
-        takenNames = Set(existing.map { Self.fold($0.name) })
+        takenNames = Set(existing.map { SpendingCategory.folded($0.name) })
     }
 
     func save(in context: ModelContext) async {
@@ -42,8 +42,4 @@ final class AddCategoryVM {
         try? context.save()
     }
 
-    /// Case- and diacritic-insensitive, so "Food" and "food" are the same name.
-    private static func fold(_ name: String) -> String {
-        name.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-    }
 }
