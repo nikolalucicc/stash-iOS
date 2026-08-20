@@ -313,6 +313,8 @@ struct AddExpenseSheetView: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .disabled(!vm.canAddExpense)
+                .opacity(vm.canAddExpense ? 1 : Opacity.muted)
 
                 Button { vm.cancelAdd() } label: {
                     Text("common.cancel_btn")
